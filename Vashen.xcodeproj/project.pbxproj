@@ -1,0 +1,312 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		E7FE89ED1D4E69DC0071CDFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */; };
+		E7FE89EF1D4E69DC0071CDFA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */; };
+		E7FE89F21D4E69DC0071CDFA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F01D4E69DC0071CDFA /* Main.storyboard */; };
+		E7FE89F51D4E69DC0071CDFA /* Vashen.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89F31D4E69DC0071CDFA /* Vashen.xcdatamodeld */; };
+		E7FE89F71D4E69DC0071CDFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F61D4E69DC0071CDFA /* Assets.xcassets */; };
+		E7FE89FA1D4E69DC0071CDFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F81D4E69DC0071CDFA /* LaunchScreen.storyboard */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		E7FE89E91D4E69DC0071CDFA /* Vashen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vashen.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		E7FE89F11D4E69DC0071CDFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E7FE89F41D4E69DC0071CDFA /* Vashen.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Vashen.xcdatamodel; sourceTree = "<group>"; };
+		E7FE89F61D4E69DC0071CDFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E7FE89F91D4E69DC0071CDFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E7FE89FB1D4E69DC0071CDFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E7FE89E61D4E69DC0071CDFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		E7FE89E01D4E69DC0071CDFA = {
+			isa = PBXGroup;
+			children = (
+				E7FE89EB1D4E69DC0071CDFA /* Vashen */,
+				E7FE89EA1D4E69DC0071CDFA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E7FE89EA1D4E69DC0071CDFA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E7FE89E91D4E69DC0071CDFA /* Vashen.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E7FE89EB1D4E69DC0071CDFA /* Vashen */ = {
+			isa = PBXGroup;
+			children = (
+				E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */,
+				E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */,
+				E7FE89F01D4E69DC0071CDFA /* Main.storyboard */,
+				E7FE89F61D4E69DC0071CDFA /* Assets.xcassets */,
+				E7FE89F81D4E69DC0071CDFA /* LaunchScreen.storyboard */,
+				E7FE89FB1D4E69DC0071CDFA /* Info.plist */,
+				E7FE89F31D4E69DC0071CDFA /* Vashen.xcdatamodeld */,
+			);
+			path = Vashen;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E7FE89E81D4E69DC0071CDFA /* Vashen */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7FE89FE1D4E69DC0071CDFA /* Build configuration list for PBXNativeTarget "Vashen" */;
+			buildPhases = (
+				E7FE89E51D4E69DC0071CDFA /* Sources */,
+				E7FE89E61D4E69DC0071CDFA /* Frameworks */,
+				E7FE89E71D4E69DC0071CDFA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Vashen;
+			productName = Vashen;
+			productReference = E7FE89E91D4E69DC0071CDFA /* Vashen.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E7FE89E11D4E69DC0071CDFA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0730;
+				LastUpgradeCheck = 0730;
+				ORGANIZATIONNAME = Alan;
+				TargetAttributes = {
+					E7FE89E81D4E69DC0071CDFA = {
+						CreatedOnToolsVersion = 7.3.1;
+					};
+				};
+			};
+			buildConfigurationList = E7FE89E41D4E69DC0071CDFA /* Build configuration list for PBXProject "Vashen" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = E7FE89E01D4E69DC0071CDFA;
+			productRefGroup = E7FE89EA1D4E69DC0071CDFA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				E7FE89E81D4E69DC0071CDFA /* Vashen */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		E7FE89E71D4E69DC0071CDFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7FE89FA1D4E69DC0071CDFA /* LaunchScreen.storyboard in Resources */,
+				E7FE89F71D4E69DC0071CDFA /* Assets.xcassets in Resources */,
+				E7FE89F21D4E69DC0071CDFA /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E7FE89E51D4E69DC0071CDFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7FE89EF1D4E69DC0071CDFA /* ViewController.swift in Sources */,
+				E7FE89F51D4E69DC0071CDFA /* Vashen.xcdatamodeld in Sources */,
+				E7FE89ED1D4E69DC0071CDFA /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		E7FE89F01D4E69DC0071CDFA /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7FE89F11D4E69DC0071CDFA /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		E7FE89F81D4E69DC0071CDFA /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E7FE89F91D4E69DC0071CDFA /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		E7FE89FC1D4E69DC0071CDFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		E7FE89FD1D4E69DC0071CDFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		E7FE89FF1D4E69DC0071CDFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Vashen/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = alan.Vashen;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		E7FE8A001D4E69DC0071CDFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = Vashen/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = alan.Vashen;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E7FE89E41D4E69DC0071CDFA /* Build configuration list for PBXProject "Vashen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7FE89FC1D4E69DC0071CDFA /* Debug */,
+				E7FE89FD1D4E69DC0071CDFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E7FE89FE1D4E69DC0071CDFA /* Build configuration list for PBXNativeTarget "Vashen" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E7FE89FF1D4E69DC0071CDFA /* Debug */,
+				E7FE8A001D4E69DC0071CDFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		E7FE89F31D4E69DC0071CDFA /* Vashen.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				E7FE89F41D4E69DC0071CDFA /* Vashen.xcdatamodel */,
+			);
+			currentVersion = E7FE89F41D4E69DC0071CDFA /* Vashen.xcdatamodel */;
+			path = Vashen.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = E7FE89E11D4E69DC0071CDFA /* Project object */;
+}
