@@ -49,6 +49,15 @@ public class AppData {
         settings.setObject(paymentToken, forKey: PAYMENT_TOKEN)
     }
     
+    public static func readPaymentToken() -> String{
+        let settings : NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if let paymentToken = settings.stringForKey(PAYMENT_TOKEN) {
+            return paymentToken
+        } else {
+            return ""
+        }
+    }
+    
     public static func readFirebaseToken() -> String{
         let settings : NSUserDefaults = NSUserDefaults.standardUserDefaults()
         if let firebaseToken = settings.stringForKey(FB_TOKEN) {

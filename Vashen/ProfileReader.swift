@@ -28,7 +28,10 @@ public class ProfileReader {
             AppData.saveData(profile.user)
             DataBase.saveCars(profile.cars)
             DataBase.saveServices(profile.services)
-            DataBase.saveCard(profile.cards[0])
+            if profile.cards.count > 0 {
+                DataBase.saveCard(profile.cards[0])
+            }
+            
         } catch{
             print("Error reading profile")
             throw ProfileReaderError.errorReadingProfile
@@ -46,8 +49,8 @@ public class ProfileReader {
             readUser(response["User Info"] as! NSDictionary)
             readCars(response["carsList"] as! Array<NSDictionary>)
             readHistory(response["History"] as! Array<NSDictionary>)
-            if (response["cards"] != nil) {
-                readCard(response["cards"] as! NSDictionary)
+            if let cards = response["cards"] as? NSDictionary {
+                readCard(cards)
             }
         } catch (let e) {
             print(e)
@@ -63,7 +66,9 @@ public class ProfileReader {
             AppData.saveData(profile.user)
             DataBase.saveCars(profile.cars)
             DataBase.saveServices(profile.services)
-            DataBase.saveCard(profile.cards[0])
+            if profile.cards.count > 0  {
+                DataBase.saveCard(profile.cards[0])
+            }
         } catch{
             print("Error reading profile")
             throw ProfileReaderError.errorReadingProfile

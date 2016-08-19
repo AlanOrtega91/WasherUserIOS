@@ -15,6 +15,7 @@
 		E71089111D4FECA6006DB612 /* Car.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089101D4FECA6006DB612 /* Car.swift */; };
 		E71089131D4FECB1006DB612 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089121D4FECB1006DB612 /* Service.swift */; };
 		E71089151D4FECBC006DB612 /* UserCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089141D4FECBC006DB612 /* UserCard.swift */; };
+		E714A5FE1D677415008DE774 /* EditPaymentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E714A5FD1D677414008DE774 /* EditPaymentController.swift */; };
 		E7550BA51D5262D600FBD719 /* HttpServerConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BA41D5262D600FBD719 /* HttpServerConnection.swift */; };
 		E7550BA71D526FB500FBD719 /* LoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BA61D526FB500FBD719 /* LoadingController.swift */; };
 		E7550BA91D5A4AE700FBD719 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BA81D5A4AE700FBD719 /* DataBase.swift */; };
@@ -65,6 +66,7 @@
 		E71089101D4FECA6006DB612 /* Car.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Car.swift; sourceTree = "<group>"; };
 		E71089121D4FECB1006DB612 /* Service.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		E71089141D4FECBC006DB612 /* UserCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCard.swift; sourceTree = "<group>"; };
+		E714A5FD1D677414008DE774 /* EditPaymentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPaymentController.swift; sourceTree = "<group>"; };
 		E7550BA41D5262D600FBD719 /* HttpServerConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServerConnection.swift; sourceTree = "<group>"; };
 		E7550BA61D526FB500FBD719 /* LoadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingController.swift; sourceTree = "<group>"; };
 		E7550BA81D5A4AE700FBD719 /* DataBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				E7550BB21D6360B400FBD719 /* CarCell.swift */,
 				E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */,
 				E7F951041D66650400BA9DE2 /* SummaryController.swift */,
+				E714A5FD1D677414008DE774 /* EditPaymentController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				E7FE8A161D4EC1A80071CDFA /* CarsController.swift in Sources */,
 				E7550BA51D5262D600FBD719 /* HttpServerConnection.swift in Sources */,
 				E7FE8A121D4EC1880071CDFA /* BillingController.swift in Sources */,
+				E714A5FE1D677415008DE774 /* EditPaymentController.swift in Sources */,
 				E7FE8A321D4F08590071CDFA /* CreateAccountPaymentController.swift in Sources */,
 				E7FE8A2E1D4F08400071CDFA /* CreateAccountController.swift in Sources */,
 				E7FC6CBB1D647CD800A54B2B /* EditCarController.swift in Sources */,

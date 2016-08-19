@@ -29,8 +29,8 @@ public class LoadingController: UIViewController {
     var fireBaseToken:String = FIRInstanceID.instanceID().token()!
     var image: UIImage!
     //NewCard
-    //var braintreeFragment:BraintreeFragment!
-    //var card:CardBuilder!
+    var braintreeClient:BTAPIClient!
+    var card:BTCard!
     //EditCar
     var selectedIndex:Int!
     //NewCar
@@ -109,11 +109,11 @@ public class LoadingController: UIViewController {
             user.encodedImage = self.encodedImage
             user = try User.sendNewUser(user, withPassword: self.password)
             AppData.saveData(user)
-            try DataBase.saveUser(user)
+            DataBase.saveUser(user)
             try User.saveFirebaseToken(user.token, pushNotificationToken: self.fireBaseToken)
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("createPayment") as! SWRevealViewController
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("createPayment") as! CreateAccountPaymentController
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
@@ -132,18 +132,29 @@ public class LoadingController: UIViewController {
     }
     
     func tryNewCard(){
-        do {
-    
-            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
+        let paymentToken = AppData.readPaymentToken()
+        braintreeClient = BTAPIClient(authorization: paymentToken)
+        
+        if let cardClient = BTCardClient(APIClient: braintreeClient) as? BTCardClient{
+            cardClient.tokenizeCard(card, completion: {
+                (tokenizedCard,error) in
+                do {
+                    try ProfileReader.run()
+                    let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+                    let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentViewController(nextViewController, animated: true, completion: nil)
+                    })
+                } catch {
+                    print("Error reading credit card on create payment")
+                    let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
+                    let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+                    self.presentViewController(nextViewController, animated: true, completion: nil)
+                }
             })
-        } catch {
-            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("login") as! LoginController
-            nextViewController.emailSet = email
-            nextViewController.passwordSet = password
+        } else {
+            let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
+            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
             self.presentViewController(nextViewController, animated: true, completion: nil)
         }
     }
@@ -157,7 +168,7 @@ public class LoadingController: UIViewController {
                 car.favorite = 1
             }
             cars.append(car)
-            try DataBase.saveCars(cars)
+            DataBase.saveCars(cars)
             let storyBoard = UIStoryboard(name: "Menu", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("cars") as! CarsController
             dispatch_async(dispatch_get_main_queue(), {
@@ -175,7 +186,7 @@ public class LoadingController: UIViewController {
             var cars = DataBase.readCars()
             cars[selectedIndex] = car
             try Car.editFavoriteCar(car,withToken: token)
-            try DataBase.saveCars(cars)
+            DataBase.saveCars(cars)
             
             let storyBoard = UIStoryboard(name: "Menu", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("cars") as! CarsController
@@ -193,7 +204,7 @@ public class LoadingController: UIViewController {
     func tryEditAccount(){
         do {
             try user.sendChangeUserData(token)
-            try DataBase.saveUser(user)
+            DataBase.saveUser(user)
 
             //TODO: Check from billing or config
             let storyBoard = UIStoryboard(name: "Menu", bundle: nil)

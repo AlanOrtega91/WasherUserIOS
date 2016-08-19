@@ -1,14 +1,14 @@
 //
-//  CreateAccountPaymentController.swift
+//  EditPaymentController.swift
 //  Vashen
 //
-//  Created by Alan on 7/31/16.
+//  Created by Alan on 8/19/16.
 //  Copyright © 2016 Alan. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
-class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate {
+class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate {
 
     var token:String!
     var card:UserCard!
@@ -27,12 +27,12 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     override func viewDidLoad() {
         initValues()
         initView()
-        let getPaymentTokenThread:NSThread = NSThread(target: self, selector:#selector(initThreads), object: nil)
-        getPaymentTokenThread.start()
     }
     
     func initValues(){
+        clientPaymentToken = AppData.readPaymentToken()
         token = AppData.readToken()
+        card = DataBase.readCard()
     }
     
     func initView(){
@@ -48,15 +48,6 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         let yearValue = card.expirationDate.substringFromIndex(card.expirationDate.startIndex.advancedBy(5))
         month.setTitle(monthValue, forState: .Normal)
         year.setTitle(yearValue, forState: .Normal)
-    }
-    
-    func initThreads(){
-        do {
-            clientPaymentToken = try Payment.getPaymentToken(token)
-            AppData.savePaymentToken(clientPaymentToken)
-        } catch {
-            
-        }
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -130,5 +121,4 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("payment") as! PaymentController
         self.presentViewController(nextViewController, animated:true, completion:nil)
     }
-
 }

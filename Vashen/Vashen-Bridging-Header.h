@@ -3,3 +3,5 @@
 //
 
 #import "SWRevealViewController.h"
+#import "BraintreeCore.h"
+#import "BraintreeCard.h"

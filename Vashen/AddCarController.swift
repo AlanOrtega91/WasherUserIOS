@@ -34,9 +34,6 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
         picker.dataSource = self
         picker.delegate = self
         picker.hidden = true
-        brand.titleLabel?.text = brands[0]
-        type.titleLabel?.text = types[0]
-        color.titleLabel?.text = colors[0]
     }
 
     override func didReceiveMemoryWarning() {
@@ -48,15 +45,15 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
         switch selected {
         case 0:
             NSLog("brand")
-            brand.titleLabel?.text = brands[row]
+            brand.setTitle(brands[row], forState: .Normal)
             selectedBrand = brands[row]
         case 1:
             NSLog("types")
-            type.titleLabel?.text = types[row]
+            type.setTitle(types[row], forState: .Normal)
             selectedType = row
         case 2:
             NSLog("colors")
-            color.titleLabel?.text = colors[row]
+            color.setTitle(colors[row], forState: .Normal)
             selectedColor = colors[row]
         default:
             return NSLog("none")

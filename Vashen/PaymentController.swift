@@ -32,10 +32,9 @@ class PaymentController: UIViewController{
     }
     
     @IBAction func clickedCancel(sender: AnyObject) {
-        navigationController?.popViewControllerAnimated(true)
-        //let storyBoard: UIStoryboard = UIStoryboard(name: "Map", bundle:nil)
-        //let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        //self.presentViewController(nextViewController, animated:true, completion:nil)
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Map", bundle:nil)
+        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+        self.presentViewController(nextViewController, animated:true, completion:nil)
     }
     
 }
