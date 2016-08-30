@@ -21,7 +21,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     var selectedType:Int = 0
     var selectedCarIndex:Int = 0
     var selectedVehicleId: Int = 0
-    var cars:Array<Car> = Array<Car>()
+    var car:Car!
     
     var brands: [String] = ["toyota","Volvo","Ford"]
     var types: [String] = ["Moto","Coche Chico","Coche Grande","Camioneta Chica","Camioneta Grande"]
@@ -33,29 +33,16 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         picker.delegate = self
         picker.hidden = true
         
-        initValues()
         initView()
 
         // Do any additional setup after loading the view.
     }
     
     func initView(){
-        let car = cars[selectedCarIndex]
-        type.titleLabel?.text = car.type
-        color.titleLabel?.text = car.color
-        brand.titleLabel?.text = car.brand
+        type.setTitle(types[Int(car.type)! - 1], forState: .Normal)
+        color.setTitle(car.color, forState: .Normal)
+        brand.setTitle(car.brand, forState: .Normal)
         plates.text = car.plates
-    }
-    
-    func initValues(){
-        cars = DataBase.readCars()
-        for car in cars {
-            if String(car.id) == String(selectedVehicleId) {
-                selectedCarIndex = cars.indexOf({$0.id == car.id})!
-                break
-            }
-        }
-
     }
 
     override func didReceiveMemoryWarning() {
@@ -67,15 +54,15 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         switch selected {
         case 0:
             NSLog("brand")
-            brand.titleLabel?.text = brands[row]
+            brand.setTitle(brands[row], forState: .Normal)
             selectedBrand = brands[row]
         case 1:
             NSLog("types")
-            type.titleLabel?.text = types[row]
+            type.setTitle(types[row], forState: .Normal)
             selectedType = row
         case 2:
             NSLog("colors")
-            color.titleLabel?.text = colors[row]
+            color.setTitle(colors[row], forState: .Normal)
             selectedColor = colors[row]
         default:
             return NSLog("none")
@@ -133,11 +120,10 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     }
     
     @IBAction func sendEdit(sender: AnyObject) {
-        let car = Car()
         car.plates = plates.text
         car.model = "Car"
         car.color = selectedColor
-        car.type = String(selectedType)
+        car.type = String(selectedType + 1)
         car.brand = selectedBrand
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)

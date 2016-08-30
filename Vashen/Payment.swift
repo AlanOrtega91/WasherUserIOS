@@ -26,6 +26,8 @@ public class Payment{
             }
             
             return response["paymentToken"] as! String
+        } catch HttpServerConnection.Error.connectionException {
+            throw PaymentError.errorGettingPaymentToken
         }
     }
     

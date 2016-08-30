@@ -10,22 +10,22 @@ import UIKit
 
 public class CreateAccountController: UIViewController,UITextFieldDelegate {
 
-    @IBOutlet weak public var email: UITextField!
-    @IBOutlet weak public var phone: UITextField!
-    @IBOutlet weak public var password: UITextField!
-    @IBOutlet weak public var password2: UITextField!
+    @IBOutlet weak var email: UITextField!
+    @IBOutlet weak var phone: UITextField!
+    @IBOutlet weak var password: UITextField!
+    @IBOutlet weak var password2: UITextField!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background.png")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
+        scrollView.contentSize.height = 600
         email.delegate = self
         phone.delegate = self
         password.delegate = self
         password2.delegate = self
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(CreateAccountController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        
     }
     
     func dismissKeyboard() {

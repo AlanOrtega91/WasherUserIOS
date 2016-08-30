@@ -36,18 +36,16 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
     }
     
     func initView(){
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
         picker.dataSource = self
         picker.delegate = self
         picker.hidden = true
-        cardNumber.text = card.cardNumber
-        
-        let monthValue = card.expirationDate.substringToIndex(card.expirationDate.startIndex.advancedBy(2))
-        let yearValue = card.expirationDate.substringFromIndex(card.expirationDate.startIndex.advancedBy(5))
-        month.setTitle(monthValue, forState: .Normal)
-        year.setTitle(yearValue, forState: .Normal)
+        if card != nil {
+            cardNumber.text = card.cardNumber
+            let monthValue = card.expirationDate.substringToIndex(card.expirationDate.startIndex.advancedBy(2))
+            let yearValue = card.expirationDate.substringFromIndex(card.expirationDate.startIndex.advancedBy(5))
+            month.setTitle(monthValue, forState: .Normal)
+            year.setTitle(yearValue, forState: .Normal)
+        }
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {

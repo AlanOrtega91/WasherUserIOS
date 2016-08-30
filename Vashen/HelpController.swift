@@ -19,6 +19,7 @@ class HelpController: UIViewController {
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var map: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,7 @@ class HelpController: UIViewController {
     }
     
     func initView(){
+        scrollView.contentSize.height = 800
         if services.count < 1 {
             return
         }

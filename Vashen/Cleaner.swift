@@ -40,7 +40,7 @@ public class Cleaner{
                 cleaners.append(cleaner)
             }
             return cleaners
-        } catch{
+        } catch HttpServerConnection.Error.connectionException{
             throw Error.errorGettingCleaners
         }
     }
@@ -62,7 +62,7 @@ public class Cleaner{
             cleaner.latitud = Double(parameters["Latitud"] as! String)
             cleaner.longitud = Double(parameters["Longitud"] as! String)
             return cleaner
-        } catch{
+        } catch HttpServerConnection.Error.connectionException{
             throw Error.errorGettingCleaners
         }
     }

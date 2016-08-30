@@ -12,9 +12,6 @@ class MainController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "loading")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
     }
 
     override func didReceiveMemoryWarning() {

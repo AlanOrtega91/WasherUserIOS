@@ -124,16 +124,19 @@ public class DataBase {
         fetchRequest.predicate = NSPredicate(format: "favorite == %@", "1")
         let car: Car = Car()
         do {
-            let results = try context.executeFetchRequest(fetchRequest)[0]
-            car.id = results.valueForKey("id") as! String
-            car.type = results.valueForKey("type") as! String
-            car.color = results.valueForKey("color") as! String
-            car.plates = results.valueForKey("plates") as! String
-            car.model = results.valueForKey("model") as! String
-            car.brand = results.valueForKey("brand") as! String
-            car.favorite = results.valueForKey("favorite") as! Int
-            
-            return car
+            let results = try context.executeFetchRequest(fetchRequest)
+            if results.count > 0 {
+                car.id = results[0].valueForKey("id") as! String
+                car.type = results[0].valueForKey("type") as! String
+                car.color = results[0].valueForKey("color") as! String
+                car.plates = results[0].valueForKey("plates") as! String
+                car.model = results[0].valueForKey("model") as! String
+                car.brand = results[0].valueForKey("brand") as! String
+                car.favorite = results[0].valueForKey("favorite") as! Int
+                
+                return car
+            }
+            return nil
         } catch {
             return nil
         }
@@ -187,7 +190,7 @@ public class DataBase {
         let context = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Service")
         fetchRequest.returnsObjectsAsFaults = false
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "acceptedTime", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "acceptedTime", ascending: false)]
         do {
             let results = try context.executeFetchRequest(fetchRequest)
             var services: Array<Service> = Array<Service>()
@@ -255,7 +258,7 @@ public class DataBase {
         let context = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "Service")
         fetchRequest.returnsObjectsAsFaults = false
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "acceptedTime", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "acceptedTime", ascending: false)]
         let statusPredicate = NSPredicate(format: "status == %@", "Finished")
         let ratingPredicate = NSPredicate(format: "rating != %@", "-1")
         fetchRequest.predicate = NSCompoundPredicate(type: .AndPredicateType, subpredicates: [statusPredicate, ratingPredicate])
@@ -295,7 +298,6 @@ public class DataBase {
             
             newCard.setValue(card.cardNumber, forKey: "cardNumber")
             newCard.setValue(card.expirationDate, forKey: "expirationDate")
-            newCard.setValue(card.cvv, forKey: "cvv")
             
             try context.save()
         } catch {
@@ -303,7 +305,7 @@ public class DataBase {
         }
     }
     
-    public static func readCard() -> UserCard{
+    public static func readCard() -> UserCard?{
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest(entityName: "UserCard")
@@ -311,13 +313,15 @@ public class DataBase {
         let card: UserCard = UserCard()
         do {
             
-            let results = try context.executeFetchRequest(fetchRequest)[0]
-            card.cardNumber = results.valueForKey("cardNumber") as! String
-            card.expirationDate = results.valueForKey("expirationDate") as! String
-
-            return card
+            let results = try context.executeFetchRequest(fetchRequest)
+            if results.count > 0 {
+                card.cardNumber = results[0].valueForKey("cardNumber") as! String
+                card.expirationDate = results[0].valueForKey("expirationDate") as! String
+                return card
+            }
+            return nil
         } catch {
-            return card
+            return nil
         }
     }
     

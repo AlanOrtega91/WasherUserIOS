@@ -17,12 +17,10 @@ class EditAccountController: UIViewController {
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
         initValues()
         initView()
     }
@@ -34,6 +32,7 @@ class EditAccountController: UIViewController {
     func initView(){
         readUserImage()
         fillUserTextFields()
+        scrollView.contentSize.height = 1000
     }
     
     func readUserImage(){

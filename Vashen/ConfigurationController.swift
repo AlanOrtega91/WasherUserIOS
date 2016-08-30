@@ -17,12 +17,10 @@ class ConfigurationController: UIViewController {
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
         initValues()
         initView()
     }
@@ -34,6 +32,7 @@ class ConfigurationController: UIViewController {
     func initView(){
         readUserImage()
         fillUserTextFields()
+        scrollView.contentSize.height = 900
     }
     
     func readUserImage(){

@@ -38,7 +38,7 @@ public class User {
             user.id = parameters["idCliente"]! as! String
             user.token = parameters["Token"]! as! String
             return user
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw UserError.errorWithNewUser
         }
     }
@@ -55,7 +55,7 @@ public class User {
                 throw UserError.errorSavingFireBaseToken
             }
             
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw UserError.errorSavingFireBaseToken
         }
     }
@@ -73,7 +73,7 @@ public class User {
                 throw UserError.errorChangeData
             }
 
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw UserError.errorChangeData
         }
     }
@@ -88,7 +88,7 @@ public class User {
                 throw UserError.errorWithLogOut
             }
             
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw UserError.errorWithLogOut
         }
     }

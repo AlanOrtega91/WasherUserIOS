@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate {
+class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate, UITextFieldDelegate {
 
     var token:String!
     var card:UserCard!
@@ -19,6 +19,7 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     @IBOutlet weak var month: UIButton!
     @IBOutlet weak var year: UIButton!
     @IBOutlet weak var picker: UIPickerView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     var selected:Int = 0
     var months: [String] = ["01","02","03","04","05","06","07","08","09","10","11","12"]
@@ -36,18 +37,17 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     }
     
     func initView(){
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
+        scrollView.contentSize.height = 600
         picker.dataSource = self
         picker.delegate = self
         picker.hidden = true
-        cardNumber.text = card.cardNumber
-        
-        let monthValue = card.expirationDate.substringToIndex(card.expirationDate.startIndex.advancedBy(2))
-        let yearValue = card.expirationDate.substringFromIndex(card.expirationDate.startIndex.advancedBy(5))
-        month.setTitle(monthValue, forState: .Normal)
-        year.setTitle(yearValue, forState: .Normal)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     func initThreads(){

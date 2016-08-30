@@ -36,7 +36,7 @@ public class Car {
             }
 
             return String(response["carId"])
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw CarError.errorAddingCar
         }
     }
@@ -54,7 +54,7 @@ public class Car {
                 throw CarError.errorAddingFavoriteCar
             }
             
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw CarError.errorAddingFavoriteCar
         }
     }
@@ -72,8 +72,26 @@ public class Car {
                 throw CarError.errorEditingCar
             }
             
-        } catch {
+        } catch HttpServerConnection.Error.connectionException{
             throw CarError.errorEditingCar
+        }
+    }
+    
+    public static func deleteFavoriteCar(id:String, token:String) throws{
+        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "DeleteCar")
+        let params = "favoriteCarId=\(id)&token=\(token)"
+        do{
+            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            
+            if response["Status"] as! String == "SESSION ERROR" {
+                throw CarError.noSessionFound
+            }
+            if response["Status"] as! String != "OK" {
+                throw CarError.errorDeletingCar
+            }
+            
+        } catch HttpServerConnection.Error.connectionException{
+            throw CarError.errorDeletingCar
         }
     }
     
@@ -83,5 +101,6 @@ public class Car {
         case errorAddingCar
         case errorAddingFavoriteCar
         case errorEditingCar
+        case errorDeletingCar
     }
 }

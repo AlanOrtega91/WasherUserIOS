@@ -17,9 +17,6 @@ public class LoginController: UIViewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
         if emailSet != "" {
             email.text = emailSet
         }

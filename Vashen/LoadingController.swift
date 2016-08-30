@@ -39,8 +39,10 @@ public class LoadingController: UIViewController {
     var user:User!
     
     override public func viewDidAppear(animated: Bool) {
-        initView()
-        initValues()
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            // do some task
+            self.initValues()
+        });
     }
     
     func initValues(){
@@ -90,12 +92,14 @@ public class LoadingController: UIViewController {
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
-        } catch {
+        }  catch {
             let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("login") as! LoginController
             nextViewController.emailSet = email
             nextViewController.passwordSet = password
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         }
     }
     
@@ -127,7 +131,9 @@ public class LoadingController: UIViewController {
             nextViewController.phone = phone
             nextViewController.password = password
             nextViewController.image.image = image
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         }
     }
     
@@ -149,13 +155,17 @@ public class LoadingController: UIViewController {
                     print("Error reading credit card on create payment")
                     let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
                     let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-                    self.presentViewController(nextViewController, animated: true, completion: nil)
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.presentViewController(nextViewController, animated: true, completion: nil)
+                    })
                 }
             })
         } else {
             let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         }
     }
     
@@ -174,10 +184,18 @@ public class LoadingController: UIViewController {
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
+        } catch Car.CarError.noSessionFound{
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         } catch {
             let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("addCar") as! AddCarController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         }
     }
     
@@ -193,11 +211,19 @@ public class LoadingController: UIViewController {
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
+        }  catch Car.CarError.noSessionFound{
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         } catch {
             let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("editCar") as! EditCarController
- 
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            nextViewController.car = car
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         }
     }
     
@@ -207,15 +233,23 @@ public class LoadingController: UIViewController {
             DataBase.saveUser(user)
 
             //TODO: Check from billing or config
-            let storyBoard = UIStoryboard(name: "Menu", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("billing") as! EditBillingController
+            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
+        }  catch Car.CarError.noSessionFound{
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         } catch {
-            let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("editBilling") as! EditBillingController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
+            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         }
     }
     
@@ -260,11 +294,6 @@ public class LoadingController: UIViewController {
         UIView.animateWithDuration(4.0,delay: 0.1,options: .CurveEaseOut, animations: {toastLabel.alpha = 0.0}, completion: nil)
     }
     
-    func initView()  {
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "loading")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
-    }
     
     enum LoginError: ErrorType {
         case error

@@ -22,7 +22,7 @@ public class HttpServerConnection
         do {
             let request = NSMutableURLRequest.init(URL: NSURL.init(string: urlPath)!)
             request.HTTPMethod = "POST"
-            request.timeoutInterval = 10
+            request.timeoutInterval = 20
             request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             var response : NSURLResponse?
         
@@ -31,10 +31,10 @@ public class HttpServerConnection
             return dataString as! Dictionary<String, AnyObject>
         } catch (let e) {
             print(e)
-            throw HttpServerConnectionError.connectionException
+            throw Error.connectionException
         }
     }
-    enum  HttpServerConnectionError: ErrorType {
+    enum  Error: ErrorType {
         case connectionException
     }
 }

@@ -65,8 +65,7 @@ public class Service {
             service.longitud = Double(parameters["longitud"] as! String)
             service.rating = -1
             return service
-        } catch (let e) {
-            print(e)
+        } catch HttpServerConnection.Error.connectionException {
             throw Error.errorRequestingService
         }
     
@@ -84,8 +83,7 @@ public class Service {
                 throw Error.errorCancelingRequest
             }
 
-        } catch (let e) {
-            print(e)
+        } catch HttpServerConnection.Error.connectionException {
             throw Error.errorCancelingRequest
         }
     }
@@ -102,8 +100,7 @@ public class Service {
                 throw Error.errorCancelingRequest
             }
             
-        } catch (let e) {
-            print(e)
+        } catch HttpServerConnection.Error.connectionException {
             throw Error.errorCancelingRequest
         }
     }

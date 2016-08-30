@@ -27,9 +27,6 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
         token = AppData.readToken()
         picker.dataSource = self
         picker.delegate = self

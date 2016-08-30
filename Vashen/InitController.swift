@@ -23,10 +23,7 @@ class InitController: UIViewController {
         token = AppData.readToken()
     }
     
-    func initView() {
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "loading")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
+    func initView() {        
         let sendDecideNextViewThread:NSThread = NSThread(target: self, selector:#selector(decideNextView), object: nil)
         sendDecideNextViewThread.start()
     }

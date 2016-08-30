@@ -10,7 +10,6 @@ import UIKit
 import GoogleMaps
 
 class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelegate {
-
     
     @IBOutlet weak var menuOpenButton: UIBarButtonItem!
     
@@ -43,6 +42,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     @IBOutlet weak var bigCarImage: UIButton!
     @IBOutlet weak var smallVanImage: UIButton!
     @IBOutlet weak var bigVanImage: UIButton!
+    @IBOutlet weak var locationText: UITextField!
 
     
     
@@ -83,12 +83,13 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     var cleaner:Cleaner!
     var showCancelAlert:Bool = false
     var userLocation: CLLocation!
+    var inScope:Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         initLocation()
         initView()
-        NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(MapController.initMap), userInfo: nil, repeats: false)
+        NSTimer.scheduledTimerWithTimeInterval(0.5, target: self, selector: #selector(MapController.initMap), userInfo: nil, repeats: false)
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -101,6 +102,18 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             buildAlertForCancel()
             showCancelAlert = false
         }
+        inScope = true
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        inScope = false
+        cancelTimers()
+    }
+    
+    func cancelTimers(){
+        dispatch_source_cancel(nearbyCleanersTimer)
+        dispatch_source_cancel(reloadMapTimer)
+        dispatch_source_cancel(reloadAddressTimer)
     }
     
     func initValues(){
@@ -201,8 +214,14 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         if activeService == nil && requestLocation != nil{
             do{
                 cleaners = try Cleaner.getNearbyCleaners(requestLocation.coordinate.latitude, longitud: requestLocation.coordinate.longitude, withToken: token)
+            } catch Cleaner.Error.noSessionFound{
+                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+                dispatch_async(dispatch_get_main_queue(), {
+                    self.presentViewController(nextViewController, animated: true, completion: nil)
+                })
             } catch {
-                //TODO: No session
+                
             }
         }
     }
@@ -212,8 +231,14 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             if activeService != nil && activeService.status != "Looking" {
                 cleaner = try Cleaner.getCleanerLocation(activeService.cleanerId,withToken: token)
             }
+        } catch Cleaner.Error.noSessionFound{
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         } catch {
-            //TODO: implement error
+            
         }
         if activeService != nil {
             if activeService.status != "Looking" && cleaner != nil{
@@ -232,20 +257,21 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func reloadAddress(){
-        if requestLocation != nil {
-            let location = CLLocation(latitude: requestLocation.coordinate.latitude, longitude: requestLocation.coordinate.longitude)
+        if self.requestLocation != nil {
+            let location = CLLocation(latitude: self.requestLocation.coordinate.latitude, longitude: self.requestLocation.coordinate.longitude)
             CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
                 //print(location)
                 
                 if error != nil {
                     print("Reverse geocoder failed with error" + error!.localizedDescription)
+                    self.locationText.text = ""
                     return
                 }
                 
                 if placemarks!.count > 0 {
                     let pm = placemarks![0] //as! CLPlacemark
-                    //print(pm)
-                    //TODO: implement set location text
+                    self.locationText.text = pm.thoroughfare! + pm.subThoroughfare! + ", " + pm.subLocality! + ", " + pm.locality! + ", " + pm.administrativeArea! + ", " + pm.country!
+                    print(self.locationText.text)
                 }
                 else {
                     print("Problem with the data received from geocoder")
@@ -323,9 +349,9 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         upLayout.hidden = false
         lowLayout.hidden = false
         startLayout.hidden = true
-        leftButton.titleLabel?.text = "Exterior"
+        leftButton.setTitle("Exterior", forState: .Normal)
         leftDescription.text = "Servicio Exterior"
-        rightButton.titleLabel?.text = "Exterior e Interior"
+        rightButton.setTitle("Exterior e Interior", forState: .Normal)
         rightDescription.text = "Servicio Exterior e Interior"
         //TODO: locationText.SetEnable
     }
@@ -336,9 +362,9 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         upLayout.hidden = false
         lowLayout.hidden = false
         startLayout.hidden = true
-        leftButton.titleLabel?.text = "Eco $"
+        leftButton.setTitle("Eco $", forState: .Normal)
         leftDescription.text = "Servicio Ecologico"
-        rightButton.titleLabel?.text = "Tradicional $$"
+        leftButton.setTitle("Tradicional $$", forState: .Normal)
         rightDescription.text = "Servicio Tradicional"
         //TODO: locationText.SetEnable
     }
@@ -385,8 +411,14 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             })
             startActiveServiceCycle()
             cancelSent = false
+        } catch Service.Error.noSessionFound{
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         } catch {
-            //TODO:Implement errors
+            
         }
     }
     
@@ -510,8 +542,8 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     func modifyClock(){
         if activeService != nil || activeService.finalTime != nil {
             //TODO: Get diff in time with sign
-            let diff = NSDate().timeIntervalSinceDate(activeService.finalTime)
-            let minutes = diff/1000/60
+            let diff = activeService.finalTime.timeIntervalSinceNow
+            let minutes = diff/1000/60 + 1
             var display = ""
             if diff < 0 {
                 display = "Terminando servicio en: 0 min"
@@ -603,6 +635,13 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             if cancelAlarmClock != nil {
                 cancelAlarmClock.invalidate()
             }
+        } catch Service.Error.noSessionFound{
+            cancelSent = false
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
         } catch {
             cancelSent = false
         }
@@ -636,7 +675,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             if viewState != STANDBY {
                 return
             }
-            if creditCard.cardNumber == nil {
+            if creditCard == nil {
                 //TODO: POST ALERT NO CREDIT CARD
                 return
             }
@@ -698,7 +737,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     
     func initView(){
         menuOpenButton.target = self.revealViewController()
-        menuOpenButton.action = #selector(SWRevealViewController.revealToggle(_:))
+        menuOpenButton.action = #selector(SWRevealViewController.revealToggle(_:))       
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
     }
     

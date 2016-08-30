@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class CreateAccountPersonalController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+public class CreateAccountPersonalController: UIViewController,UIImagePickerControllerDelegate, UINavigationControllerDelegate,UITextFieldDelegate {
 
     public var email:String!
     public var password:String!
@@ -16,18 +16,39 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
     @IBOutlet weak public var name: UITextField!
     @IBOutlet weak public var lastName: UITextField!
     @IBOutlet weak public var image: UIImageView!
+    @IBOutlet weak var scrollView: UIScrollView!
     
     var encodedString: String!
     var token: String!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        let backgroundImage = UIImageView(frame: UIScreen.mainScreen().bounds)
-        backgroundImage.image = UIImage(named: "background")
-        self.view.insertSubview(backgroundImage, atIndex: 0)
+        scrollView.contentSize.height = 600
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
         image.userInteractionEnabled = true
         image.addGestureRecognizer(tapGestureRecognizer)
+        name.delegate = self
+        lastName.delegate = self
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
+    }
+    
+    public func textFieldShouldReturn(textField: UITextField) -> Bool {
+        switch textField {
+        case name:
+            lastName.becomeFirstResponder()
+            break
+        case lastName:
+            sendRegistration("")
+            break
+        default:
+            break
+        }
+        return true
     }
     
 
@@ -62,7 +83,10 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         image.image = imagePicked
         let imageData = UIImagePNGRepresentation(imagePicked)
-        encodedString = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            // do some task
+            self.encodedString = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+        });
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     
