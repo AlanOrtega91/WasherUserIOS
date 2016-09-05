@@ -25,6 +25,8 @@ class SummaryController: UIViewController {
     var token:String!
     var activeService:Service!
     
+    var clickedAlertOK = false
+    
     override func viewDidAppear(animated: Bool) {
         initValues()
         initView()
@@ -87,9 +89,34 @@ class SummaryController: UIViewController {
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
             self.presentViewController(nextViewController, animated: true, completion: nil)
-        } catch {
+        } catch Service.Error.noSessionFound{
             //TODO: implement errors
+            createAlertInfo("Error con sesion")
+            while !clickedAlertOK {
+                
+            }
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main") as! SWRevealViewController
+            self.presentViewController(nextViewController, animated: true, completion: nil)
+        } catch {
+            createAlertInfo("Error enviando la calificacion")
+            while !clickedAlertOK {
+                
+            }
+            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+            self.presentViewController(nextViewController, animated: true, completion: nil)
         }
+    }
+    
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+                self.clickedAlertOK = true
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     @IBAction func starClicked(sender: UIButton) {

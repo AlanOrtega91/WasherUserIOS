@@ -54,11 +54,10 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
 
     @IBAction func sendRegistration(sender: AnyObject) {
         if name.text == "" || lastName.text == "" {
-            postAlert("Nombre y apellido son necesarios")
+            createAlertInfo("Nombre y apellido son necesarios")
             return
         }
         let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loading") as! LoadingController
-        nextViewController.action = LoadingController.LOGIN
         nextViewController.email = email
         nextViewController.password = password
         nextViewController.phone = phone
@@ -82,26 +81,21 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
 
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         image.image = imagePicked
-        let imageData = UIImagePNGRepresentation(imagePicked)
+        let imageData = UIImageJPEGRepresentation(imagePicked, 0.5)
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             // do some task
-            self.encodedString = imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+            self.encodedString = imageData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+            print(self.encodedString)
         });
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     
-    private func postAlert(message:String){
-        let toastLabel = UILabel(frame: CGRectMake(self.view.frame.size.width/2 - 150, self.view.frame.size.height-100, 300, 35))
-        toastLabel.backgroundColor = UIColor.blackColor()
-        toastLabel.textColor = UIColor.whiteColor()
-        toastLabel.textAlignment = NSTextAlignment.Center;
-        self.view.addSubview(toastLabel)
-        toastLabel.text = message
-        toastLabel.alpha = 1.0
-        toastLabel.layer.cornerRadius = 10;
-        toastLabel.clipsToBounds  =  true
-        
-        UIView.animateWithDuration(4.0,delay: 0.1,options: .CurveEaseOut, animations: {toastLabel.alpha = 0.0}, completion: nil)
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     

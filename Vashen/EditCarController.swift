@@ -27,6 +27,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     var types: [String] = ["Moto","Coche Chico","Coche Grande","Camioneta Chica","Camioneta Grande"]
     var colors: [String] = ["Rojo","Azul","Negro"]
     
+    //TODO: ocultar teclado onclick de botones
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.dataSource = self

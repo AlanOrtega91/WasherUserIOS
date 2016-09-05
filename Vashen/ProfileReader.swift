@@ -52,8 +52,7 @@ public class ProfileReader {
             if let cards = response["cards"] as? NSDictionary {
                 readCard(cards)
             }
-        } catch (let e) {
-            print(e)
+        } catch {
             throw ProfileReaderError.errorReadingData
         }
     }
@@ -70,7 +69,6 @@ public class ProfileReader {
                 DataBase.saveCard(profile.cards[0])
             }
         } catch{
-            print("Error reading profile")
             throw ProfileReaderError.errorReadingProfile
         }
     }
@@ -89,8 +87,7 @@ public class ProfileReader {
             if (response["cards"] != nil) {
                 readCard(response["cards"] as! NSDictionary)
             }
-        } catch (let e) {
-            print(e)
+        } catch {
             throw ProfileReaderError.errorReadingData
         }
     }

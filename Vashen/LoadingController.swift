@@ -26,7 +26,6 @@ public class LoadingController: UIViewController {
     var encodedImage:String!
     var email: String!
     var password: String!
-    var fireBaseToken:String = FIRInstanceID.instanceID().token()!
     var image: UIImage!
     //NewCard
     var braintreeClient:BTAPIClient!
@@ -37,6 +36,7 @@ public class LoadingController: UIViewController {
     var car:Car!
     //Edit Account
     var user:User!
+    var clickedAlertOK = false
     
     override public func viewDidAppear(animated: Bool) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
@@ -86,6 +86,7 @@ public class LoadingController: UIViewController {
                     print("Connected to FCM")
                 }
             })
+            let fireBaseToken:String = FIRInstanceID.instanceID().token()!
             try User.saveFirebaseToken(token,pushNotificationToken: fireBaseToken)
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
@@ -93,6 +94,10 @@ public class LoadingController: UIViewController {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         }  catch {
+            createAlertInfo("Error al iniciar sesion")
+            while !clickedAlertOK {
+                
+            }
             let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("login") as! LoginController
             nextViewController.emailSet = email
@@ -114,7 +119,8 @@ public class LoadingController: UIViewController {
             user = try User.sendNewUser(user, withPassword: self.password)
             AppData.saveData(user)
             DataBase.saveUser(user)
-            try User.saveFirebaseToken(user.token, pushNotificationToken: self.fireBaseToken)
+            let fireBaseToken:String = FIRInstanceID.instanceID().token()!
+            try User.saveFirebaseToken(user.token, pushNotificationToken: fireBaseToken)
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("createPayment") as! CreateAccountPaymentController
@@ -122,7 +128,10 @@ public class LoadingController: UIViewController {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         } catch {
-            //TODO:change to create personal
+            createAlertInfo("Error al crear usuario")
+            while !clickedAlertOK {
+                
+            }
             let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("createPersonal") as! CreateAccountPersonalController
             nextViewController.name.text = name
@@ -185,12 +194,20 @@ public class LoadingController: UIViewController {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         } catch Car.CarError.noSessionFound{
+            createAlertInfo("Error con la sesion")
+            while !clickedAlertOK {
+                
+            }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         } catch {
+            createAlertInfo("Error al agregar coche")
+            while !clickedAlertOK {
+                
+            }
             let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("addCar") as! AddCarController
             dispatch_async(dispatch_get_main_queue(), {
@@ -212,12 +229,14 @@ public class LoadingController: UIViewController {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         }  catch Car.CarError.noSessionFound{
+            createAlertInfo("Error con la sesion")
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         } catch {
+            createAlertInfo("Error al editar coche")
             let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("editCar") as! EditCarController
             nextViewController.car = car
@@ -239,12 +258,20 @@ public class LoadingController: UIViewController {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         }  catch Car.CarError.noSessionFound{
+            createAlertInfo("Error con la sesion")
+            while !clickedAlertOK {
+                
+            }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
         } catch {
+            createAlertInfo("Error editar los datos")
+            while !clickedAlertOK {
+                
+            }
             let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
             let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
             dispatch_async(dispatch_get_main_queue(), {
@@ -260,13 +287,13 @@ public class LoadingController: UIViewController {
             AppData.savePaymentToken(paymentToken)
             
         } catch Payment.PaymentError.errorGettingPaymentToken{
-            postAlert("Pagos no disponibles")
+            createAlertInfo("Pagos no disponibles")
             throw LoginError.error
         } catch Payment.PaymentError.noSessionFound{
-            postAlert("Error con sesion")
+            createAlertInfo("Error con sesion")
             throw LoginError.error
         } catch {
-            postAlert("Error general")
+            createAlertInfo("Error general")
             throw LoginError.error
         }
     }
@@ -280,18 +307,14 @@ public class LoadingController: UIViewController {
         
     }
     
-    private func postAlert(message:String){
-        let toastLabel = UILabel(frame: CGRectMake(self.view.frame.size.width/2 - 150, self.view.frame.size.height-100, 300, 35))
-        toastLabel.backgroundColor = UIColor.blackColor()
-        toastLabel.textColor = UIColor.whiteColor()
-        toastLabel.textAlignment = NSTextAlignment.Center;
-        self.view.addSubview(toastLabel)
-        toastLabel.text = message
-        toastLabel.alpha = 1.0
-        toastLabel.layer.cornerRadius = 10;
-        toastLabel.clipsToBounds  =  true
-        
-        UIView.animateWithDuration(4.0,delay: 0.1,options: .CurveEaseOut, animations: {toastLabel.alpha = 0.0}, completion: nil)
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+                self.clickedAlertOK = true
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     

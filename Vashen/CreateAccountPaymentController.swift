@@ -55,7 +55,7 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
             clientPaymentToken = try Payment.getPaymentToken(token)
             AppData.savePaymentToken(clientPaymentToken)
         } catch {
-            
+            createAlertInfo("Error con pagos")
         }
     }
     
@@ -127,8 +127,21 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     }
     
     @IBAction func clickedCancel(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("payment") as! PaymentController
+        let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
         self.presentViewController(nextViewController, animated:true, completion:nil)
+    }
+    
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+                let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+                self.presentViewController(nextViewController, animated:true, completion:nil)
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
 
 }

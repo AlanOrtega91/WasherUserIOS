@@ -28,6 +28,7 @@
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitud" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
         <attribute name="longitud" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="model" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="price" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="service" optional="YES" attributeType="String" syncable="YES"/>
@@ -57,7 +58,7 @@
     <elements>
         <element name="Car" positionX="261" positionY="216" width="128" height="165"/>
         <element name="Cleaner" positionX="288" positionY="234" width="128" height="120"/>
-        <element name="Service" positionX="306" positionY="243" width="128" height="285"/>
+        <element name="Service" positionX="306" positionY="243" width="128" height="300"/>
         <element name="User" positionX="324" positionY="252" width="128" height="195"/>
         <element name="UserCard" positionX="261" positionY="189" width="128" height="105"/>
     </elements>

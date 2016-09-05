@@ -51,7 +51,8 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         
         self.presentViewController(nextViewController, animated:true, completion:nil)
         } catch {
-            postAlert("Error con credenciales")
+            //TODO: set invalid for password length
+            createAlertInfo("Error con credenciales")
         }
     }
     
@@ -68,20 +69,6 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         if password.text != password2.text {
             throw Error.passwordDontMatch
         }
-    }
-    
-    private func postAlert(message:String){
-        let toastLabel = UILabel(frame: CGRectMake(self.view.frame.size.width/2 - 150, self.view.frame.size.height-100, 300, 35))
-        toastLabel.backgroundColor = UIColor.blackColor()
-        toastLabel.textColor = UIColor.whiteColor()
-        toastLabel.textAlignment = NSTextAlignment.Center;
-        self.view.addSubview(toastLabel)
-        toastLabel.text = message
-        toastLabel.alpha = 1.0
-        toastLabel.layer.cornerRadius = 10;
-        toastLabel.clipsToBounds  =  true
-        
-        UIView.animateWithDuration(4.0,delay: 0.1,options: .CurveEaseOut, animations: {toastLabel.alpha = 0.0}, completion: nil)
     }
     
     @IBAction func clickedCancel(sender: AnyObject) {
@@ -107,6 +94,14 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
             break
         }
         return true
+    }
+    
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     enum Error: ErrorType{

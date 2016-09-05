@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             switch state {
             case "2":
                 message = "Tu servicio fue aceptado"
+                sendPopUp(message)
                 if let serviceJson = userInfo["serviceInfo"] as? String{
                     let data = serviceJson.dataUsingEncoding(NSUTF8StringEncoding)
                     do {
@@ -55,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 break
             case "4":
                 message = "Tu servicio comenzo"
+                sendPopUp(message)
                 if let serviceJson = userInfo["serviceInfo"] as? String{
                     let data = serviceJson.dataUsingEncoding(NSUTF8StringEncoding)
                     do {
@@ -68,12 +70,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 break
             case "5":
                 message = "Terminado"
+                sendPopUp(message)
                 if let serviceJson = userInfo["serviceInfo"] as? String{
                     let data = serviceJson.dataUsingEncoding(NSUTF8StringEncoding)
                     do {
                     let service = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! NSDictionary
                         print(service)
                         saveNewServiceState(service)
+                    } catch {}
+                    
+                    //TODO: check if notify or popup
+                }
+                break
+            case "6":
+                print(userInfo["message"])
+                if userInfo["message"] as? String == "5" {
+                    sendPopUp("Canceled")
+                }
+                if let serviceJson = userInfo["serviceInfo"] as? String{
+                    let data = serviceJson.dataUsingEncoding(NSUTF8StringEncoding)
+                    do {
+                        let service = try NSJSONSerialization.JSONObjectWithData(data!, options: []) as! NSDictionary
+                        print(service)
+                        deleteService(service)
                     } catch {}
                     
                     //TODO: check if notify or popup
@@ -109,6 +128,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } else {
             services![i!].rating = -1
         }
+        DataBase.saveServices(services!)
+        AppData.notifyNewData(true)
+    }
+    
+    func deleteService(serviceJson:NSDictionary){
+        var services = DataBase.readServices()
+        let id = serviceJson["id"] as! String
+        let i = services?.indexOf({$0.id == id})
+        
+        services?.removeAtIndex(i!)
         DataBase.saveServices(services!)
         AppData.notifyNewData(true)
     }

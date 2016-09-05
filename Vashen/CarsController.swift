@@ -18,6 +18,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var cars: Array<Car> = Array<Car>()
     var selectedCar: Car!
     var isEditingCar = false
+    var clickedAlertOK = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,9 +101,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
-            // Delete the row from the data source
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                // do some task
                 self.deleteCar(indexPath.row)
             });
         }
@@ -122,9 +121,32 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 self.tableView.reloadData()
             });
             
-        } catch{
-            //TODO:implement error
-        }
+        } catch Car.CarError.errorDeletingCar{
+            createAlertInfo("Error borrando coche");
+        } catch Car.CarError.errorAddingFavoriteCar{
+            createAlertInfo("Error al seleccionar coche favorito")
+            self.viewDidLoad()
+        } catch Car.CarError.noSessionFound {
+            createAlertInfo("Error de sesion")
+            while !clickedAlertOK {
+                
+            }
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
+        } catch {}
+    }
+    
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+                self.clickedAlertOK = true
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+        })
     }
     
     func sendSelectFavCar(){
@@ -133,8 +155,18 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
             DataBase.setFavoriteCar(selectedCar.id)
             cars = DataBase.readCars()
             tableView.reloadData()
-        } catch{
-            
+        } catch Car.CarError.noSessionFound{
+            createAlertInfo("Error de sesion")
+            while !clickedAlertOK {
+                
+            }
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
+        } catch {
+            createAlertInfo("Error al seleccionar coche favorito")
         }
     }
     @IBAction func onClickEdit(sender: AnyObject) {

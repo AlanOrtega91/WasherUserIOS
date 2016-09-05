@@ -41,6 +41,7 @@ class EditBillingController: UIViewController {
     @IBAction func changeData(sender: AnyObject) {
         if billingName.text == "" || rfc.text == "" || billingAddress == "" {
             //TODO: implement post alert
+            createAlertInfo("Datos incompletos")
             return
         }
         user.billingAddress = billingAddress.text
@@ -53,11 +54,14 @@ class EditBillingController: UIViewController {
         nextViewController.action = LoadingController.EDIT_ACCOUNT
         self.presentViewController(nextViewController, animated: true, completion: nil)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        })
     }
+
     
     @IBAction func clickedCancel(sender: AnyObject) {
         let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("billing") as! BillingController

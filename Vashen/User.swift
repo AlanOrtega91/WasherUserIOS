@@ -26,7 +26,12 @@ public class User {
     
     public static func sendNewUser(user: User, withPassword password: String) throws -> User{
         let url = HttpServerConnection.buildURL(HTTP_LOCATION + "NewUser")
-        let params = "name=\(user.name)&lastName=\(user.lastName)&email=\(user.email)&password=\(password)&phone=\(user.phone)&encoded_string=\(user.encodedImage)"
+        var params = ""
+        if user.encodedImage == nil {
+            params = "name=\(user.name)&lastName=\(user.lastName)&email=\(user.email)&password=\(password)&phone=\(user.phone)"
+        } else {
+            params = "name=\(user.name)&lastName=\(user.lastName)&email=\(user.email)&password=\(password)&phone=\(user.phone)&encoded_string=\(user.encodedImage)"
+        }
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params) as NSDictionary
             if response["Status"] as! String != "OK" {
@@ -62,7 +67,12 @@ public class User {
     
     public func sendChangeUserData(token: String) throws{
         let url = HttpServerConnection.buildURL(User.HTTP_LOCATION + "ChangeUserData")
-        let params = "newName=\(name)&newLastName=\(lastName)&newEmail=\(email)&token=\(token)&newPhone=\(phone)&newBillingName=\(billingName)&newRFC=\(rfc)&newBillingAddress=\(billingAddress)&encoded_image=\(encodedImage)"
+        var params = ""
+        if encodedImage == nil {
+            params = "newName=\(name)&newLastName=\(lastName)&newEmail=\(email)&token=\(token)&newPhone=\(phone)&newBillingName=\(billingName)&newRFC=\(rfc)&newBillingAddress=\(billingAddress)"
+        } else {
+            params = "newName=\(name)&newLastName=\(lastName)&newEmail=\(email)&token=\(token)&newPhone=\(phone)&newBillingName=\(billingName)&newRFC=\(rfc)&newBillingAddress=\(billingAddress)&encoded_string=\(encodedImage)"
+        }
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
             

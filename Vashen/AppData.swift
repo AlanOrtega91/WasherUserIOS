@@ -82,6 +82,20 @@ public class AppData {
         settings.setObject(message, forKey: SERVICE_CHANGED)
     }
     
+    public static func deleteMessage() {
+        let settings : NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        settings.removeObjectForKey(MESSAGE)
+    }
+    
+    public static func getMessage() -> String {
+        let settings : NSUserDefaults = NSUserDefaults.standardUserDefaults()
+        if let message = settings.stringForKey(MESSAGE) {
+            return message
+        } else {
+            return ""
+        }
+    }
+    
     public static func eliminateData() {
         let settings : NSUserDefaults = NSUserDefaults.standardUserDefaults()
         settings.removeObjectForKey(TOKEN)

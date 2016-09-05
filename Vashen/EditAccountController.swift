@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditAccountController: UIViewController {
+class EditAccountController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     var user: User!
 
@@ -17,7 +17,10 @@ class EditAccountController: UIViewController {
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var userImage: UIImageView!
+    
     @IBOutlet weak var scrollView: UIScrollView!
+    
+    var encodedString: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +35,10 @@ class EditAccountController: UIViewController {
     func initView(){
         readUserImage()
         fillUserTextFields()
-        scrollView.contentSize.height = 1000
+        scrollView.contentSize.height = 600
+        let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
+        userImage.userInteractionEnabled = true
+        userImage.addGestureRecognizer(tapGestureRecognizer)
     }
     
     func readUserImage(){
@@ -62,13 +68,14 @@ class EditAccountController: UIViewController {
     }
     @IBAction func sendModifyData(sender: AnyObject) {
         if name.text == "" || lastName.text == "" {
-            //TODO: Implement postAlert
+            createAlertInfo("Faltan datos")
             return
         }
         user.name = name.text
         user.lastName = lastName.text
         user.email = email.text
         user.phone = phone.text
+        user.encodedImage = encodedString
         do{
         try reviewCredentials()
         
@@ -78,7 +85,7 @@ class EditAccountController: UIViewController {
         nextViewController.action = LoadingController.EDIT_ACCOUNT
         self.presentViewController(nextViewController, animated: true, completion: nil)
         } catch{
-            //TODO: PostAlert
+            createAlertInfo("email o contrasena invalidos")
         }
         
     }
@@ -88,10 +95,34 @@ class EditAccountController: UIViewController {
             throw Error.invalidCredentialsEmail
         }
     }
+    
+    @IBAction func clickOpenCamera(sender: AnyObject) {
+        openCamera()
+    }
+    func openCamera(){
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+            let imagePicker = UIImagePickerController()
+            imagePicker.delegate = self
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+            imagePicker.allowsEditing = false
+            self.presentViewController(imagePicker, animated: true, completion: nil)
+        }
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        userImage.image = imagePicked
+        let imageData = UIImageJPEGRepresentation(imagePicked, 0.5)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            self.encodedString = imageData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
+        });
+        self.dismissViewControllerAnimated(true, completion: nil);
+    }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func createAlertInfo(message:String){
+        dispatch_async(dispatch_get_main_queue(), {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
+        })
     }
     
     @IBAction func clickedCancel(sender: AnyObject) {

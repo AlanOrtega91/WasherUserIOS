@@ -38,9 +38,9 @@ public class Service {
     public static let SMALL_VAN = 4
     public static let BIG_VAN = 5
     
-    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withType idServiceType:String, withToken token:String, withCar idCar:String) throws -> Service{
+    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withType idServiceType:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
         let url = HttpServerConnection.buildURL(HTTP_LOCATION + "RequestService")
-        let params = "direccion=\(direccion)&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&idTipoServicio=\(idServiceType)&token=\(token)&idCoche=\(idCar)"
+        let params = "direccion=\(direccion)&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&idTipoServicio=\(idServiceType)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
             if response["Status"] as! String == "SESSION ERROR" {
