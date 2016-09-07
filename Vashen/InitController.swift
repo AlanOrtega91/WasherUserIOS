@@ -26,7 +26,6 @@ class InitController: UIViewController {
     
     func initView() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            // do some task
             self.decideNextView()
         });
     }
@@ -41,13 +40,13 @@ class InitController: UIViewController {
     
     func tryReadUser() {
         do{
-            FIRMessaging.messaging().connectWithCompletion({ (error) in
-                if (error != nil){
-                    print("Unable to connect with FCM = \(error)")
-                } else {
-                    print("Connected to FCM")
-                }
-            })
+//            FIRMessaging.messaging().connectWithCompletion({ (error) in
+//                if (error != nil){
+//                    print("Unable to connect with FCM = \(error)")
+//                } else {
+//                    print("Connected to FCM")
+//                }
+//            })
             try ProfileReader.run()
             getPaymentToken()
             

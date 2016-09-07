@@ -220,7 +220,6 @@
 				E7FE8A171D4EC1B40071CDFA /* HelpController.swift */,
 				E7FE8A191D4EC1C90071CDFA /* ConfigurationController.swift */,
 				E7FE8A1B1D4EC1D30071CDFA /* AboutController.swift */,
-				E7FE8A231D4F01A90071CDFA /* InitController.swift */,
 				E7FE8A251D4F04DD0071CDFA /* MapController.swift */,
 				E7FE8A271D4F060B0071CDFA /* MainController.swift */,
 				E7FE8A291D4F067E0071CDFA /* LoginController.swift */,
@@ -231,6 +230,7 @@
 				E7FE8A331D4F230E0071CDFA /* EditBillingController.swift */,
 				E7FE8A351D4F248E0071CDFA /* AddCarController.swift */,
 				E7FE8A371D4F24C70071CDFA /* EditAccountController.swift */,
+				E7FE8A231D4F01A90071CDFA /* InitController.swift */,
 				E7550BA61D526FB500FBD719 /* LoadingController.swift */,
 				E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */,
 				E7550BB21D6360B400FBD719 /* CarCell.swift */,
@@ -550,6 +550,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Vashen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9c7c40b6-eed0-4c9c-9cd0-4d13cf40aa13";
 				SWIFT_OBJC_BRIDGING_HEADER = "Vashen/Vashen-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -566,6 +567,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Vashen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "9c7c40b6-eed0-4c9c-9cd0-4d13cf40aa13";
 				SWIFT_OBJC_BRIDGING_HEADER = "Vashen/Vashen-Bridging-Header.h";
 			};
 			name = Release;

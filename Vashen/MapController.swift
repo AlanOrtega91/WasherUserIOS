@@ -90,7 +90,9 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         super.viewDidLoad()
         initLocation()
         initView()
-        NSTimer.scheduledTimerWithTimeInterval(0.3, target: self, selector: #selector(MapController.initMap), userInfo: nil, repeats: false)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC/3)), dispatch_get_main_queue(), {
+            self.initMap()
+        })
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -184,24 +186,28 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     func initTimers(){
         let  nearbyCleanersQueue = dispatch_queue_create("com.alan.nearbyCleaners", DISPATCH_QUEUE_CONCURRENT);
         nearbyCleanersTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, nearbyCleanersQueue);
-        dispatch_source_set_timer(nearbyCleanersTimer, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC/50, 2*NSEC_PER_SEC);
+        dispatch_source_set_timer(nearbyCleanersTimer, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC, 2*NSEC_PER_SEC);
         
         dispatch_source_set_event_handler(nearbyCleanersTimer, {
             dispatch_async(dispatch_get_main_queue(), {
+                print("nearbyCleaners")
                 let tempLocation = self.requestLocation
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                    self.nearbyCleaners(tempLocation)
-                });
+                if self.activeService == nil && self.requestLocation != nil {
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                        self.nearbyCleaners(tempLocation)
+                    });
+                }
             })
         });
         dispatch_resume(nearbyCleanersTimer);
         
         let  reloadMapQueue = dispatch_queue_create("com.alan.reloadMap", DISPATCH_QUEUE_CONCURRENT);
         reloadMapTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, reloadMapQueue);
-        dispatch_source_set_timer(reloadMapTimer, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC/50, 2*NSEC_PER_SEC);
+        dispatch_source_set_timer(reloadMapTimer, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC, 2*NSEC_PER_SEC);
         
         dispatch_source_set_event_handler(reloadMapTimer, {
             dispatch_async(dispatch_get_main_queue(), {
+                print("ReloadMap")
                 self.reloadMap()
             })
         });
@@ -209,7 +215,6 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func nearbyCleaners(location:CLLocation){
-        if self.activeService == nil && self.requestLocation != nil{
             do{
                 self.cleaners = try Cleaner.getNearbyCleaners(location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
             } catch Cleaner.Error.noSessionFound{
@@ -225,7 +230,6 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             } catch {
                 print("Error leyendo lavadores")
             }
-        }
     }
     
     func reloadMap(){
@@ -310,9 +314,11 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
                 
                 if placemarks!.count > 0 {
                     //TODO:check for convert
-                    let pm = placemarks![0] //as! CLPlacemark
-//                    self.locationText.text = pm.thoroughfare! + " " + pm.subThoroughfare! + ", " + pm.subLocality! + ", " + pm.locality! + ", " + pm.administrativeArea! + ", " + pm.country!
-//                    print(self.locationText.text)
+                    let pm = placemarks![0]
+                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                        //self.locationText.text = "\(pm.thoroughfare) \(pm.subThoroughfare), \(pm.subLocality), \(pm.locality), \(pm.administrativeArea)"
+                        print(self.locationText.text)
+                    });
                 }
                 else {
                     print("Problem with the data received from geocoder")
@@ -583,6 +589,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             clock.invalidate()
         }
         if activeService.rating == -1 {
+            cancelTimers()
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("summary") as! SummaryController
             self.presentViewController(nextViewController, animated: true, completion: nil)
@@ -598,12 +605,13 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func modifyClock(){
-        if activeService != nil || activeService.finalTime != nil {
+        if activeService != nil && activeService.finalTime != nil {
             let diff = activeService.finalTime.timeIntervalSinceNow
-            let minutes = diff/1000/60
+            let minutes = Int(diff/60)
             var display = ""
             if diff < 0 {
                 display = "Terminando servicio en: 0 min"
+                clock.invalidate()
             } else {
                 display = "Terminando servicio en: " + String(minutes + 1) + " min"
             }
@@ -802,20 +810,21 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     
     func initMap(){
         dispatch_async(dispatch_get_main_queue(), {
-            var camera:GMSCameraPosition
-            if self.userLocation == nil {
-                camera = GMSCameraPosition.cameraWithLatitude(0, longitude: 0, zoom: 15.0)
-            } else {
-                camera = GMSCameraPosition.cameraWithLatitude(self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
-            }
-            
+            var camera = GMSCameraPosition.cameraWithLatitude(0, longitude: 0, zoom: 15.0)
             self.map = GMSMapView.mapWithFrame(self.mapView.bounds, camera: camera)
             self.map.delegate = self
-            self.map.camera = camera
             self.map.myLocationEnabled = true
             self.map.accessibilityElementsHidden = false
             self.mapView.addSubview(self.map)
-            self.view.sendSubviewToBack(self.mapView)
+            
+            if self.userLocation != nil {
+                camera = GMSCameraPosition.cameraWithLatitude(self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
+            } else if self.map.myLocation != nil{
+                camera = GMSCameraPosition.cameraWithLatitude(self.map.myLocation!.coordinate.latitude, longitude: self.map.myLocation!.coordinate.longitude, zoom: 15.0)
+            }
+            
+            //self.view.sendSubviewToBack(self.mapView)
+            self.map.camera = camera
             
             // Creates a marker in the center of the map.
             self.centralMarker.position = CLLocationCoordinate2D(latitude: camera.target.latitude, longitude: camera.target.longitude)
@@ -827,12 +836,11 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
         if activeService == nil{
             centralMarker.position = CLLocationCoordinate2D(latitude: position.target.latitude, longitude: position.target.longitude)
+            //TODO: change to send geocoder async in xs time
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                self.reloadAddress(self.requestLocation)
+            });
         }
-        
-        //TODO: change to send geocoder async in xs time
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            self.reloadAddress(self.requestLocation)
-        });
     }
     
     @IBAction func myLocationClicked(sender: AnyObject) {
@@ -842,19 +850,16 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         } else {
             camera = GMSCameraPosition.cameraWithLatitude(self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
         }
-        self.map.camera = camera
+        self.map.animateToCameraPosition(camera)
     }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
-                self.clickedAlertOK = true
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
+        let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+            self.clickedAlertOK = true
+        }))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
-    
     
     enum Error: ErrorType{
         case invalidVehicle

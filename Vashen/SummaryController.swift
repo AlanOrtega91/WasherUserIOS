@@ -27,7 +27,7 @@ class SummaryController: UIViewController {
     
     var clickedAlertOK = false
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidLoad() {
         initValues()
         initView()
     }
@@ -45,37 +45,35 @@ class SummaryController: UIViewController {
             let format = NSDateFormatter()
             format.dateFormat = "yyy-MM-dd HH:mm:ss"
             date.text = format.stringFromDate(activeService.acceptedTime)
-            price.text = activeService.price
-            NSTimer.scheduledTimerWithTimeInterval(5, target: self, selector: #selector(setMapImage), userInfo: nil, repeats: false)
-            NSTimer.scheduledTimerWithTimeInterval(0, target: self, selector: #selector(setCleanerImage), userInfo: nil, repeats: false)
+            price.text = "$\(activeService.price)"
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                self.setMapImage()
+                self.setCleanerImage()
+            });
         }
     }
     
     func setMapImage(){
         let url = NSURL(string: "https://maps.googleapis.com/maps/api/staticmap?center=\(activeService.latitud),\(activeService.longitud)&markers=color:red%7Clabel:S%7C\(activeService.latitud),\(activeService.longitud)&zoom=15&size=1000x400&key=")
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let data = NSData(contentsOfURL: url!){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.location.image = UIImage(data: data)
-                });
-            }
+        if let data = NSData(contentsOfURL: url!){
+            dispatch_async(dispatch_get_main_queue(), {
+                self.cleaner.image = UIImage(data: data)
+            });
         }
     }
     
     func setCleanerImage(){
         let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/" + activeService.id + "/profile_image.jpg")
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let data = NSData(contentsOfURL: url!){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.cleaner.image = UIImage(data: data)
-                });
-            }
+        if let data = NSData(contentsOfURL: url!){
+            dispatch_async(dispatch_get_main_queue(), {
+                self.cleaner.image = UIImage(data: data)
+            });
         }
     }
     @IBAction func clickSend(sender: UIButton) {
-        NSTimer.scheduledTimerWithTimeInterval(0, target: self, selector: #selector(sendReview), userInfo: nil, repeats: false)
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            self.sendReview()
+        });
     }
     
     func sendReview() {
@@ -100,12 +98,12 @@ class SummaryController: UIViewController {
             self.presentViewController(nextViewController, animated: true, completion: nil)
         } catch {
             createAlertInfo("Error enviando la calificacion")
-            while !clickedAlertOK {
-                
-            }
-            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+//            while !clickedAlertOK {
+//                
+//            }
+//            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+//            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+//            self.presentViewController(nextViewController, animated: true, completion: nil)
         }
     }
     
@@ -118,6 +116,7 @@ class SummaryController: UIViewController {
             self.presentViewController(alert, animated: true, completion: nil)
         })
     }
+    
     
     @IBAction func starClicked(sender: UIButton) {
         switch sender {

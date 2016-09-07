@@ -23,8 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FIRApp.configure()
         let notificationType: UIUserNotificationType = [UIUserNotificationType.Alert,UIUserNotificationType.Badge,UIUserNotificationType.Sound]
         let notificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
-        application.registerForRemoteNotifications()
         application.registerUserNotificationSettings(notificationSettings)
+        application.registerForRemoteNotifications()
         FIRMessaging.messaging().connectWithCompletion({ (error) in
             if (error != nil){
                 print("Unable to connect with FCM = \(error)")
@@ -144,6 +144,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func sendPopUp(message:String){
         AppData.saveMessage(message)
+    }
+    
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Prod)
     }
 
     func applicationWillResignActive(application: UIApplication) {

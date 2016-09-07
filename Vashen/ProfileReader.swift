@@ -144,7 +144,7 @@ public class ProfileReader {
             service.cleanerName = serviceJSON["nombreLavador"] as? String
             
             let format = NSDateFormatter()
-            format.dateFormat = "yyy-MM-dd HH:mm:ss"
+            format.dateFormat = "yyyy-MM-dd HH:mm:ss"
             if let finalTime = serviceJSON["horaFinalEstimada"] as? String{
                 service.finalTime = format.dateFromString(finalTime)
             }

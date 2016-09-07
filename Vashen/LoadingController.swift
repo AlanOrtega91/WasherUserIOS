@@ -79,21 +79,37 @@ public class LoadingController: UIViewController {
             token = AppData.readToken()
             try getPaymentToken()
             //TODO: implement this AppData.readFirebaseToken()
-            FIRMessaging.messaging().connectWithCompletion({ (error) in
-                if (error != nil){
-                    print("Unable to connect with FCM = \(error)")
-                } else {
-                    print("Connected to FCM")
-                }
-            })
-            let fireBaseToken:String = FIRInstanceID.instanceID().token()!
-            try User.saveFirebaseToken(token,pushNotificationToken: fireBaseToken)
+//            FIRMessaging.messaging().connectWithCompletion({ (error) in
+//                if (error != nil){
+//                    print("Unable to connect with FCM = \(error)")
+//                } else {
+//                    print("Connected to FCM")
+//                }
+//            })
+            if let firebaseToken = FIRInstanceID.instanceID().token() {
+                try User.saveFirebaseToken(token,pushNotificationToken: firebaseToken)
+            } else {
+                throw User.UserError.errorSavingFireBaseToken
+            }
+            
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
             dispatch_async(dispatch_get_main_queue(), {
                 self.presentViewController(nextViewController, animated: true, completion: nil)
             })
-        }  catch {
+        }  catch User.UserError.errorSavingFireBaseToken{
+            createAlertInfo("Error con el sistema de notificaciones")
+            while !clickedAlertOK {
+                
+            }
+            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
+            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("login") as! LoginController
+            nextViewController.emailSet = email
+            nextViewController.passwordSet = password
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(nextViewController, animated: true, completion: nil)
+            })
+        } catch {
             createAlertInfo("Error al iniciar sesion")
             while !clickedAlertOK {
                 

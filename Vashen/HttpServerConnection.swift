@@ -22,7 +22,7 @@ public class HttpServerConnection
         do {
             let request = NSMutableURLRequest.init(URL: NSURL.init(string: urlPath)!)
             request.HTTPMethod = "POST"
-            request.timeoutInterval = 20
+            request.timeoutInterval = 10
             request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
             var response : NSURLResponse?
         

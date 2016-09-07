@@ -73,7 +73,7 @@ class MenuVC: UITableViewController {
             let cell = tableView.dequeueReusableCellWithIdentifier("headerCell", forIndexPath: indexPath) as! HeaderCell
             if user.encodedImage != nil {
                 let dataDecoded = NSData(base64EncodedString: user.encodedImage, options: .IgnoreUnknownCharacters)
-                //cell.userImage.image = UIImage(data: dataDecoded!)!
+                cell.userImage.image = UIImage(data: dataDecoded!)!
             }
             cell.userName.text = user.name + " " + user.lastName
             return cell
