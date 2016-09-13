@@ -25,13 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let notificationSettings = UIUserNotificationSettings(forTypes: notificationType, categories: nil)
         application.registerUserNotificationSettings(notificationSettings)
         application.registerForRemoteNotifications()
-        FIRMessaging.messaging().connectWithCompletion({ (error) in
-            if (error != nil){
-                print("Unable to connect with FCM = \(error)")
-            } else {
-                print("Connected to FCM")
-            }
-        })
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(self.tokenRefreshNotificaiton),
+                                                         name: kFIRInstanceIDTokenRefreshNotification, object: nil)
         return true
     }
     
@@ -70,7 +65,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 break
             case "5":
                 message = "Terminado"
-                sendPopUp(message)
                 if let serviceJson = userInfo["serviceInfo"] as? String{
                     let data = serviceJson.dataUsingEncoding(NSUTF8StringEncoding)
                     do {
@@ -146,8 +140,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppData.saveMessage(message)
     }
     
+    func tokenRefreshNotificaiton(notification: NSNotification) {
+        if let refreshedToken = FIRInstanceID.instanceID().token() {
+            print("InstanceID token: \(refreshedToken)")
+            // Connect to FCM since connection may have failed when attempted before having a token.
+            connectToFcm()
+        }
+    }
+    // [END refresh_token]
+    
+    // [START connect_to_fcm]
+    func connectToFcm() {
+        FIRMessaging.messaging().connectWithCompletion { (error) in
+            if (error != nil) {
+                print("Unable to connect with FCM. \(error)")
+            } else {
+                print("Connected to FCM.")
+            }
+        }
+    }
+    
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Prod)
+        print(NSString(data: deviceToken, encoding: NSUTF8StringEncoding))
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: FIRInstanceIDAPNSTokenType.Unknown)
     }
 
     func applicationWillResignActive(application: UIApplication) {

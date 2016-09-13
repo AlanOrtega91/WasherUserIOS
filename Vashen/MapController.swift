@@ -136,7 +136,8 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("summary") as! SummaryController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            self.navigationController?.pushViewController(nextViewController, animated: true)
+            //TODO:check --- self.presentViewController(nextViewController, animated: true, completion: nil)
         } else {
             viewState = SERVICE_START
             configureState()

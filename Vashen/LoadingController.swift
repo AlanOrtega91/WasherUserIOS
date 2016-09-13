@@ -38,6 +38,7 @@ public class LoadingController: UIViewController {
     var user:User!
     var clickedAlertOK = false
     
+
     override public func viewDidAppear(animated: Bool) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             // do some task
@@ -78,14 +79,6 @@ public class LoadingController: UIViewController {
         try ProfileReader.run(email, withPassword:password)
             token = AppData.readToken()
             try getPaymentToken()
-            //TODO: implement this AppData.readFirebaseToken()
-//            FIRMessaging.messaging().connectWithCompletion({ (error) in
-//                if (error != nil){
-//                    print("Unable to connect with FCM = \(error)")
-//                } else {
-//                    print("Connected to FCM")
-//                }
-//            })
             if let firebaseToken = FIRInstanceID.instanceID().token() {
                 try User.saveFirebaseToken(token,pushNotificationToken: firebaseToken)
             } else {

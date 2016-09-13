@@ -40,13 +40,6 @@ class InitController: UIViewController {
     
     func tryReadUser() {
         do{
-//            FIRMessaging.messaging().connectWithCompletion({ (error) in
-//                if (error != nil){
-//                    print("Unable to connect with FCM = \(error)")
-//                } else {
-//                    print("Connected to FCM")
-//                }
-//            })
             try ProfileReader.run()
             getPaymentToken()
             
@@ -54,9 +47,9 @@ class InitController: UIViewController {
             let firebaseToken = FIRInstanceID.instanceID().token()
             if firebaseToken == nil {
                 throw User.UserError.errorSavingFireBaseToken
+            } else {
+                try User.saveFirebaseToken(token,pushNotificationToken: firebaseToken!)
             }
-            try User.saveFirebaseToken(token,pushNotificationToken: firebaseToken!)
-
             changeView("Map", controllerName: "reveal_controller")
         } catch User.UserError.errorSavingFireBaseToken{
             ProfileReader.delete()

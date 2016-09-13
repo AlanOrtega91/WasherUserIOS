@@ -23,12 +23,29 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <segue destination="bGG-lk-isV" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegueSetController" id="mJi-df-6T0"/>
-                        <segue destination="GBQ-w9-cbx" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="RxA-8q-y4E"/>
+                        <segue destination="S0s-pT-ifU" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="3C1-f1-R3G"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="56p-lE-Mzq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="221" y="404"/>
+            <point key="canvasLocation" x="257" y="377"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="3Bj-4m-aVj">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="S0s-pT-ifU" sceneMemberID="viewController">
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="oKM-ED-peS">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="GBQ-w9-cbx" kind="relationship" relationship="rootViewController" id="NNC-sy-0Yq"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L83-Zb-EyK" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="441" y="1120"/>
         </scene>
         <!--MenuVC-->
         <scene sceneID="IE6-ue-G6B">

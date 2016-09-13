@@ -83,10 +83,10 @@ class SummaryController: UIViewController {
             let index = services?.indexOf({$0.id == activeService.id})
             services![index!].rating = rating
             DataBase.saveServices(services!)
-            
-            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            self.navigationController?.popViewControllerAnimated(true)
+//            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+//            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
+//            self.presentViewController(nextViewController, animated: true, completion: nil)
         } catch Service.Error.noSessionFound{
             //TODO: implement errors
             createAlertInfo("Error con sesion")
