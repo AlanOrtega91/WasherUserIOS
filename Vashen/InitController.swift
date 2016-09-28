@@ -12,12 +12,38 @@ import FirebaseMessaging
 
 class InitController: UIViewController {
     
-    var settings : NSUserDefaults = NSUserDefaults.standardUserDefaults()
+    var settings : UserDefaults = UserDefaults.standard
     var token : String = ""
     var clickedAlertOK = false
 
+    @IBOutlet weak var loading: UIImageView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        var imgList = [UIImage]()
+        for countValue in 0...119 {
+            if countValue%2 == 0 {
+            let strImageName = "frame_\(countValue)_delay-0.04s"
+            let image = UIImage(named: strImageName)
+            if image != nil {
+                imgList.append(image!)
+            }
+        }
+        }
+        self.loading.animationImages = imgList
+        self.loading.animationDuration = 5.0
+        self.loading.startAnimating()
+        imgList.removeAll()
+    }
+    
+    
+    override func didReceiveMemoryWarning() {
+        print("memory warning bato")
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        initValues()
+        initView()
     }
     
     func initValues() {
@@ -25,14 +51,14 @@ class InitController: UIViewController {
     }
     
     func initView() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global().async {
             self.decideNextView()
-        });
+        }
     }
     
     func decideNextView(){
         if token == "" {
-            changeView("Main", controllerName: "main")
+            changeView(storyBoardName: "Main", controllerName: "main")
         } else{
             tryReadUser()
         }
@@ -41,70 +67,46 @@ class InitController: UIViewController {
     func tryReadUser() {
         do{
             try ProfileReader.run()
-            getPaymentToken()
-            
             
             let firebaseToken = FIRInstanceID.instanceID().token()
-            if firebaseToken == nil {
-                throw User.UserError.errorSavingFireBaseToken
-            } else {
-                try User.saveFirebaseToken(token,pushNotificationToken: firebaseToken!)
+            if firebaseToken != nil {
+                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken!)
             }
-            changeView("Map", controllerName: "reveal_controller")
+            changeView(storyBoardName: "Map", controllerName: "reveal_controller")
         } catch User.UserError.errorSavingFireBaseToken{
             ProfileReader.delete()
-            createAlertInfo("Error con el sistema de notificaciones")
+            createAlertInfo(message: "Error con el sistema de notificaciones")
             while !clickedAlertOK {
                 
             }
-            changeView("Main", controllerName: "main")
+            changeView(storyBoardName: "Main", controllerName: "main")
         } catch {
             ProfileReader.delete()
-            createAlertInfo("Error con el inicio de sesion")
+            createAlertInfo(message: "Error con el inicio de sesion")
             while !clickedAlertOK {
                 
             }
-            changeView("Main", controllerName: "main")
+            changeView(storyBoardName: "Main", controllerName: "main")
         }
     }
     
-    private func getPaymentToken(){
-        do{
-           let paymentToken = try Payment.getPaymentToken(token)
-            AppData.savePaymentToken(paymentToken)
-            
-        } catch Payment.PaymentError.errorGettingPaymentToken{
-            createAlertInfo("Pagos no disponibles")
-        } catch Payment.PaymentError.noSessionFound{
-            createAlertInfo("Error con sesion")
-            changeView("Main", controllerName: "main")
-        } catch {
-            createAlertInfo("Error general")
-            changeView("Main", controllerName: "main")
-        }
-    }
     
     private func changeView(storyBoardName:String, controllerName:String){
         let storyBoard = UIStoryboard(name: storyBoardName, bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier(controllerName)
-        dispatch_async(dispatch_get_main_queue(), {
-            self.presentViewController(nextViewController, animated: true, completion: nil)
-        })
-        
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: controllerName)
+        DispatchQueue.main.async {
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            _ = self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
                 self.clickedAlertOK = true
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        initValues()
-        initView()
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }

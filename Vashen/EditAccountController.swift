@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditAccountController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate {
+class EditAccountController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate {
     
     var user: User!
 
@@ -26,6 +26,16 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
         super.viewDidLoad()
         initValues()
         initView()
+        name.delegate = self
+        lastName.delegate = self
+        email.delegate = self
+        phone.delegate = self
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     func initValues(){
@@ -35,9 +45,9 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     func initView(){
         readUserImage()
         fillUserTextFields()
-        scrollView.contentSize.height = 600
+        scrollView.contentSize.height = 1200
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
-        userImage.userInteractionEnabled = true
+        userImage.isUserInteractionEnabled = true
         userImage.addGestureRecognizer(tapGestureRecognizer)
     }
     
@@ -48,8 +58,8 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     }
     
     func setUserImage(){
-        let imageData = NSData(base64EncodedString: user.encodedImage, options: .IgnoreUnknownCharacters)
-        userImage.image = UIImage(data: imageData!)
+        let imageData = NSData(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
+        userImage.image = UIImage(data: imageData! as Data)
     }
     
     func fillUserTextFields(){
@@ -66,9 +76,9 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
             phone.text = user.phone
         }
     }
-    @IBAction func sendModifyData(sender: AnyObject) {
+    @IBAction func sendModifyData(_ sender: AnyObject) {
         if name.text == "" || lastName.text == "" {
-            createAlertInfo("Faltan datos")
+            createAlertInfo(message: "Faltan datos")
             return
         }
         user.name = name.text
@@ -80,57 +90,79 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
         try reviewCredentials()
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("loading") as! LoadingController
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loading") as! LoadingController
         nextViewController.user = user
         nextViewController.action = LoadingController.EDIT_ACCOUNT
-        self.presentViewController(nextViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(nextViewController, animated: true)
         } catch{
-            createAlertInfo("email o contrasena invalidos")
+            createAlertInfo(message: "email o contrasena invalidos")
         }
         
     }
     
     func reviewCredentials() throws{
-        if email.text! == "" || !(email.text?.containsString("@"))! || !(email.text?.componentsSeparatedByString("@")[1].containsString("."))!{
-            throw Error.invalidCredentialsEmail
+        if email.text! == "" || !(email.text?.contains("@"))! || !(email.text?.components(separatedBy: "@")[1].contains("."))!{
+            throw EditAccountError.invalidCredentialsEmail
         }
     }
     
-    @IBAction func clickOpenCamera(sender: AnyObject) {
+    @IBAction func clickOpenCamera(_ sender: AnyObject) {
         openCamera()
     }
+    
     func openCamera(){
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
             imagePicker.allowsEditing = false
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         userImage.image = imagePicked
         let imageData = UIImageJPEGRepresentation(imagePicked, 1.0)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            self.encodedString = imageData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
-        });
-        self.dismissViewControllerAnimated(true, completion: nil);
+        DispatchQueue.global(qos: .background).async {
+            self.encodedString = imageData?.base64EncodedString()
+        }
+        self.dismiss(animated: true, completion: nil);
     }
 
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-        })
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        }
     }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("configuration") as! ConfigurationController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case name:
+            lastName.becomeFirstResponder()
+            break
+        case lastName:
+            email.becomeFirstResponder()
+            break
+        case email:
+            phone.becomeFirstResponder()
+            break
+        default:
+            break
+        }
+        return true
+    }
+    
+    @IBAction func phoneMaxLength(_ sender: AnyObject) {
+        if (phone.text?.characters.count)! > 12 {
+            self.phone.deleteBackward()
+        }
+    }
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
-    enum Error: ErrorType{
+    enum EditAccountError: Error{
         case invalidCredentialsEmail
     }
 }

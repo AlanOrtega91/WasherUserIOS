@@ -19,8 +19,7 @@ class ConfigurationController: UIViewController {
     @IBOutlet weak var userImage: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
         initValues()
         initView()
     }
@@ -42,42 +41,40 @@ class ConfigurationController: UIViewController {
     }
     
     func setUserImage(){
-        let imageData = NSData(base64EncodedString: user.encodedImage, options: .IgnoreUnknownCharacters)
-        userImage.image = UIImage(data: imageData!)
+        let imageData = NSData(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
+        userImage.image = UIImage(data: imageData! as Data)
     }
     
     func fillUserTextFields(){
         if user.name != nil {
-            name.text = user.name
+            name.text = String(user.name)
         }
         if user.lastName != nil {
-            lastName.text = user.lastName
+            lastName.text = String(user.lastName)
         }
         if user.email != nil {
-            email.text = user.email
+            email.text = String(user.email)
         }
         if user.phone != nil {
-            phone.text = user.phone
-        }
-    }
-    @IBAction func sendLogOut(sender: AnyObject) {
-        do{
-        ProfileReader.delete()
-        try user.sendLogout()
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main") as! MainController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
-        } catch {
-            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main") as! MainController
-            self.presentViewController(nextViewController, animated:true, completion:nil)
+            phone.text = String(user.phone)
         }
     }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Map", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func sendLogOut(_ sender: AnyObject) {
+        do{
+            ProfileReader.delete()
+            try user.sendLogout()
+        } catch {
+            print("Error logging out")
+        }
+        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+        self.navigationController?.setViewControllers([nextViewController], animated: true)
+        _ = self.navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
 }

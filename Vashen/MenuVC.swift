@@ -20,81 +20,70 @@ class MenuVC: UITableViewController {
         self.tableView.backgroundView = imageView
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let user = DataBase.readUser()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell") as! HeaderCell
+        if user.encodedImage != nil {
+            let dataDecoded = NSData(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
+            cell.userImage.image = UIImage(data: dataDecoded! as Data)!
+        }
+        cell.userName.text = user.name + " " + user.lastName
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Menu", bundle:nil)
-        //TODO: Add navigation controller
-        if indexPath.row > 0 {
-            switch TableArray[indexPath.row - 1] {
-            case TableArray[0]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("payment") as! PaymentController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            case TableArray[1]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("billing") as! BillingController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            case TableArray[2]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("history") as! HistoryController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            case TableArray[3]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("cars") as! CarsController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            case TableArray[4]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("help") as! HelpController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            case TableArray[5]:
-                let url = NSURL(string: "https://google.com")!
-                UIApplication.sharedApplication().openURL(url)
-                break
-            case TableArray[6]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("configuration") as! ConfigurationController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            case TableArray[7]:
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("about") as! AboutController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
-                break
-            default:
-                return
-            }
+        var nextViewController = storyBoard.instantiateViewController(withIdentifier: "payment")
+        switch TableArray[indexPath.row] {
+        case TableArray[0]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "payment") as! PaymentController
+            break
+        case TableArray[1]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "billing") as! BillingController
+            break
+        case TableArray[2]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "history") as! HistoryController
+            break
+        case TableArray[3]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "cars") as! CarsController
+            break
+        case TableArray[4]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "help") as! HelpController
+            break
+        case TableArray[5]:
+            let url = NSURL(string: "https://google.com")!
+            UIApplication.shared.openURL(url as URL)
+            break
+        case TableArray[6]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "configuration") as! ConfigurationController
+            break
+        case TableArray[7]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "about") as! AboutController
+            break
+        default:
+            return
         }
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
+
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return TableArray.count + 1
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return TableArray.count
     }
-    
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            let user = DataBase.readUser()
-            let cell = tableView.dequeueReusableCellWithIdentifier("headerCell", forIndexPath: indexPath) as! HeaderCell
-            if user.encodedImage != nil {
-                let dataDecoded = NSData(base64EncodedString: user.encodedImage, options: .IgnoreUnknownCharacters)
-                cell.userImage.image = UIImage(data: dataDecoded!)!
-            }
-            cell.userName.text = user.name + " " + user.lastName
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("menuCell", forIndexPath: indexPath) as! MenuCell
-            cell.menuLabel.text = TableArray[indexPath.row - 1]
-            if TableArray[indexPath.row - 1] != "Acerca de" {
-                cell.menuImage.image = ImageMenuArray[indexPath.row - 1]
-            }
-            return cell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell", for: indexPath as IndexPath) as! MenuCell
+        cell.menuLabel.text = TableArray[indexPath.row]
+        if TableArray[indexPath.row] != "Acerca de" {
+            cell.menuImage.image = ImageMenuArray[indexPath.row]
         }
-        
+        return cell
     }
     
-    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if indexPath.row == 0 {
-            return 120
-        } else {
-            return 50
-        }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
     }
     
-    
+    override func tableView(_ tableView : UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 120
+    }
 }

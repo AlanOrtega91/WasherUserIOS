@@ -9,6 +9,7 @@
 import Foundation
 
 class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var rightBarButton: UIBarButtonItem!
@@ -21,15 +22,18 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     var clickedAlertOK = false
     
     override func viewDidLoad() {
-        super.viewDidLoad()
         initValues()
         self.tableView.delegate = self
         self.tableView.dataSource = self
-
     }
     
-    override func viewDidAppear(animated: Bool) {
-
+    override func viewWillAppear(_ animated: Bool) {
+        super.setEditing(false, animated: true)
+        self.tableView.setEditing(false, animated: true)
+        isEditingCar = false
+        rightBarButton.title = "Editar"
+        initValues()
+        self.tableView.reloadData()
     }
     
     func initValues() {
@@ -39,33 +43,33 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cars.count + 1
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row >= cars.count {
-            let cell = self.tableView.dequeueReusableCellWithIdentifier("addCell")
+            let cell = self.tableView.dequeueReusableCell(withIdentifier: "addCell")
             return cell!
         } else {
             let car = self.cars[indexPath.row]
-            let cell = self.tableView.dequeueReusableCellWithIdentifier("carCell") as! CarCell
+            let cell = self.tableView.dequeueReusableCell(withIdentifier: "carCell") as! CarCell
             cell.plates.text = car.plates
             cell.brand.text = car.brand
             if selectedCar != nil {
                 if selectedCar.id == car.id {
-                    cell.selectedIndicator.hidden = false
+                    cell.selectedIndicator.isHidden = false
                 } else {
-                    cell.selectedIndicator.hidden = true
+                    cell.selectedIndicator.isHidden = true
                 }
             } else {
-                cell.selectedIndicator.hidden = true
+                cell.selectedIndicator.isHidden = true
             }
             return cell
         }
     }
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.row >= cars.count {
             return 50
         } else {
@@ -73,17 +77,17 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row >= cars.count {
             let storyBoard: UIStoryboard = UIStoryboard(name: "Menu", bundle:nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("addCar") as! AddCarController
-            self.presentViewController(nextViewController, animated:true, completion:nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "addCar") as! AddCarController
+            self.navigationController?.pushViewController(nextViewController, animated: true)
         } else {
             if isEditingCar {
                 let storyBoard: UIStoryboard = UIStoryboard(name: "Menu", bundle:nil)
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("editCar") as! EditCarController
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "editCar") as! EditCarController
                 nextViewController.car = cars[indexPath.row]
-                self.presentViewController(nextViewController, animated:true, completion:nil)
+                self.navigationController?.pushViewController(nextViewController, animated: true)
             } else {
                 selectedCar = cars[indexPath.row]
                 sendSelectFavCar()
@@ -91,7 +95,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
     }
     
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if indexPath.row >= cars.count {
             return false
         } else {
@@ -99,77 +103,69 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
     }
     
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                self.deleteCar(indexPath.row)
-            });
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            self.deleteCar(index: indexPath.row)
         }
     }
     
     func deleteCar(index:Int){
         do{
             let id = cars[index].id
-            try Car.deleteFavoriteCar(id, token: token)
-            cars.removeAtIndex(index)
+            try Car.deleteFavoriteCar(id: id!, token: token)
+            cars.remove(at: index)
             if cars.count == 1 {
-                try Car.selectFavoriteCar(cars[0].id, withToken: token)
+                try Car.selectFavoriteCar(carId: cars[0].id, withToken: token)
                 cars[0].favorite = 1
             }
-            DataBase.saveCars(cars)
-            dispatch_async(dispatch_get_main_queue(), {
-                self.tableView.reloadData()
-            });
+            DataBase.saveCars(cars: cars)
+            self.tableView.reloadData()
             
         } catch Car.CarError.errorDeletingCar{
-            createAlertInfo("Error borrando coche");
+            createAlertInfo(message: "Error borrando coche");
         } catch Car.CarError.errorAddingFavoriteCar{
-            createAlertInfo("Error al seleccionar coche favorito")
+            createAlertInfo(message: "Error al seleccionar coche favorito")
             self.viewDidLoad()
         } catch Car.CarError.noSessionFound {
-            createAlertInfo("Error de sesion")
+            createAlertInfo(message: "Error de sesion")
             while !clickedAlertOK {
                 
             }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            _ = self.navigationController?.popToRootViewController(animated: true)
         } catch {}
     }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
                 self.clickedAlertOK = true
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
+            self.present(alert, animated: true, completion: nil)
     }
     
     func sendSelectFavCar(){
         do{
-            try Car.selectFavoriteCar(selectedCar.id, withToken: token)
-            DataBase.setFavoriteCar(selectedCar.id)
+            try Car.selectFavoriteCar(carId: selectedCar.id, withToken: token)
+            DataBase.setFavoriteCar(id: selectedCar.id)
             cars = DataBase.readCars()
             tableView.reloadData()
         } catch Car.CarError.noSessionFound{
-            createAlertInfo("Error de sesion")
+            createAlertInfo(message: "Error de sesion")
             while !clickedAlertOK {
                 
             }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            _ = self.navigationController?.popToRootViewController(animated: true)
         } catch {
-            createAlertInfo("Error al seleccionar coche favorito")
+            createAlertInfo(message: "Error al seleccionar coche favorito")
         }
     }
-    @IBAction func onClickEdit(sender: AnyObject) {
+    @IBAction func onClickEdit(_ sender: AnyObject) {
         if isEditingCar {
             super.setEditing(false, animated: true)
             self.tableView.setEditing(false, animated: true)
@@ -183,10 +179,8 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
     }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Map", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
 }

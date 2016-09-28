@@ -10,14 +10,9 @@ import Foundation
 
 class AboutController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Map", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditBillingController: UIViewController {
+class EditBillingController: UIViewController, UITextFieldDelegate {
 
     var user: User!
     var token: String!
@@ -16,6 +16,7 @@ class EditBillingController: UIViewController {
     @IBOutlet weak var rfc: UITextField!
     @IBOutlet weak var billingAddress: UITextField!
     
+    @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
         initValues()
@@ -27,6 +28,12 @@ class EditBillingController: UIViewController {
     }
     
     func initView() {
+        self.scrollView.contentSize.height = 1000
+        self.billingName.delegate = self
+        self.rfc.delegate = self
+        self.billingAddress.delegate = self
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
         if user.billingName != nil {
             billingName.text = user.billingName
         }
@@ -38,10 +45,13 @@ class EditBillingController: UIViewController {
         }
     }
     
-    @IBAction func changeData(sender: AnyObject) {
-        if billingName.text == "" || rfc.text == "" || billingAddress == "" {
-            //TODO: implement post alert
-            createAlertInfo("Datos incompletos")
+    func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @IBAction func changeData(_ sender: AnyObject) {
+        if billingName.text! == "" || rfc.text! == "" || billingAddress.text == "" {
+            self.createAlertInfo(message: "Datos incompletos")
             return
         }
         user.billingAddress = billingAddress.text
@@ -49,23 +59,36 @@ class EditBillingController: UIViewController {
         user.billingName = billingName.text
 
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("loading") as! LoadingController
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loading") as! LoadingController
         nextViewController.user = user
         nextViewController.action = LoadingController.EDIT_ACCOUNT
-        self.presentViewController(nextViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-        })
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
     }
 
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+        case billingName:
+            rfc.becomeFirstResponder()
+            break
+        case rfc:
+            billingAddress.becomeFirstResponder()
+            break
+        case billingAddress:
+            changeData("" as AnyObject)
+            break
+        default:
+            break
+        }
+        return true
+    }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("billing") as! BillingController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
 }

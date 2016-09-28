@@ -23,10 +23,10 @@ public class Car {
     
     
     public static func addNewFavoriteCar(car:Car, withToken token:String) throws -> String{
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "NewCar")
-        let params = "vehiculoId=\(car.type)&token=\(token)&color=\(car.color)&placas=\(car.plates)&modelo=\(car.model)&marca=\(car.brand)"
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewCar")
+        let params = "vehiculoId=" + car.type + "&token=" + token + "&color=" + car.color + "&placas=" + car.plates + "&modelo=" + car.model + "&marca=" + car.brand
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params) as NSDictionary
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params) as NSDictionary
             
             if response["Status"] as! String == "SESSION ERROR" {
                 throw CarError.noSessionFound
@@ -35,17 +35,17 @@ public class Car {
                 throw CarError.errorAddingCar
             }
 
-            return String(response["carId"])
-        } catch HttpServerConnection.Error.connectionException{
+            return String(describing: response["carId"])
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw CarError.errorAddingCar
         }
     }
     
     public static func selectFavoriteCar(carId:String, withToken token:String) throws{
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "SetFavoriteCar")
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "SetFavoriteCar")
         let params = "vehiculoFavoritoId=\(carId)&token=\(token)"
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
             if response["Status"] as! String == "SESSION ERROR" {
                 throw CarError.noSessionFound
@@ -54,16 +54,16 @@ public class Car {
                 throw CarError.errorAddingFavoriteCar
             }
             
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw CarError.errorAddingFavoriteCar
         }
     }
     
     public static func editFavoriteCar(car:Car, withToken token:String) throws {
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "EditCar")
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "EditCar")
         let params = "vehiculoId=\(car.type)&vehiculoFavoritoId=\(car.id)&token=\(token)&color=\(car.color)&placas=\(car.plates)&modelo=\(car.model)&marca=\(car.brand)"
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
             if response["Status"] as! String == "SESSION ERROR" {
                 throw CarError.noSessionFound
@@ -72,16 +72,16 @@ public class Car {
                 throw CarError.errorEditingCar
             }
             
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw CarError.errorEditingCar
         }
     }
     
     public static func deleteFavoriteCar(id:String, token:String) throws{
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "DeleteCar")
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "DeleteCar")
         let params = "favoriteCarId=\(id)&token=\(token)"
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
             if response["Status"] as! String == "SESSION ERROR" {
                 throw CarError.noSessionFound
@@ -90,13 +90,13 @@ public class Car {
                 throw CarError.errorDeletingCar
             }
             
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw CarError.errorDeletingCar
         }
     }
     
     
-    public enum CarError: ErrorType{
+    public enum CarError: Error{
         case noSessionFound
         case errorAddingCar
         case errorAddingFavoriteCar

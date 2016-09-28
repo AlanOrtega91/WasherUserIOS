@@ -11,8 +11,8 @@ import UIKit
 class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UIPickerViewDelegate, UITextFieldDelegate {
 
     var token:String!
-    var card:UserCard!
-    var clientPaymentToken:String!
+    var card:Card!
+    var sentNewCard = false
     
     @IBOutlet weak var cardNumber: UITextField!
     @IBOutlet weak var cvv: UITextField!
@@ -28,8 +28,12 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     override func viewDidLoad() {
         initValues()
         initView()
-        let getPaymentTokenThread:NSThread = NSThread(target: self, selector:#selector(initThreads), object: nil)
-        getPaymentTokenThread.start()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if sentNewCard {
+            createAlertInfo()
+        }
     }
     
     func initValues(){
@@ -40,39 +44,30 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         scrollView.contentSize.height = 600
         picker.dataSource = self
         picker.delegate = self
-        picker.hidden = true
+        picker.isHidden = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
     
     func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
+        self.picker.isHidden = true
     }
     
-    func initThreads(){
-        do {
-            clientPaymentToken = try Payment.getPaymentToken(token)
-            AppData.savePaymentToken(clientPaymentToken)
-        } catch {
-            createAlertInfo("Error con pagos")
-        }
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch selected {
         case 0:
             NSLog("brand")
-            month.setTitle(months[row], forState: .Normal)
+            month.setTitle(months[row], for: .normal)
         case 1:
             NSLog("types")
-            year.setTitle(years[row], forState: .Normal)
+            year.setTitle(years[row], for: .normal)
         default:
             return NSLog("none")
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch selected {
         case 0:
             return months[row]
@@ -83,7 +78,7 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         }
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch selected {
         case 0:
             return months.count
@@ -98,7 +93,12 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         return 1
     }
     
-    @IBAction func dateClick(sender: UIButton) {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    @IBAction func dateClick(_ sender: UIButton) {
+        self.view.endEditing(true)
         switch sender {
         case month:
             selected = 0
@@ -111,37 +111,60 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         default:
             break
         }
-        picker.hidden = false
+        picker.isHidden = false
     }
     
-    @IBAction func saveNewCard(sender: AnyObject) {
-        let card = BTCard(number: cardNumber.text!, expirationMonth: month.titleLabel!.text!, expirationYear: year.titleLabel!.text!, cvv: cvv.text)
-        card.shouldValidate = true
+    @IBAction func saveNewCard(_ sender: AnyObject) {
+        let user = DataBase.readUser()
+        let conekta = Conekta()
+        conekta.delegate = self
+        conekta.publicKey = "key_LqvrHkEMcS3rda65s4W4wRg"
+        conekta.collectDevice()
         
+        let cardConekta = conekta.card()
+        cardConekta?.setNumber(cardNumber.text, name: user.name + " " + user.lastName, cvc: cvv.text, expMonth: month.titleLabel!.text!, expYear: year.titleLabel!.text!)
+        let tokenConekta = conekta.token()
         
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("loading") as! LoadingController
-        nextViewController.card = card
+        tokenConekta?.card = cardConekta
+        
+        sentNewCard = true
+        var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loading") as! LoadingController
+        nextViewController.tokenConekta = tokenConekta
         nextViewController.action = LoadingController.NEW_CARD
-        self.presentViewController(nextViewController, animated: true, completion: nil)
+        storyBoard = UIStoryboard(name: "Map", bundle: nil)
+        let rootViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller") as! SWRevealViewController
+        self.navigationController?.setViewControllers([rootViewController,self], animated: true)
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
+    @IBAction func clickedCancel(_ sender: AnyObject) {
         let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller") as! SWRevealViewController
+        self.navigationController?.setViewControllers([nextViewController], animated: true)
+        _ = self.navigationController?.popToRootViewController(animated: true)
     }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
                 let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-                self.presentViewController(nextViewController, animated:true, completion:nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller") as! SWRevealViewController
+                self.navigationController?.setViewControllers([nextViewController], animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
             }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
+            self.present(alert, animated: true, completion: nil)
+    }
+    @IBAction func maxSizeCVV(_ sender: AnyObject) {
+        if (cvv.text?.characters.count)! > 4 {
+            self.cvv.deleteBackward()
+        }
+    }
+    
+    func createAlertInfo(){
+        let alert = UIAlertController(title: "Error", message: "Error con la tarjeta", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 
 }

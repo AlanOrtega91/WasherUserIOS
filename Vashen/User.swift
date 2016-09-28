@@ -25,15 +25,14 @@ public class User {
     public static let HTTP_LOCATION = "User/"
     
     public static func sendNewUser(user: User, withPassword password: String) throws -> User{
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "NewUser")
-        var params = ""
-        if user.encodedImage == nil {
-            params = "name=\(user.name)&lastName=\(user.lastName)&email=\(user.email)&password=\(password)&phone=\(user.phone)"
-        } else {
-            params = "name=\(user.name)&lastName=\(user.lastName)&email=\(user.email)&password=\(password)&phone=\(user.phone)&encoded_string=\(user.encodedImage)"
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewUser")
+        var params = "name=" + user.name + "&lastName=" + user.lastName + "&email=" + user.email + "&password=" + password + "&phone=" + user.phone
+        if user.encodedImage != nil {
+            //print(user.encodedImage)
+            params += "&encoded_string=" + user.encodedImage
         }
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params) as NSDictionary
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params) as NSDictionary
             if response["Status"] as! String != "OK" {
                 if response["Status"] as! String != "CREATE PAYMENT ACCOUNT ERROR" {
                     throw UserError.errorWithNewUser
@@ -43,16 +42,16 @@ public class User {
             user.id = parameters["idCliente"]! as! String
             user.token = parameters["Token"]! as! String
             return user
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw UserError.errorWithNewUser
         }
     }
     
     public static func saveFirebaseToken(token:String, pushNotificationToken:String) throws {
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "SavePushNotificationToken")
-        let params = "token=\(token)&pushNotificationToken=\(pushNotificationToken)"
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "SavePushNotificationToken")
+        let params = "token=" + token + "&pushNotificationToken=" + pushNotificationToken
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String == "SESSION ERROR" {
                 throw UserError.noSessionFound
             }
@@ -60,21 +59,25 @@ public class User {
                 throw UserError.errorSavingFireBaseToken
             }
             
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw UserError.errorSavingFireBaseToken
         }
     }
     
     public func sendChangeUserData(token: String) throws{
-        let url = HttpServerConnection.buildURL(User.HTTP_LOCATION + "ChangeUserData")
+        let url = HttpServerConnection.buildURL(location: User.HTTP_LOCATION + "ChangeUserData")
         var params = ""
-        if encodedImage == nil {
-            params = "newName=\(name)&newLastName=\(lastName)&newEmail=\(email)&token=\(token)&newPhone=\(phone)&newBillingName=\(billingName)&newRFC=\(rfc)&newBillingAddress=\(billingAddress)"
+        if rfc == nil {
+            params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=&newRFC=&newBillingAddress="
         } else {
-            params = "newName=\(name)&newLastName=\(lastName)&newEmail=\(email)&token=\(token)&newPhone=\(phone)&newBillingName=\(billingName)&newRFC=\(rfc)&newBillingAddress=\(billingAddress)&encoded_string=\(encodedImage)"
+            params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=" + billingName + "&newRFC=" + rfc + "&newBillingAddress=" + billingAddress
+        }
+        if encodedImage != nil {
+            print(encodedImage)
+            params += "&encoded_string=" + encodedImage
         }
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
             if response["Status"] as! String == "SESSION ERROR" {
                 throw UserError.noSessionFound
@@ -83,33 +86,33 @@ public class User {
                 throw UserError.errorChangeData
             }
 
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw UserError.errorChangeData
         }
     }
     
     public func sendLogout() throws {
-        let url = HttpServerConnection.buildURL(User.HTTP_LOCATION + "LogOut")
+        let url = HttpServerConnection.buildURL(location: User.HTTP_LOCATION + "LogOut")
         let params = "email=\(email)"
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
             if response["Status"] as! String != "OK" {
                 throw UserError.errorWithLogOut
             }
             
-        } catch HttpServerConnection.Error.connectionException{
+        } catch HttpServerConnection.HTTPError.connectionException{
             throw UserError.errorWithLogOut
         }
     }
     
     public static func getEncodedImageForUser(id:String) -> String {
         let url = NSURL(string: "http://imanio.zone/Vashen/images/users/\(id)/profile_image.jpg")!
-        let imageData = NSData.init(contentsOfURL: url)
-        return imageData!.base64EncodedStringWithOptions(.Encoding64CharacterLineLength)
+        let imageData = NSData.init(contentsOf: url as URL)
+        return imageData!.base64EncodedString(options: .lineLength64Characters)
     }
     
-    public enum UserError: ErrorType{
+    public enum UserError: Error{
         case noSessionFound
         case errorSavingFireBaseToken
         case errorWithNewUser

@@ -21,8 +21,7 @@ class HelpController: UIViewController {
     @IBOutlet weak var map: UIImageView!
     @IBOutlet weak var scrollView: UIScrollView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
         initValues()
         initView()
     }
@@ -38,48 +37,40 @@ class HelpController: UIViewController {
             return
         }
         activeService = services[0]
-        let format = NSDateFormatter()
+        let format = DateFormatter()
         format.dateFormat = "yyy-MM-dd HH:mm:ss"
-        date.text = format.stringFromDate(activeService.startedTime)
+        format.locale = Locale(identifier: "us")
+        date.text = format.string(from: activeService.startedTime)
         price.text = " $" + activeService.price
         type.text = activeService.service
         setCleanerImage()
-        setMapImage(map,withService: activeService)
+        setMapImage(map: map,withService: activeService)
     }
     
     func setCleanerImage(){
-        let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/\(activeService.cleanerId)/profile_image.jpg")
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let data = NSData(contentsOfURL: url!){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.cleanerImage.image = UIImage(data: data)
-                });
-            }
-        }
+        let url = URL(string: "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")! as URL
+        do {
+            let data = try Data(contentsOf: url)
+            self.cleanerImage.image = UIImage(data: data)
+        } catch {}
     }
     
     func setMapImage(map:UIImageView, withService service:Service){
-        let url = NSURL(string: "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=1000x400&key=")
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let data = NSData(contentsOfURL: url!){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.map.image = UIImage(data: data)
-                });
-            }
-        }
+        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud!),\(service.longitud!)&markers=color:red%7Clabel:S%7C\(service.latitud!),\(service.longitud!)&zoom=15&size=1000x400&key="
+        let url = URL(string: urlString)! as URL
+        do {
+            let data = try Data(contentsOf: url)
+            self.map.image = UIImage(data: data)
+        } catch {}
     }
     
-    @IBAction func clickedOption(sender: AnyObject) {
+    @IBAction func clickedOption(_ sender: AnyObject) {
         let email = "help@bvashen.com"
         let url = NSURL(string: "mailto:\(email)?subject:Help")
-        UIApplication.sharedApplication().openURL(url!)
+        UIApplication.shared.openURL(url! as URL)
     }
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Map", bundle:nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
 }

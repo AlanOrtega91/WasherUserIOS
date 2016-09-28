@@ -32,45 +32,45 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         super.viewDidLoad()
         picker.dataSource = self
         picker.delegate = self
-        picker.hidden = true
+        picker.isHidden = true
         
         initView()
-
-        // Do any additional setup after loading the view.
     }
     
     func initView(){
-        type.setTitle(types[Int(car.type)! - 1], forState: .Normal)
-        color.setTitle(car.color, forState: .Normal)
-        brand.setTitle(car.brand, forState: .Normal)
+        type.setTitle(types[Int(car.type)! - 1], for: .normal)
+        color.setTitle(car.color, for: .normal)
+        brand.setTitle(car.brand, for: .normal)
         plates.text = car.plates
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func dismissKeyboard() {
+        view.endEditing(true)
+        self.picker.isHidden = true
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch selected {
         case 0:
             NSLog("brand")
-            brand.setTitle(brands[row], forState: .Normal)
+            brand.setTitle(brands[row], for: .normal)
             selectedBrand = brands[row]
         case 1:
             NSLog("types")
-            type.setTitle(types[row], forState: .Normal)
+            type.setTitle(types[row], for: .normal)
             selectedType = row
         case 2:
             NSLog("colors")
-            color.setTitle(colors[row], forState: .Normal)
+            color.setTitle(colors[row], for: .normal)
             selectedColor = colors[row]
         default:
             return NSLog("none")
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch selected {
         case 0:
             return brands[row]
@@ -83,7 +83,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         }
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch selected {
         case 0:
             return brands.count
@@ -96,11 +96,12 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         }
     }
     
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
     
-    @IBAction func optionClick(sender: UIButton) {
+    @IBAction func optionClick(_ sender: UIButton) {
+        self.view.endEditing(true)
         switch sender {
         case brand:
             selected = 0
@@ -117,10 +118,10 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         default:
             break
         }
-        picker.hidden = false
+        picker.isHidden = false
     }
     
-    @IBAction func sendEdit(sender: AnyObject) {
+    @IBAction func sendEdit(_ sender: AnyObject) {
         car.plates = plates.text
         car.model = "Car"
         car.color = selectedColor
@@ -128,16 +129,15 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         car.brand = selectedBrand
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("loading") as! LoadingController
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loading") as! LoadingController
         nextViewController.car = car
         nextViewController.selectedIndex = selectedCarIndex
         nextViewController.action = LoadingController.EDIT_CAR
-        self.presentViewController(nextViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("cars") as! CarsController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 
 }

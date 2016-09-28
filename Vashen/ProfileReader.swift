@@ -11,7 +11,7 @@ import CoreData
 
 public class ProfileReader {
     
-    var managedContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+    var managedContext = (UIApplication.shared.delegate as! AppDelegate).managedObjectContext
     
     let HTTP_LOCATION = "User/"
     var user = User()
@@ -23,13 +23,13 @@ public class ProfileReader {
         do{
             let profile = ProfileReader()
             let token = AppData.readToken()
-            try profile.initialRead(token)
-            DataBase.saveUser(profile.user)
-            AppData.saveData(profile.user)
-            DataBase.saveCars(profile.cars)
-            DataBase.saveServices(profile.services)
+            try profile.initialRead(token: token)
+            DataBase.saveUser(user: profile.user)
+            AppData.saveData(user: profile.user)
+            DataBase.saveCars(cars: profile.cars)
+            DataBase.saveServices(services: profile.services)
             if profile.cards.count > 0 {
-                DataBase.saveCard(profile.cards[0])
+                DataBase.saveCard(card: profile.cards[0])
             }
             
         } catch{
@@ -39,18 +39,18 @@ public class ProfileReader {
     }
     
     private func initialRead(token:String) throws{
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "InitialRead")
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "InitialRead")
         let params = "token=\(token)"
         do{
-            var response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String != "OK" {
                 throw ProfileReaderError.errorReadingData
             }
-            readUser(response["User Info"] as! NSDictionary)
-            readCars(response["carsList"] as! Array<NSDictionary>)
-            readHistory(response["History"] as! Array<NSDictionary>)
+            readUser(parameters: response["User Info"] as! NSDictionary)
+            readCars(parameters: response["carsList"] as! Array<NSDictionary>)
+            readHistory(parameters: response["History"] as! Array<NSDictionary>)
             if let cards = response["cards"] as? NSDictionary {
-                readCard(cards)
+                readCard(parameters: cards)
             }
         } catch {
             throw ProfileReaderError.errorReadingData
@@ -60,13 +60,13 @@ public class ProfileReader {
     public static func run(email:String, withPassword password:String) throws{
         do{
             let profile = ProfileReader()
-            try profile.login(email, withPassword: password)
-            DataBase.saveUser(profile.user)
-            AppData.saveData(profile.user)
-            DataBase.saveCars(profile.cars)
-            DataBase.saveServices(profile.services)
+            try profile.login(email: email, withPassword: password)
+            DataBase.saveUser(user: profile.user)
+            AppData.saveData(user: profile.user)
+            DataBase.saveCars(cars: profile.cars)
+            DataBase.saveServices(services: profile.services)
             if profile.cards.count > 0  {
-                DataBase.saveCard(profile.cards[0])
+                DataBase.saveCard(card: profile.cards[0])
             }
         } catch{
             throw ProfileReaderError.errorReadingProfile
@@ -74,18 +74,18 @@ public class ProfileReader {
     }
     
     private func login(email: String, withPassword password: String) throws{
-        let url = HttpServerConnection.buildURL(HTTP_LOCATION + "LogIn")
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "LogIn")
         let params = "email=\(email)&password=\(password)"
         do{
-            var response = try HttpServerConnection.sendHttpRequestPost(url, withParams: params)
+            var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String != "OK" {
                 throw ProfileReaderError.errorReadingData
             }
-            readUser(response["User Info"] as! NSDictionary)
-            readCars(response["carsList"] as! Array<NSDictionary>)
-            readHistory(response["History"] as! Array<NSDictionary>)
-            if (response["cards"] != nil) {
-                readCard(response["cards"] as! NSDictionary)
+            readUser(parameters: response["User Info"] as! NSDictionary)
+            readCars(parameters: response["carsList"] as! Array<NSDictionary>)
+            readHistory(parameters: response["History"] as! Array<NSDictionary>)
+            if let cards = response["cards"] as? NSDictionary {
+                readCard(parameters: cards)
             }
         } catch {
             throw ProfileReaderError.errorReadingData
@@ -109,7 +109,7 @@ public class ProfileReader {
             user.billingAddress = billingAddress
         }
         if (parameters["FotoURL"] as? String) != nil{
-            user.encodedImage = User.getEncodedImageForUser(user.id)
+            user.encodedImage = User.getEncodedImageForUser(id: user.id)
         }
     }
     
@@ -143,16 +143,17 @@ public class ProfileReader {
             service.cleanerId = serviceJSON["idLavador"] as? String
             service.cleanerName = serviceJSON["nombreLavador"] as? String
             
-            let format = NSDateFormatter()
+            let format = DateFormatter()
+            format.locale = Locale(identifier: "us")
             format.dateFormat = "yyyy-MM-dd HH:mm:ss"
             if let finalTime = serviceJSON["horaFinalEstimada"] as? String{
-                service.finalTime = format.dateFromString(finalTime)
+                service.finalTime = format.date(from: finalTime)
             }
             if let startedTime = serviceJSON["fechaEmpezado"] as? String {
-                service.startedTime = format.dateFromString(startedTime)
+                service.startedTime = format.date(from: startedTime)
             }
             if let acceptedTime = serviceJSON["fechaAceptado"] as? String{
-                service.acceptedTime = format.dateFromString(acceptedTime)
+                service.acceptedTime = format.date(from: acceptedTime)
             }
             if let rating = serviceJSON["Calificacion"] as? String{
                 service.rating = Int(rating)!
@@ -166,17 +167,19 @@ public class ProfileReader {
     
     private func readCard(parameters: NSDictionary){
         let card: UserCard = UserCard()
-        card.cardNumber = parameters["cardNumber"] as! String
-        card.expirationDate = parameters["cardExpiration"] as! String
+        card.cardNumber = "xxxx-xxxx-xxxx-" + (parameters["cardNumber"] as! String)
+        card.expirationMonth = parameters["cardExpirationMonth"] as! String
+        card.expirationYear = parameters["cardExpirationYear"] as! String
         cards.append(card)
     }
     
     public static func delete() {
         AppData.eliminateData()
+        
         DataBase.deleteAllTables()
     }
     
-    public enum ProfileReaderError: ErrorType {
+    public enum ProfileReaderError: Error {
         case errorReadingData
         case errorReadingProfile
     }

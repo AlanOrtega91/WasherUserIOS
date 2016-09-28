@@ -1,3 +1,4 @@
+
 //
 //  EditPaymentController.swift
 //  Vashen
@@ -12,7 +13,7 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
 
     var token:String!
     var card:UserCard!
-    var clientPaymentToken:String!
+    var sentNewCard = false
     
     @IBOutlet weak var cardNumber: UITextField!
     @IBOutlet weak var cvv: UITextField!
@@ -29,8 +30,13 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         initView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if sentNewCard {
+            createAlertInfo()
+        }
+    }
+    
     func initValues(){
-        clientPaymentToken = AppData.readPaymentToken()
         token = AppData.readToken()
         card = DataBase.readCard()
     }
@@ -38,30 +44,35 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
     func initView(){
         picker.dataSource = self
         picker.delegate = self
-        picker.hidden = true
+        picker.isHidden = true
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
         if card != nil {
             cardNumber.text = card.cardNumber
-            let monthValue = card.expirationDate.substringToIndex(card.expirationDate.startIndex.advancedBy(2))
-            let yearValue = card.expirationDate.substringFromIndex(card.expirationDate.startIndex.advancedBy(5))
-            month.setTitle(monthValue, forState: .Normal)
-            year.setTitle(yearValue, forState: .Normal)
+            let monthValue = card.expirationMonth
+            let yearValue = card.expirationYear
+            month.setTitle(monthValue, for: .normal)
+            year.setTitle(yearValue, for: .normal)
         }
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+    func dismissKeyboard() {
+        view.endEditing(true)
+        self.picker.isHidden = true
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch selected {
         case 0:
-            NSLog("brand")
-            month.setTitle(months[row], forState: .Normal)
+            month.setTitle(months[row], for: .normal)
         case 1:
-            NSLog("types")
-            year.setTitle(years[row], forState: .Normal)
+            year.setTitle(years[row], for: .normal)
         default:
-            return NSLog("none")
+            return print("none")
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch selected {
         case 0:
             return months[row]
@@ -72,7 +83,7 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         }
     }
     
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch selected {
         case 0:
             return months.count
@@ -87,7 +98,12 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         return 1
     }
     
-    @IBAction func dateClick(sender: UIButton) {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    @IBAction func dateClick(_ sender: UIButton) {
+        self.view.endEditing(true)
         switch sender {
         case month:
             selected = 0
@@ -100,23 +116,42 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         default:
             break
         }
-        picker.hidden = false
+        picker.isHidden = false
     }
     
-    @IBAction func saveNewCard(sender: AnyObject) {
-        let card = BTCard(number: cardNumber.text!, expirationMonth: month.titleLabel!.text!, expirationYear: year.titleLabel!.text!, cvv: cvv.text)
-        card.shouldValidate = true
+    @IBAction func saveNewCard(_ sender: AnyObject) {
+        //TODO: change to Conekta
+        let user = DataBase.readUser()
+        let conekta = Conekta()
+        conekta.delegate = self
+        conekta.publicKey = "key_LqvrHkEMcS3rda65s4W4wRg"
+        conekta.collectDevice()
+
+        let cardConekta = conekta.card()
+        cardConekta?.setNumber(cardNumber.text, name: user.name + " " + user.lastName, cvc: cvv.text, expMonth: month.titleLabel!.text!, expYear: year.titleLabel!.text!)
+        let tokenConekta = conekta.token()
         
-        
+        tokenConekta?.card = cardConekta
+        sentNewCard = true
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("loading") as! LoadingController
-        nextViewController.card = card
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loading") as! LoadingController
+        nextViewController.tokenConekta = tokenConekta
         nextViewController.action = LoadingController.NEW_CARD
-        self.presentViewController(nextViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("payment") as! PaymentController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func maxCharSize(_ sender: AnyObject) {
+        if (cvv.text?.characters.count)! > 4 {
+            self.cvv.deleteBackward()
+        }
+    }
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    func createAlertInfo(){
+        let alert = UIAlertController(title: "Error", message: "Error con la tarjeta", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }

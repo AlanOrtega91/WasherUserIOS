@@ -25,7 +25,7 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
         super.viewDidLoad()
         scrollView.contentSize.height = 600
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
-        image.userInteractionEnabled = true
+        image.isUserInteractionEnabled = true
         image.addGestureRecognizer(tapGestureRecognizer)
         name.delegate = self
         lastName.delegate = self
@@ -33,17 +33,16 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
         view.addGestureRecognizer(tap)
     }
     func dismissKeyboard() {
-        //Causes the view (or one of its embedded text fields) to resign the first responder status.
         view.endEditing(true)
     }
     
-    public func textFieldShouldReturn(textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case name:
             lastName.becomeFirstResponder()
             break
         case lastName:
-            sendRegistration("")
+            sendRegistration("" as AnyObject)
             break
         default:
             break
@@ -52,12 +51,12 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
     }
     
 
-    @IBAction func sendRegistration(sender: AnyObject) {
+    @IBAction func sendRegistration(_ sender: AnyObject) {
         if name.text == "" || lastName.text == "" {
-            createAlertInfo("Nombre y apellido son necesarios")
+            createAlertInfo(message: "Nombre y apellido son necesarios")
             return
         }
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("loading") as! LoadingController
+        let nextViewController = self.storyboard!.instantiateViewController(withIdentifier: "loading") as! LoadingController
         nextViewController.email = email
         nextViewController.password = password
         nextViewController.phone = phone
@@ -66,48 +65,38 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
         nextViewController.image = image.image
         nextViewController.encodedImage = encodedString
         nextViewController.action = LoadingController.REGISTER
-        self.presentViewController(nextViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(nextViewController, animated: true)
     }
     
     func openCamera(){
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
-            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera;
+            imagePicker.sourceType = UIImagePickerControllerSourceType.camera;
             imagePicker.allowsEditing = false
-            self.presentViewController(imagePicker, animated: true, completion: nil)
+            self.present(imagePicker, animated: true, completion: nil)
         }
     }
+    
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         image.image = imagePicked
         let imageData = UIImageJPEGRepresentation(imagePicked, 1.0)
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            // do some task
-            self.encodedString = imageData!.base64EncodedStringWithOptions(NSDataBase64EncodingOptions())
-            print(self.encodedString)
-        });
-        self.dismissViewControllerAnimated(true, completion: nil);
+        DispatchQueue.global(qos: .background).async {
+            self.encodedString = imageData!.base64EncodedString(options: [])
+        }
+        self.dismiss(animated: true, completion: nil);
     }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
+            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
     }
-    
-    
-    
-    override public func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
     
 
-    @IBAction func clickedCancel(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("create_account") as! CreateAccountController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func clickedCancel(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
     }
 }

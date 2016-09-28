@@ -28,8 +28,8 @@ public class LoadingController: UIViewController {
     var password: String!
     var image: UIImage!
     //NewCard
-    var braintreeClient:BTAPIClient!
-    var card:BTCard!
+    //TODO: change to Conekta
+    var tokenConekta:Token!
     //EditCar
     var selectedIndex:Int!
     //NewCar
@@ -38,12 +38,30 @@ public class LoadingController: UIViewController {
     var user:User!
     var clickedAlertOK = false
     
+    @IBOutlet weak var loading: UIImageView!
 
-    override public func viewDidAppear(animated: Bool) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            // do some task
+    override public func viewDidLoad() {
+        super.viewDidLoad()
+        var imgList = [UIImage]()
+        for countValue in 0...119 {
+            if countValue%2 == 0{
+                let strImageName = "frame_\(countValue)_delay-0.04s"
+                let image = UIImage(named: strImageName)
+                if image != nil {
+                    imgList.append(image!)
+                }
+            }
+        }
+        self.loading.animationImages = imgList
+        self.loading.animationDuration = 5.0
+        self.loading.startAnimating()
+        imgList.removeAll()
+    }
+    
+    override public func viewDidAppear(_ animated: Bool) {
+        DispatchQueue.global(qos: .background).async {
             self.initValues()
-        });
+        }
     }
     
     func initValues(){
@@ -68,52 +86,43 @@ public class LoadingController: UIViewController {
             tryEditAccount()
             break;
         default:
-            let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("main") as! MainController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
             break
         }
     }
     
     func tryLogin(){
         do {
-        try ProfileReader.run(email, withPassword:password)
+            try ProfileReader.run(email: email, withPassword:password)
             token = AppData.readToken()
-            try getPaymentToken()
             if let firebaseToken = FIRInstanceID.instanceID().token() {
-                try User.saveFirebaseToken(token,pushNotificationToken: firebaseToken)
-            } else {
-                throw User.UserError.errorSavingFireBaseToken
+                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
             }
-            
+            //TODO: new stack
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller")
+            DispatchQueue.main.async {
+                self.navigationController?.setViewControllers([nextViewController], animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
+            }
         }  catch User.UserError.errorSavingFireBaseToken{
-            createAlertInfo("Error con el sistema de notificaciones")
+            createAlertInfo(message: "Error con el sistema de notificaciones")
             while !clickedAlertOK {
                 
             }
-            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("login") as! LoginController
-            nextViewController.emailSet = email
-            nextViewController.passwordSet = password
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
         } catch {
-            createAlertInfo("Error al iniciar sesion")
+            createAlertInfo(message: "Error al iniciar sesion")
             while !clickedAlertOK {
                 
             }
-            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("login") as! LoginController
-            nextViewController.emailSet = email
-            nextViewController.passwordSet = password
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
         }
     }
     
@@ -125,103 +134,102 @@ public class LoadingController: UIViewController {
             user.email = self.email
             user.phone = self.phone
             user.encodedImage = self.encodedImage
-            user = try User.sendNewUser(user, withPassword: self.password)
-            AppData.saveData(user)
-            DataBase.saveUser(user)
-            let fireBaseToken:String = FIRInstanceID.instanceID().token()!
-            try User.saveFirebaseToken(user.token, pushNotificationToken: fireBaseToken)
+            user = try User.sendNewUser(user: user, withPassword: self.password)
+            AppData.saveData(user: user)
+            DataBase.saveUser(user: user)
+            if let fireBaseToken = FIRInstanceID.instanceID().token() {
+                try User.saveFirebaseToken(token: user.token, pushNotificationToken: fireBaseToken)
+            }
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("createPayment") as! CreateAccountPaymentController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "createPayment") as! CreateAccountPaymentController
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(nextViewController, animated: true)
+            }
         } catch {
-            createAlertInfo("Error al crear usuario")
+            createAlertInfo(message: "Error al crear usuario")
             while !clickedAlertOK {
                 
             }
-            let storyboard = UIStoryboard.init(name: "Main", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("createPersonal") as! CreateAccountPersonalController
-            nextViewController.name.text = name
-            nextViewController.lastName.text = lastName
-            nextViewController.email = email
-            nextViewController.phone = phone
-            nextViewController.password = password
-            nextViewController.image.image = image
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
         }
     }
     
     func tryNewCard(){
-        let paymentToken = AppData.readPaymentToken()
-        braintreeClient = BTAPIClient(authorization: paymentToken)
-        
-        if let cardClient = BTCardClient(APIClient: braintreeClient) as? BTCardClient{
-            cardClient.tokenizeCard(card, completion: {
-                (tokenizedCard,error) in
-                do {
-                    try ProfileReader.run()
-                    let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-                    let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.presentViewController(nextViewController, animated: true, completion: nil)
-                    })
-                } catch {
-                    print("Error reading credit card on create payment")
-                    let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
-                    let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.presentViewController(nextViewController, animated: true, completion: nil)
-                    })
+        //TODO: change to Conekta
+        tokenConekta?.create(success: { (data) -> Void in
+            print(data)
+            if data?["object"] as! String == "error" {
+                let stackSize = self.navigationController?.viewControllers.count
+                let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
+                DispatchQueue.main.async {
+                    _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
                 }
-            })
-        } else {
-            let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
-        }
+                return
+            }
+            do {
+                let cardToken = data?["id"] as! String
+                try UserCard.saveNewCardToken(token: self.token, withCard: cardToken)
+                try ProfileReader.run()
+                let stackSize = self.navigationController?.viewControllers.count
+                let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]
+                DispatchQueue.main.async {
+                    _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
+                }
+            } catch {
+                print("Error reading credit card on create payment")
+                let stackSize = self.navigationController?.viewControllers.count
+                let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
+                DispatchQueue.main.async {
+                    _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
+                }
+            }
+            }, andError: { (error) -> Void in
+                print(error)
+                let stackSize = self.navigationController?.viewControllers.count
+                let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
+                DispatchQueue.main.async {
+                    _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
+                }
+        })
     }
     
     func tryNewCar(){
         do {
             var cars = DataBase.readCars()
-            car.id = try Car.addNewFavoriteCar(car,withToken: token)
+            car.id = try Car.addNewFavoriteCar(car: car,withToken: token)
             if cars.count == 0 {
-                try Car.selectFavoriteCar(car.id,withToken: token)
+                try Car.selectFavoriteCar(carId: car.id,withToken: token)
                 car.favorite = 1
             }
             cars.append(car)
-            DataBase.saveCars(cars)
-            let storyBoard = UIStoryboard(name: "Menu", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("cars") as! CarsController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DataBase.saveCars(cars: cars)
+            let stackSize = self.navigationController?.viewControllers.count
+            let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
+            }
         } catch Car.CarError.noSessionFound{
-            createAlertInfo("Error con la sesion")
+            createAlertInfo(message: "Error con la sesion")
             while !clickedAlertOK {
                 
             }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            DispatchQueue.main.async {
+                self.navigationController?.setViewControllers([nextViewController], animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
+            }
         } catch {
-            createAlertInfo("Error al agregar coche")
+            createAlertInfo(message: "Error al agregar coche")
             while !clickedAlertOK {
                 
             }
-            let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("addCar") as! AddCarController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
         }
     }
     
@@ -229,106 +237,74 @@ public class LoadingController: UIViewController {
         do {
             var cars = DataBase.readCars()
             cars[selectedIndex] = car
-            try Car.editFavoriteCar(car,withToken: token)
-            DataBase.saveCars(cars)
+            try Car.editFavoriteCar(car: car,withToken: token)
+            DataBase.saveCars(cars: cars)
             
-            let storyBoard = UIStoryboard(name: "Menu", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("cars") as! CarsController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let stackSize = self.navigationController?.viewControllers.count
+            let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
+            }
         }  catch Car.CarError.noSessionFound{
-            createAlertInfo("Error con la sesion")
+            createAlertInfo(message: "Error con la sesion")
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popToRootViewController(animated: true)
+            }
         } catch {
-            createAlertInfo("Error al editar coche")
-            let storyboard = UIStoryboard.init(name: "Menu", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("editCar") as! EditCarController
-            nextViewController.car = car
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
         }
     }
     
     func tryEditAccount(){
         do {
-            try user.sendChangeUserData(token)
-            DataBase.saveUser(user)
-
-            //TODO: Check from billing or config
-            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            try user.sendChangeUserData(token: token)
+            DataBase.saveUser(user: user)
+            
+            let stackSize = self.navigationController?.viewControllers.count
+            let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
+            }
         }  catch Car.CarError.noSessionFound{
-            createAlertInfo("Error con la sesion")
+            createAlertInfo(message: "Error con la sesion")
             while !clickedAlertOK {
                 
             }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popToRootViewController(animated: true)
+            }
         } catch {
-            createAlertInfo("Error editar los datos")
+            createAlertInfo(message: "Error editar los datos")
             while !clickedAlertOK {
                 
             }
-            let storyboard = UIStoryboard.init(name: "Map", bundle: nil)
-            let nextViewController = storyboard.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
         }
     }
     
-    
-    private func getPaymentToken() throws{
-        do{
-            let paymentToken = try Payment.getPaymentToken(token)
-            AppData.savePaymentToken(paymentToken)
-            
-        } catch Payment.PaymentError.errorGettingPaymentToken{
-            createAlertInfo("Pagos no disponibles")
-            throw LoginError.error
-        } catch Payment.PaymentError.noSessionFound{
-            createAlertInfo("Error con sesion")
-            throw LoginError.error
-        } catch {
-            createAlertInfo("Error general")
-            throw LoginError.error
-        }
-    }
-    
-    private func changeView(storyBoardName:String, controllerName:String){
-        let storyBoard = UIStoryboard(name: storyBoardName, bundle: nil)
-        let nextViewController = storyBoard.instantiateViewControllerWithIdentifier(controllerName)
-        dispatch_async(dispatch_get_main_queue(), {
-            self.presentViewController(nextViewController, animated: true, completion: nil)
-        })
-        
-    }
     
     func createAlertInfo(message:String){
-        dispatch_async(dispatch_get_main_queue(), {
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
-                self.clickedAlertOK = true
-            }))
-            self.presentViewController(alert, animated: true, completion: nil)
-        })
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
+            self.clickedAlertOK = true
+        }))
+        DispatchQueue.main.async {
+            self.present(alert, animated: true, completion: nil)
+        }
     }
     
     
-    enum LoginError: ErrorType {
+    enum LoginError: Error {
         case error
     }
-
 }

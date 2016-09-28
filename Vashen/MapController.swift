@@ -22,7 +22,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     let upLayoutSize = CGFloat(50)
     @IBOutlet weak var lowLayout: UIView!
     @IBOutlet weak var lowLayoutHeight: NSLayoutConstraint!
-    let lowLayoutSize = CGFloat(100)
+    let lowLayoutSize = CGFloat(150)
     @IBOutlet weak var startLayout: UIView!
     @IBOutlet weak var startLayoutHeight: NSLayoutConstraint!
     let startLayoutSize = CGFloat(90)
@@ -37,11 +37,8 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     @IBOutlet weak var rightDescription: UILabel!
     @IBOutlet weak var leftDescription: UILabel!
 
-    @IBOutlet weak var bikeImage: UIButton!
-    @IBOutlet weak var smallCarImage: UIButton!
-    @IBOutlet weak var bigCarImage: UIButton!
-    @IBOutlet weak var smallVanImage: UIButton!
-    @IBOutlet weak var bigVanImage: UIButton!
+
+    @IBOutlet weak var vehiclesButton: UIButton!
     @IBOutlet weak var locationText: UITextField!
 
     
@@ -70,11 +67,11 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     var service:String!
     var cancelCode:Int = 0
     var cancelSent:Bool = false
-    var activeServiceCycleThread:NSThread!
-    var cancelAlarmClock:NSTimer!
-    var clock:NSTimer!
-    var nearbyCleanersTimer:dispatch_source_t!
-    var reloadMapTimer:dispatch_source_t!
+    var activeServiceCycleThread:Thread!
+    var cancelAlarmClock:DispatchSourceTimer!
+    var clock:DispatchSourceTimer!
+    var nearbyCleanersTimer:DispatchSourceTimer!
+    var reloadMapTimer:DispatchSourceTimer!
     
     let centralMarker = GMSMarker()
     let cleanerMarker = GMSMarker()
@@ -90,12 +87,12 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         super.viewDidLoad()
         initLocation()
         initView()
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(NSEC_PER_SEC/3)), dispatch_get_main_queue(), {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4, execute: {
             self.initMap()
         })
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         onResume()
     }
     
@@ -111,14 +108,18 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         inScope = true
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         inScope = false
         cancelTimers()
     }
     
     func cancelTimers(){
-        dispatch_source_cancel(nearbyCleanersTimer)
-        dispatch_source_cancel(reloadMapTimer)
+        if nearbyCleanersTimer != nil {
+            nearbyCleanersTimer.cancel()
+        }
+        if reloadMapTimer != nil {
+            reloadMapTimer.cancel()
+        }
     }
     
     func initValues(){
@@ -131,13 +132,9 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             viewState = STANDBY
             configureState()
         } else if activeService.status == "Finished" {
-            viewState == SERVICE_START
+            viewState = SERVICE_START
             configureState()
             
-            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("summary") as! SummaryController
-            self.navigationController?.pushViewController(nextViewController, animated: true)
-            //TODO:check --- self.presentViewController(nextViewController, animated: true, completion: nil)
         } else {
             viewState = SERVICE_START
             configureState()
@@ -146,16 +143,8 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func configureServices(){
-        bikeImage.alpha = 0.5
-        smallCarImage.alpha = 0.5
-        bigCarImage.alpha = 0.5
-        smallVanImage.alpha = 0.5
-        bigVanImage.alpha = 0.5
-        bikeImage.userInteractionEnabled = false
-        smallCarImage.userInteractionEnabled = false
-        bigCarImage.userInteractionEnabled = false
-        smallVanImage.userInteractionEnabled = false
-        bigVanImage.userInteractionEnabled = false
+        vehiclesButton.alpha = 0.5
+        vehiclesButton.isUserInteractionEnabled = false
         
         var type = 6
         let selectedCar = DataBase.getFavoriteCar()
@@ -165,69 +154,67 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         
         switch type {
         case Service.BIKE:
-            bikeImage.alpha = 1
-            bikeImage.userInteractionEnabled = true
+            vehiclesButton.alpha = 1
+            vehiclesButton.isUserInteractionEnabled = true
+            vehiclesButton.setImage(UIImage(named: "bikeActive") , for: .normal)
         case Service.SMALL_CAR:
-            smallCarImage.alpha = 1
-            smallCarImage.userInteractionEnabled = true
+            vehiclesButton.alpha = 1
+            vehiclesButton.isUserInteractionEnabled = true
+            vehiclesButton.setImage(UIImage(named: "smallCarActive") , for: .normal)
         case Service.BIG_CAR:
-            bigCarImage.alpha = 1
-            bigCarImage.userInteractionEnabled = true
+            vehiclesButton.alpha = 1
+            vehiclesButton.isUserInteractionEnabled = true
+            vehiclesButton.setImage(UIImage(named: "bigCarActive") , for: .normal)
         case Service.SMALL_VAN:
-            smallVanImage.alpha = 1
-            smallVanImage.userInteractionEnabled = true
+            vehiclesButton.alpha = 1
+            vehiclesButton.isUserInteractionEnabled = true
+            vehiclesButton.setImage(UIImage(named: "smallVanActive") , for: .normal)
         case Service.BIG_VAN:
-            bigVanImage.alpha = 1
-            bigVanImage.userInteractionEnabled = true
+            vehiclesButton.alpha = 1
+            vehiclesButton.isUserInteractionEnabled = true
+            vehiclesButton.setImage(UIImage(named: "bigVanActive") , for: .normal)
         default:
             break
         }
     }
     
     func initTimers(){
-        let  nearbyCleanersQueue = dispatch_queue_create("com.alan.nearbyCleaners", DISPATCH_QUEUE_CONCURRENT);
-        nearbyCleanersTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, nearbyCleanersQueue);
-        dispatch_source_set_timer(nearbyCleanersTimer, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC, 2*NSEC_PER_SEC);
-        
-        dispatch_source_set_event_handler(nearbyCleanersTimer, {
-            dispatch_async(dispatch_get_main_queue(), {
-                print("nearbyCleaners")
-                let tempLocation = self.requestLocation
-                if self.activeService == nil && self.requestLocation != nil {
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                        self.nearbyCleaners(tempLocation)
-                    });
+        let nearbyCleanersQueue = DispatchQueue(label: "com.alan.nearbyCleaners", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        nearbyCleanersTimer = DispatchSource.makeTimerSource(flags: .strict, queue: nearbyCleanersQueue)
+        nearbyCleanersTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
+        nearbyCleanersTimer.setEventHandler(handler: {
+            let tempLocation = self.requestLocation
+            if self.activeService == nil && self.requestLocation != nil {
+                DispatchQueue.main.async {
+                    self.nearbyCleaners(location: tempLocation!)
                 }
-            })
-        });
-        dispatch_resume(nearbyCleanersTimer);
+            }
+        })
+        nearbyCleanersTimer.resume()
         
-        let  reloadMapQueue = dispatch_queue_create("com.alan.reloadMap", DISPATCH_QUEUE_CONCURRENT);
-        reloadMapTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, reloadMapQueue);
-        dispatch_source_set_timer(reloadMapTimer, dispatch_time(DISPATCH_TIME_NOW, 0), NSEC_PER_SEC, 2*NSEC_PER_SEC);
         
-        dispatch_source_set_event_handler(reloadMapTimer, {
-            dispatch_async(dispatch_get_main_queue(), {
-                print("ReloadMap")
-                self.reloadMap()
-            })
-        });
-        dispatch_resume(reloadMapTimer);
+        let reloadMapQueue = DispatchQueue(label: "com.alan.reloadMap", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+        reloadMapTimer = DispatchSource.makeTimerSource(flags: .strict, queue: reloadMapQueue)
+        reloadMapTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
+        reloadMapTimer.setEventHandler(handler: {
+                DispatchQueue.main.async {
+                    self.reloadMap()
+            }
+        })
+        reloadMapTimer.resume()
     }
     
     func nearbyCleaners(location:CLLocation){
             do{
-                self.cleaners = try Cleaner.getNearbyCleaners(location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
-            } catch Cleaner.Error.noSessionFound{
-                createAlertInfo("Error con la sesion")
+                self.cleaners = try Cleaner.getNearbyCleaners(latitud: location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
+            } catch Cleaner.CleanerError.noSessionFound{
+                createAlertInfo(message: "Error con la sesion")
                 while !self.clickedAlertOK {
                     
                 }
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.presentViewController(nextViewController, animated: true, completion: nil)
-                })
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+                self.present(nextViewController, animated: true, completion: nil)
             } catch {
                 print("Error leyendo lavadores")
             }
@@ -237,20 +224,18 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         do{
             if self.activeService != nil {
                 if self.activeService.status != "Looking" {
-                    self.cleaner = try Cleaner.getCleanerLocation(self.activeService.cleanerId,withToken: self.token)
+                    self.cleaner = try Cleaner.getCleanerLocation(cleanerId: self.activeService.cleanerId,withToken: self.token)
                 }
             }
-        } catch Cleaner.Error.noSessionFound{
+        } catch Cleaner.CleanerError.noSessionFound{
             print("Error")
-            createAlertInfo("Error con la sesion")
+            createAlertInfo(message: "Error con la sesion")
             while !self.clickedAlertOK {
                 
             }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.present(nextViewController, animated: true, completion: nil)
         } catch {
             print("Error leyendo ubicacion del lavador")
         }
@@ -259,6 +244,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             if activeService.status != "Looking" && cleaner != nil{
                 cleanerMarker.map = map
                 cleanerMarker.position = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
+                cleanerMarker.icon = UIImage(named: "washer")
             }
         } else {
             cleanerMarker.map = nil
@@ -281,6 +267,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             } else {
                 aux.append(GMSMarker(position: CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)))
                 aux[i].map = map
+                aux[i].icon = UIImage(named: "washer")
             }
             i += 1
         }
@@ -316,10 +303,10 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
                 if placemarks!.count > 0 {
                     //TODO:check for convert
                     let pm = placemarks![0]
-                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                        //self.locationText.text = "\(pm.thoroughfare) \(pm.subThoroughfare), \(pm.subLocality), \(pm.locality), \(pm.administrativeArea)"
+                    DispatchQueue.main.async {
+                        //self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!), \(pm.locality!), \(pm.administrativeArea!)"
                         print(self.locationText.text)
-                    });
+                    }
                 }
                 else {
                     print("Problem with the data received from geocoder")
@@ -332,7 +319,6 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         switch viewState {
         case STANDBY:
             configureStandByState()
-            setButtonVisibilityAll()
             break
         case VEHICLE_SELECTED:
             configureVehicleSelectedState()
@@ -352,68 +338,43 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         }
     }
     
-    func setButtonVisibilityAll(){
-        bikeImage.hidden = false
-        smallCarImage.hidden = false
-        bigCarImage.hidden = false
-        smallVanImage.hidden = false
-        bigVanImage.hidden = false
-    }
-    
-    func setButtonVisibility(i:Int){
-        bikeImage.alpha = 0
-        smallCarImage.alpha = 0
-        bigCarImage.alpha = 0
-        smallVanImage.alpha = 0
-        bigVanImage.alpha = 0
-        switch i {
-        case 0:
-            bikeImage.alpha = 1
-        case 1:
-            smallCarImage.alpha = 1
-        case 2:
-            bigCarImage.alpha = 1
-        case 3:
-            smallVanImage.alpha = 1
-        case 4:
-            bigVanImage.alpha = 1
-        default: break
-        }
-    }
-    
     func configureStandByState(){
         upLayoutHeight.constant = upLayoutSize
         lowLayoutHeight.constant = 0
         startLayoutHeight.constant = 0
-        upLayout.hidden = false
-        lowLayout.hidden = true
-        startLayout.hidden = true
+        upLayout.isHidden = false
+        lowLayout.isHidden = true
+        startLayout.isHidden = true
         //TODO: locationText.SetEnable
     }
     func configureVehicleSelectedState(){
         upLayoutHeight.constant = upLayoutSize
         lowLayoutHeight.constant = lowLayoutSize
         startLayoutHeight.constant = 0
-        upLayout.hidden = false
-        lowLayout.hidden = false
-        startLayout.hidden = true
-        leftButton.setTitle("Exterior", forState: .Normal)
-        leftDescription.text = "Servicio Exterior"
-        rightButton.setTitle("Exterior e Interior", forState: .Normal)
-        rightDescription.text = "Servicio Exterior e Interior"
+        upLayout.isHidden = false
+        lowLayout.isHidden = false
+        startLayout.isHidden = true
+        leftButton.setTitle("Lavado Exterior $$", for: .normal)
+        leftButton.setImage(UIImage(named: "exterior"), for: .normal)
+        leftDescription.text = "Consiste en lavado de carrocería, cris- tales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo)."
+        rightButton.setTitle("Lavado Interior $$", for: .normal)
+        rightButton.setImage(UIImage(named: "interior"), for: .normal)
+        rightDescription.text = "Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo)."
         //TODO: locationText.SetEnable
     }
     func configureServiceSelectedState(){
         upLayoutHeight.constant = upLayoutSize
         lowLayoutHeight.constant = lowLayoutSize
         startLayoutHeight.constant = 0
-        upLayout.hidden = false
-        lowLayout.hidden = false
-        startLayout.hidden = true
-        leftButton.setTitle("Eco $", forState: .Normal)
-        leftDescription.text = "Servicio Ecologico"
-        leftButton.setTitle("Tradicional $$", forState: .Normal)
-        rightDescription.text = "Servicio Tradicional"
+        upLayout.isHidden = false
+        lowLayout.isHidden = false
+        startLayout.isHidden = true
+        leftButton.setTitle("Ecologico $$", for: .normal)
+        leftButton.setImage(UIImage(named: "ecologico"), for: .normal)
+        leftDescription.text = "Lavado de auto en seco, con nuestro producto de máxima calidad, que brinda un acabado brillante, sin rayar el auto, protegiendo la pintura, al mismo tiempo que deja una capa de cera protectora."
+        rightButton.setTitle("Tradicional $$", for: .normal)
+        rightButton.setImage(UIImage(named: "tradicional"), for: .normal)
+        rightDescription.text = "Lavado de auto con agua y shampoo, que deja una capa protectora de cera. Para este servicio, el usuario deberá proporcionar el agua al momento de la llegada de nuestros socios lavadores."
         //TODO: locationText.SetEnable
     }
     func configureServiceTypeState(){
@@ -421,18 +382,18 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
              return
          }
          serviceRequestFlag = true
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        DispatchQueue.global(qos: .background).async {
             self.sendRequestService()
-        });
+        }
     }
     func configureServiceStartState(){
         upLayoutHeight.constant = 0
         lowLayoutHeight.constant = 0
         startLayoutHeight.constant = startLayoutSize
-        upLayout.hidden = true
-        lowLayout.hidden = true
-        startLayout.hidden = false
-        cancelButton.hidden = false
+        upLayout.isHidden = true
+        lowLayout.isHidden = true
+        startLayout.isHidden = false
+        cancelButton.isHidden = false
         serviceInfo.text = "Buscando Lavador"
         //TODO: locationText.SetEnable
         configureActiveServiceView()
@@ -441,42 +402,42 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     func sendRequestService(){
         do{
             let favCar = DataBase.getFavoriteCar()!
-            let serviceRequested = try Service.requestService("",withLatitud: String(requestLocation.coordinate.latitude),withLongitud: String(requestLocation.coordinate.longitude),withId: service,withType: serviceType,withToken: token,withCar: vehicleType, withFavoriteCar: favCar.id)
+            let serviceRequested = try Service.requestService(direccion: "",withLatitud: String(requestLocation.coordinate.latitude),withLongitud: String(requestLocation.coordinate.longitude),withId: service,withType: serviceType,withToken: token,withCar: vehicleType, withFavoriteCar: favCar.id)
             var services:Array<Service> = DataBase.readServices()!
             services.append(serviceRequested)
-            DataBase.saveServices(services)
+            DataBase.saveServices(services: services)
             cancelCode = 0;
             activeService = serviceRequested
-            dispatch_async(dispatch_get_main_queue(), {
+            DispatchQueue.main.async {
                 self.upLayoutHeight.constant = 0
                 self.lowLayoutHeight.constant = 0
                 self.startLayoutHeight.constant = self.startLayoutSize
-                self.upLayout.hidden = true
-                self.lowLayout.hidden = true
-                self.startLayout.hidden = false
-                self.cancelButton.hidden = false
-                self.cleanerInfo.hidden = true
+                self.upLayout.isHidden = true
+                self.lowLayout.isHidden = true
+                self.startLayout.isHidden = false
+                self.cancelButton.isHidden = false
+                self.cleanerInfo.isHidden = true
                 //LocationTextSetEnable
                 self.serviceInfo.text = "Buscando Lavador"
-            })
+            }
             startActiveServiceCycle()
             cancelSent = false
-        } catch Service.Error.noSessionFound{
-            createAlertInfo("Error con la sesion")
+        } catch Service.ServiceError.noSessionFound{
+            createAlertInfo(message: "Error con la sesion")
             while !clickedAlertOK {
                 
             }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
-        } catch Service.Error.userBlock{
-            createAlertInfo("Usuario bloqueado por error de tarjeta")
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            DispatchQueue.main.async {
+                self.present(nextViewController, animated: true, completion: nil)
+            }
+        } catch Service.ServiceError.userBlock{
+            createAlertInfo(message: "Usuario bloqueado por error de tarjeta")
             serviceRequestFlag = false
             onResume()
         } catch {
-            createAlertInfo("Error pidiendo servicio")
+            createAlertInfo(message: "Error pidiendo servicio")
             serviceRequestFlag = false
             onResume()
         }
@@ -484,10 +445,10 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     
     func startActiveServiceCycle(){
         if activeServiceCycleThread == nil {
-            activeServiceCycleThread = NSThread(target: self, selector:#selector(activeServiceCycle), object: nil)
+            activeServiceCycleThread = Thread(target: self, selector:#selector(activeServiceCycle), object: nil)
             activeServiceCycleThread.start()
-        } else if !activeServiceCycleThread.executing {
-            activeServiceCycleThread = NSThread(target: self, selector:#selector(activeServiceCycle), object: nil)
+        } else if !activeServiceCycleThread.isExecuting {
+            activeServiceCycleThread = Thread(target: self, selector:#selector(activeServiceCycle), object: nil)
             activeServiceCycleThread.start()
         }
     }
@@ -509,35 +470,58 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             configureActiveServiceForLooking()
             break
         case "Accepted":
-            var diffInMillis = NSDate().timeIntervalSinceDate(activeService.acceptedTime)
+            var diffInMillis = activeService.acceptedTime.addingTimeInterval(60 * 1).timeIntervalSinceNow
             if diffInMillis < 0 {
                 diffInMillis = 0
             } else {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.cancelButton.hidden = false
-                })
+                DispatchQueue.main.async {
+                    self.cancelButton.isHidden = false
+                }
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(diffInMillis)), dispatch_get_main_queue(), {
-                self.cancelButton.hidden = true
+            cancelCode = 1
+            //TODO: Check this
+            let t = DispatchTime.now() + diffInMillis
+            DispatchQueue.main.asyncAfter(deadline: t, execute: {
+                self.cancelButton.isHidden = true
                 });
-            configureActiveService("Llegando en 15 min desde pedido")
-            cancelAlarmClock = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MapController.alertForCancel), userInfo: nil, repeats: false)
+            configureActiveService(display: "Llegando en: 15 min")
+            
+            let cancelAlarmClockQueue = DispatchQueue(label: "com.alan.clockCancel", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+            cancelAlarmClock = DispatchSource.makeTimerSource(flags: .strict, queue: cancelAlarmClockQueue)
+            cancelAlarmClock.scheduleRepeating(deadline: .now() + .seconds(20), interval: .seconds(20), leeway: .seconds(1))
+            cancelAlarmClock.setEventHandler(handler: {
+                DispatchQueue.main.async {
+                    self.alertForCancel()
+                }
+            })
+            cancelAlarmClock.resume()
+            
     
             break
         case "On The Way":
             if cancelAlarmClock != nil {
-                cancelAlarmClock.invalidate()
+                cancelAlarmClock.cancel()
             }
-            configureActiveService("De camino")
+            configureActiveService(display: "De camino")
             break
         case "Started":
-            dispatch_async(dispatch_get_main_queue(), {
-                self.cancelButton.hidden = true
-            })
-            if cancelAlarmClock != nil {
-                cancelAlarmClock.invalidate()
+            DispatchQueue.main.async {
+                self.cancelButton.isHidden = true
             }
-            clock = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(MapController.modifyClock), userInfo: nil, repeats: true)
+            if cancelAlarmClock != nil {
+                cancelAlarmClock.cancel()
+            }
+            
+            let clockQueue = DispatchQueue(label: "com.alan.clock", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
+            clock = DispatchSource.makeTimerSource(flags: .strict, queue: clockQueue)
+            clock.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
+            clock.setEventHandler(handler: {
+                DispatchQueue.main.async {
+                    self.modifyClock()
+                }
+            })
+            clock.resume()
+            
             break
         case "Finished":
             configureActiveServiceForFinished()
@@ -545,64 +529,64 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         default:
             break
         }
-        AppData.notifyNewData(false)
+        AppData.notifyNewData(newData: false)
     }
     
     func configureServiceForDelete(){
         serviceRequestFlag = false
-        dispatch_async(dispatch_get_main_queue(), {
-            self.cleanerInfo.hidden = true
-            self.cleanerImageInfo.hidden = true
+        DispatchQueue.main.async {
+            self.cleanerInfo.isHidden = true
+            self.cleanerImageInfo.isHidden = true
             self.cleanerInfo.text = "-"
             self.cleanerImageInfo.image = nil
             self.serviceInfo.text = "Buscando lavador"
             self.onResume()
-        })
+        }
     }
     
     func checkNotification(){
         let message = AppData.getMessage()
         if message != "" && message != "Finished"{
             AppData.deleteMessage()
-            dispatch_async(dispatch_get_main_queue(), {
-                self.createAlertInfo(message)
-            })
+            DispatchQueue.main.async {
+                self.createAlertInfo(message: message)
+            }
         }
     }
     
     func configureActiveServiceForLooking(){
-        dispatch_async(dispatch_get_main_queue(), {
-            self.cleanerInfo.hidden = true
-            self.cleanerImageInfo.hidden = true
+        DispatchQueue.main.async {
+            self.cleanerInfo.isHidden = true
+            self.cleanerImageInfo.isHidden = true
             self.serviceInfo.text = "Buscando lavador"
-            self.cancelButton.hidden = true
+            self.cancelButton.isHidden = false
             if self.activeService != nil{
                 self.centralMarker.position = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
             }
             for marker in self.markers {
                 marker.map = nil
             }
-        })
+        }
     }
     
     func configureActiveServiceForFinished(){
         if clock != nil {
-            clock.invalidate()
+            clock.cancel()
         }
         if activeService.rating == -1 {
             cancelTimers()
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("summary") as! SummaryController
-            self.presentViewController(nextViewController, animated: true, completion: nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "summary") as! SummaryController
+            self.navigationController?.pushViewController(nextViewController, animated: true)
         }
         serviceRequestFlag = false
-        dispatch_async(dispatch_get_main_queue(), {
-            self.cleanerInfo.hidden = true
-            self.cleanerImageInfo.hidden = true
+        DispatchQueue.main.async {
+            self.cleanerInfo.isHidden = true
+            self.cleanerImageInfo.isHidden = true
             self.cleanerInfo.text = "-"
             self.cleanerImageInfo.image = nil
             self.serviceInfo.text = "Buscando lavador"
-        })
+        }
     }
     
     func modifyClock(){
@@ -611,112 +595,112 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             let minutes = Int(diff/60)
             var display = ""
             if diff < 0 {
-                display = "Terminando servicio en: 0 min"
-                clock.invalidate()
+                display = "Tu servicio terminara en cualquier momento"
+                clock.cancel()
             } else {
                 display = "Terminando servicio en: " + String(minutes + 1) + " min"
             }
-            configureActiveService(display)
+            configureActiveService(display: display)
         }
     }
     
     func configureActiveService(display:String){
-        dispatch_async(dispatch_get_main_queue(), {
+        DispatchQueue.main.async {
             if self.activeService != nil{
-                self.cleanerInfo.hidden = false
-                self.cleanerImageInfo.hidden = false
+                self.cleanerInfo.isHidden = false
+                self.cleanerImageInfo.isHidden = false
                 self.cleanerInfo.text = self.activeService.cleanerName
                 self.serviceInfo.text = display
                 self.centralMarker.position = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
             }
-        })
+        }
         setImageDrawableForActiveService()
     }
     
     func setImageDrawableForActiveService(){
         let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let data = NSData(contentsOfURL: url!){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.cleanerImageInfo.image = UIImage(data: data)
-                });
-            }
-        }
+        do {
+            let data = try Data(contentsOf: url as! URL)
+            self.cleanerImageInfo.image = UIImage(data: data as Data)
+        } catch {}
     }
     
     func alertForCancel(){
-        dispatch_async(dispatch_get_main_queue(), {
             if self.activeService == nil || self.cancelSent{
                 return
             }
             self.cancelCode = 2
             self.buildAlertForCancel()
             //Send notification
-        })
     }
     
     func buildAlertForCancel(){
+        cancelAlarmClock.suspend()
+        var alert:UIAlertController!
         if cancelCode == 2 {
-            let alert = UIAlertController(title: "Lavador esta tomando mucho tiempo", message: "Deseas cancelar?", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+            alert = UIAlertController(title: "Lavador esta tomando mucho tiempo", message: "Deseas cancelar?", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
                 self.sendCancel()
-                if self.cancelAlarmClock != nil {
-                    self.cancelAlarmClock.invalidate()
-                }
             }))
-            alert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.Default, handler: { action in
-                if self.cancelAlarmClock != nil {
-                    self.cancelAlarmClock.invalidate()
-                }
-                self.cancelAlarmClock = NSTimer.scheduledTimerWithTimeInterval(120, target: self, selector: #selector(MapController.alertForCancel), userInfo: nil, repeats: false)
-                
+            alert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.default, handler: { action in
+                self.cancelAlarmClock.resume()
             }))
         } else {
-            let alert = UIAlertController(title: "Cancelar", message: "Cancelar en este momento incluye un costo extra, estas seguro...?", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: { action in
+            alert = UIAlertController(title: "Cancelar", message: "Cancelar en este momento incluye un costo extra, estas seguro...?", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
                 self.sendCancel()
                 if self.cancelAlarmClock != nil {
-                    self.cancelAlarmClock.invalidate()
+                    self.cancelAlarmClock.cancel()
                 }
             }))
-            alert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.Default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.default, handler: nil))
         }
-        
+        self.present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func clickCancel(_ sender: AnyObject) {
+        if cancelCode == 0 {
+            sendCancel()
+        } else if cancelCode == 1 {
+            buildAlertForCancel()
+        }
+    }
     func sendCancel(){
         do {
             if cancelSent {
                 return
             }
             cancelSent = true
-            try Service.cancelService(activeService.id,withToken: token,withTimeOutCancel: cancelCode)
+            try Service.cancelService(idService: activeService.id,withToken: token,withTimeOutCancel: cancelCode)
             
             activeService.status = "Canceled"
             var services = DataBase.readServices()
-            let index = services?.indexOf({$0.id == activeService.id})
-            services?.removeAtIndex(index!)
-            AppData.notifyNewData(true)
+            let index = services?.index(where: {$0.id == activeService.id})
+            services?.remove(at: index!)
+            DataBase.saveServices(services: services!)
+            AppData.notifyNewData(newData: true)
             if cancelAlarmClock != nil {
-                cancelAlarmClock.invalidate()
+                cancelAlarmClock.cancel()
             }
-        } catch Service.Error.noSessionFound{
+        } catch Service.ServiceError.noSessionFound{
             cancelSent = false
-            createAlertInfo("Error de sesion")
+            createAlertInfo(message: "Error de sesion")
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewControllerWithIdentifier("main")
-            dispatch_async(dispatch_get_main_queue(), {
-                self.presentViewController(nextViewController, animated: true, completion: nil)
-            })
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            DispatchQueue.main.async {
+                self.present(nextViewController, animated: true, completion: nil)
+            }
         } catch {
-            createAlertInfo("Error al cancelar")
+            createAlertInfo(message: "Error al cancelar")
             cancelSent = false
+            if cancelAlarmClock != nil {
+                cancelAlarmClock.resume()
+            }
         }
     }
     
     
-    @IBAction func leftClick(sender: AnyObject) {
+    @IBAction func leftClick(_ sender: AnyObject) {
         if viewState == VEHICLE_SELECTED {
             service = String(Service.OUTSIDE)
             viewState = SERVICE_SELECTED
@@ -727,7 +711,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         configureState()
     }
     
-    @IBAction func rightClick(sender: AnyObject) {
+    @IBAction func rightClick(_ sender: AnyObject) {
         if viewState == VEHICLE_SELECTED {
             service = String(Service.OUTSIDE_INSIDE)
             viewState = SERVICE_SELECTED
@@ -738,49 +722,21 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         configureState()
     }
     
-    @IBAction func vehicleClicked(sender: UIButton) {
-        do{
+    @IBAction func vehicleClicked(_ sender: UIButton) {
             if viewState != STANDBY {
                 return
             }
             if creditCard == nil {
-                createAlertInfo("Agrega una tarjeta de credito")
+                createAlertInfo(message: "Agrega una tarjeta de credito")
                 return
             }
             if cleaners.count < 1 {
-                createAlertInfo("No hay lavadores cercanos")
+                createAlertInfo(message: "No hay lavadores cercanos")
                 return
             }
             viewState = VEHICLE_SELECTED
-            try configureVehicleButtons(sender)
+            vehicleType = DataBase.getFavoriteCar()?.type
             configureState()
-        } catch {
-            createAlertInfo("Vehiculo invalido")
-        }
-    }
-    
-    func configureVehicleButtons(sender: UIButton) throws{
-        var i:Int!
-        switch sender {
-        case bikeImage:
-            i = 0
-            vehicleType = String(Service.BIKE)
-        case smallCarImage:
-            i = 1
-            vehicleType = String(Service.SMALL_CAR)
-        case bigCarImage:
-            i = 2
-            vehicleType = String(Service.BIG_CAR)
-        case smallVanImage:
-            i = 3
-            vehicleType = String(Service.SMALL_VAN)
-        case bigVanImage:
-            i = 4
-            vehicleType = String(Service.BIG_VAN)
-        default:
-            throw Error.invalidVehicle
-        }
-        setButtonVisibility(i)
     }
     
     
@@ -794,11 +750,21 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         }
     }
     
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         userLocation = manager.location
     }
     
-    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if CLLocationManager.locationServicesEnabled() {
+            locManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locManager.startUpdatingLocation()
+            DispatchQueue.main.asyncAfter(wallDeadline: .now() + 1.0, execute: {
+                self.myLocationClicked("" as AnyObject)
+            })
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         locManager.stopUpdatingLocation()
                 print(error)
     }
@@ -810,18 +776,17 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func initMap(){
-        dispatch_async(dispatch_get_main_queue(), {
-            var camera = GMSCameraPosition.cameraWithLatitude(0, longitude: 0, zoom: 15.0)
-            self.map = GMSMapView.mapWithFrame(self.mapView.bounds, camera: camera)
+            var camera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 15.0)
+            self.map = GMSMapView.map(withFrame: self.mapView.bounds, camera: camera)
             self.map.delegate = self
-            self.map.myLocationEnabled = true
+            self.map.isMyLocationEnabled = true
             self.map.accessibilityElementsHidden = false
             self.mapView.addSubview(self.map)
             
             if self.userLocation != nil {
-                camera = GMSCameraPosition.cameraWithLatitude(self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
+                camera = GMSCameraPosition.camera(withLatitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
             } else if self.map.myLocation != nil{
-                camera = GMSCameraPosition.cameraWithLatitude(self.map.myLocation!.coordinate.latitude, longitude: self.map.myLocation!.coordinate.longitude, zoom: 15.0)
+                camera = GMSCameraPosition.camera(withLatitude: self.map.myLocation!.coordinate.latitude, longitude: self.map.myLocation!.coordinate.longitude, zoom: 15.0)
             }
             
             //self.view.sendSubviewToBack(self.mapView)
@@ -831,38 +796,37 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             self.centralMarker.position = CLLocationCoordinate2D(latitude: camera.target.latitude, longitude: camera.target.longitude)
             self.requestLocation = CLLocation(latitude: self.centralMarker.position.latitude, longitude: self.centralMarker.position.longitude)
             self.centralMarker.map = self.map
-        });
     }
     
-    func mapView(mapView: GMSMapView, didChangeCameraPosition position: GMSCameraPosition) {
+    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         if activeService == nil{
             centralMarker.position = CLLocationCoordinate2D(latitude: position.target.latitude, longitude: position.target.longitude)
             //TODO: change to send geocoder async in xs time
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-                self.reloadAddress(self.requestLocation)
-            });
+            DispatchQueue.global().async {
+                self.reloadAddress(location: self.requestLocation)
+            }
         }
     }
     
-    @IBAction func myLocationClicked(sender: AnyObject) {
+    @IBAction func myLocationClicked(_ sender: AnyObject) {
         var camera:GMSCameraPosition
         if self.userLocation == nil {
-            camera = GMSCameraPosition.cameraWithLatitude(0, longitude: 0, zoom: 15.0)
+            camera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 15.0)
         } else {
-            camera = GMSCameraPosition.cameraWithLatitude(self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
+            camera = GMSCameraPosition.camera(withLatitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
         }
-        self.map.animateToCameraPosition(camera)
+        self.map.animate(to: camera)
     }
     
     func createAlertInfo(message:String){
-        let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler: {action in
+        let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
             self.clickedAlertOK = true
         }))
-        self.presentViewController(alert, animated: true, completion: nil)
+        self.present(alert, animated: true, completion: nil)
     }
     
-    enum Error: ErrorType{
+    enum MapError: Error{
         case invalidVehicle
     }
 }

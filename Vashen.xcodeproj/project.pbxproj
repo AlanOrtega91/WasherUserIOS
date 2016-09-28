@@ -17,13 +17,19 @@
 		E71089151D4FECBC006DB612 /* UserCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089141D4FECBC006DB612 /* UserCard.swift */; };
 		E71410221D6FA60C00C97798 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71410211D6FA60C00C97798 /* HeaderCell.swift */; };
 		E714A5FE1D677415008DE774 /* EditPaymentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E714A5FD1D677414008DE774 /* EditPaymentController.swift */; };
+		E7153DF81D92D06000F169B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7153DF71D92D06000F169B9 /* Assets.xcassets */; };
+		E7153DFA1D92D71600F169B9 /* LegalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7153DF91D92D71600F169B9 /* LegalController.swift */; };
+		E7153DFC1D92D77700F169B9 /* LegalInformationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7153DFB1D92D77700F169B9 /* LegalInformationController.swift */; };
 		E7550BA51D5262D600FBD719 /* HttpServerConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BA41D5262D600FBD719 /* HttpServerConnection.swift */; };
 		E7550BA71D526FB500FBD719 /* LoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BA61D526FB500FBD719 /* LoadingController.swift */; };
 		E7550BA91D5A4AE700FBD719 /* DataBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BA81D5A4AE700FBD719 /* DataBase.swift */; };
-		E7550BAB1D5B775000FBD719 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BAA1D5B775000FBD719 /* Payment.swift */; };
 		E7550BB11D5BAB3200FBD719 /* HistoryRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */; };
 		E7550BB31D6360B400FBD719 /* CarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BB21D6360B400FBD719 /* CarCell.swift */; };
 		E7615F221D64C823001607D3 /* Cleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7615F211D64C823001607D3 /* Cleaner.swift */; };
+		E7F528101D99FF6400BA2B16 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F528091D99FF6400BA2B16 /* Card.m */; };
+		E7F528111D99FF6400BA2B16 /* Conekta.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280B1D99FF6400BA2B16 /* Conekta.m */; };
+		E7F528121D99FF6400BA2B16 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280D1D99FF6400BA2B16 /* Connection.m */; };
+		E7F528131D99FF6400BA2B16 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280F1D99FF6400BA2B16 /* Token.m */; };
 		E7F951031D66069D00BA9DE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */; };
 		E7F951051D66650400BA9DE2 /* SummaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F951041D66650400BA9DE2 /* SummaryController.swift */; };
 		E7FC6CBB1D647CD800A54B2B /* EditCarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */; };
@@ -31,7 +37,6 @@
 		E7FE89ED1D4E69DC0071CDFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */; };
 		E7FE89EF1D4E69DC0071CDFA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */; };
 		E7FE89F21D4E69DC0071CDFA /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F01D4E69DC0071CDFA /* Map.storyboard */; };
-		E7FE89F71D4E69DC0071CDFA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F61D4E69DC0071CDFA /* Assets.xcassets */; };
 		E7FE89FA1D4E69DC0071CDFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F81D4E69DC0071CDFA /* LaunchScreen.storyboard */; };
 		E7FE8A041D4E6AAB0071CDFA /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7FE8A031D4E6AAB0071CDFA /* SWRevealViewController.m */; };
 		E7FE8A061D4E6D650071CDFA /* MenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE8A051D4E6D650071CDFA /* MenuVC.swift */; };
@@ -70,13 +75,24 @@
 		E71089141D4FECBC006DB612 /* UserCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCard.swift; sourceTree = "<group>"; };
 		E71410211D6FA60C00C97798 /* HeaderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderCell.swift; sourceTree = "<group>"; };
 		E714A5FD1D677414008DE774 /* EditPaymentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPaymentController.swift; sourceTree = "<group>"; };
+		E7153DF61D920AA600F169B9 /* Vashen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vashen.entitlements; sourceTree = "<group>"; };
+		E7153DF71D92D06000F169B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E7153DF91D92D71600F169B9 /* LegalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalController.swift; sourceTree = "<group>"; };
+		E7153DFB1D92D77700F169B9 /* LegalInformationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalInformationController.swift; sourceTree = "<group>"; };
 		E7550BA41D5262D600FBD719 /* HttpServerConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HttpServerConnection.swift; sourceTree = "<group>"; };
 		E7550BA61D526FB500FBD719 /* LoadingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingController.swift; sourceTree = "<group>"; };
 		E7550BA81D5A4AE700FBD719 /* DataBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBase.swift; sourceTree = "<group>"; };
-		E7550BAA1D5B775000FBD719 /* Payment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryRowTableViewCell.swift; sourceTree = "<group>"; };
 		E7550BB21D6360B400FBD719 /* CarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarCell.swift; sourceTree = "<group>"; };
 		E7615F211D64C823001607D3 /* Cleaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cleaner.swift; sourceTree = "<group>"; };
+		E7F528081D99FF6400BA2B16 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
+		E7F528091D99FF6400BA2B16 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
+		E7F5280A1D99FF6400BA2B16 /* Conekta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conekta.h; sourceTree = "<group>"; };
+		E7F5280B1D99FF6400BA2B16 /* Conekta.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Conekta.m; sourceTree = "<group>"; };
+		E7F5280C1D99FF6400BA2B16 /* Connection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Connection.h; sourceTree = "<group>"; };
+		E7F5280D1D99FF6400BA2B16 /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
+		E7F5280E1D99FF6400BA2B16 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
+		E7F5280F1D99FF6400BA2B16 /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
 		E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E7F951041D66650400BA9DE2 /* SummaryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryController.swift; sourceTree = "<group>"; };
 		E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCarController.swift; sourceTree = "<group>"; };
@@ -85,7 +101,6 @@
 		E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E7FE89F11D4E69DC0071CDFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Map.storyboard; sourceTree = "<group>"; };
-		E7FE89F61D4E69DC0071CDFA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E7FE89F91D4E69DC0071CDFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E7FE89FB1D4E69DC0071CDFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7FE8A011D4E6AAA0071CDFA /* Vashen-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Vashen-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -157,7 +172,6 @@
 				E71089101D4FECA6006DB612 /* Car.swift */,
 				E7550BA41D5262D600FBD719 /* HttpServerConnection.swift */,
 				E7550BA81D5A4AE700FBD719 /* DataBase.swift */,
-				E7550BAA1D5B775000FBD719 /* Payment.swift */,
 				E7615F211D64C823001607D3 /* Cleaner.swift */,
 			);
 			name = Model;
@@ -166,13 +180,28 @@
 		E710890F1D4FE7EA006DB612 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
-				E7FE89F61D4E69DC0071CDFA /* Assets.xcassets */,
+				E7153DF71D92D06000F169B9 /* Assets.xcassets */,
 				E7FE8A011D4E6AAA0071CDFA /* Vashen-Bridging-Header.h */,
 				E7FE8A021D4E6AAB0071CDFA /* SWRevealViewController.h */,
 				E7FE8A031D4E6AAB0071CDFA /* SWRevealViewController.m */,
 				E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */,
 			);
 			name = "Support Files";
+			sourceTree = "<group>";
+		};
+		E7F528071D99FD0600BA2B16 /* Conekta */ = {
+			isa = PBXGroup;
+			children = (
+				E7F528081D99FF6400BA2B16 /* Card.h */,
+				E7F528091D99FF6400BA2B16 /* Card.m */,
+				E7F5280A1D99FF6400BA2B16 /* Conekta.h */,
+				E7F5280B1D99FF6400BA2B16 /* Conekta.m */,
+				E7F5280C1D99FF6400BA2B16 /* Connection.h */,
+				E7F5280D1D99FF6400BA2B16 /* Connection.m */,
+				E7F5280E1D99FF6400BA2B16 /* Token.h */,
+				E7F5280F1D99FF6400BA2B16 /* Token.m */,
+			);
+			name = Conekta;
 			sourceTree = "<group>";
 		};
 		E7FE89E01D4E69DC0071CDFA = {
@@ -197,6 +226,8 @@
 		E7FE89EB1D4E69DC0071CDFA /* Vashen */ = {
 			isa = PBXGroup;
 			children = (
+				E7F528071D99FD0600BA2B16 /* Conekta */,
+				E7153DF61D920AA600F169B9 /* Vashen.entitlements */,
 				E710890F1D4FE7EA006DB612 /* Support Files */,
 				E71088FF1D4FA4E0006DB612 /* Model */,
 				E7FE8A221D4ED6BA0071CDFA /* Views */,
@@ -211,6 +242,8 @@
 		E7FE8A211D4ED6A80071CDFA /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				E7153DFB1D92D77700F169B9 /* LegalInformationController.swift */,
+				E7153DF91D92D71600F169B9 /* LegalController.swift */,
 				E7FE8A051D4E6D650071CDFA /* MenuVC.swift */,
 				E7FE8A0D1D4EBB3D0071CDFA /* MenuCell.swift */,
 				E7FE8A0F1D4EC1380071CDFA /* PaymentController.swift */,
@@ -226,17 +259,17 @@
 				E7FE8A2B1D4F07310071CDFA /* ForgotPasswordController.swift */,
 				E7FE8A2D1D4F08400071CDFA /* CreateAccountController.swift */,
 				E7FE8A2F1D4F084C0071CDFA /* CreateAccountPersonalController.swift */,
+				E7FE8A371D4F24C70071CDFA /* EditAccountController.swift */,
 				E7FE8A311D4F08590071CDFA /* CreateAccountPaymentController.swift */,
+				E714A5FD1D677414008DE774 /* EditPaymentController.swift */,
 				E7FE8A331D4F230E0071CDFA /* EditBillingController.swift */,
 				E7FE8A351D4F248E0071CDFA /* AddCarController.swift */,
-				E7FE8A371D4F24C70071CDFA /* EditAccountController.swift */,
+				E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */,
 				E7FE8A231D4F01A90071CDFA /* InitController.swift */,
 				E7550BA61D526FB500FBD719 /* LoadingController.swift */,
 				E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */,
 				E7550BB21D6360B400FBD719 /* CarCell.swift */,
-				E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */,
 				E7F951041D66650400BA9DE2 /* SummaryController.swift */,
-				E714A5FD1D677414008DE774 /* EditPaymentController.swift */,
 				E71410211D6FA60C00C97798 /* HeaderCell.swift */,
 				E7FD0EF91D754786001C2A06 /* InformationController.swift */,
 			);
@@ -283,12 +316,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Alan;
 				TargetAttributes = {
 					E7FE89E81D4E69DC0071CDFA = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = T83HJT87GD;
+						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 1;
@@ -325,9 +360,9 @@
 			files = (
 				E7FE89FA1D4E69DC0071CDFA /* LaunchScreen.storyboard in Resources */,
 				E7FE8A201D4EC70A0071CDFA /* Main.storyboard in Resources */,
-				E7FE89F71D4E69DC0071CDFA /* Assets.xcassets in Resources */,
 				E7FE8A1E1D4EC30C0071CDFA /* Menu.storyboard in Resources */,
 				E7FE89F21D4E69DC0071CDFA /* Map.storyboard in Resources */,
+				E7153DF81D92D06000F169B9 /* Assets.xcassets in Resources */,
 				E7F951031D66069D00BA9DE2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,14 +425,17 @@
 				E71410221D6FA60C00C97798 /* HeaderCell.swift in Sources */,
 				E71089031D4FA853006DB612 /* User.swift in Sources */,
 				E7FE8A1A1D4EC1C90071CDFA /* ConfigurationController.swift in Sources */,
+				E7F528131D99FF6400BA2B16 /* Token.m in Sources */,
 				E7FE89EF1D4E69DC0071CDFA /* ViewController.swift in Sources */,
 				E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */,
+				E7F528101D99FF6400BA2B16 /* Card.m in Sources */,
 				E7FE8A241D4F01A90071CDFA /* InitController.swift in Sources */,
 				E71089011D4FA4FB006DB612 /* AppData.swift in Sources */,
 				E7F951051D66650400BA9DE2 /* SummaryController.swift in Sources */,
 				E7550BB11D5BAB3200FBD719 /* HistoryRowTableViewCell.swift in Sources */,
 				E7FE8A0E1D4EBB3D0071CDFA /* MenuCell.swift in Sources */,
 				E71089081D4FD1F2006DB612 /* Vashen.xcdatamodeld in Sources */,
+				E7F528121D99FF6400BA2B16 /* Connection.m in Sources */,
 				E7FE8A381D4F24C70071CDFA /* EditAccountController.swift in Sources */,
 				E7FD0EFA1D754786001C2A06 /* InformationController.swift in Sources */,
 				E7FE8A301D4F084C0071CDFA /* CreateAccountPersonalController.swift in Sources */,
@@ -407,14 +445,15 @@
 				E7FE8A341D4F230E0071CDFA /* EditBillingController.swift in Sources */,
 				E7FE8A141D4EC19A0071CDFA /* HistoryController.swift in Sources */,
 				E7615F221D64C823001607D3 /* Cleaner.swift in Sources */,
+				E7F528111D99FF6400BA2B16 /* Conekta.m in Sources */,
 				E7FE89ED1D4E69DC0071CDFA /* AppDelegate.swift in Sources */,
 				E7FE8A281D4F060B0071CDFA /* MainController.swift in Sources */,
 				E7FE8A041D4E6AAB0071CDFA /* SWRevealViewController.m in Sources */,
-				E7550BAB1D5B775000FBD719 /* Payment.swift in Sources */,
 				E7FE8A061D4E6D650071CDFA /* MenuVC.swift in Sources */,
 				E7FE8A2A1D4F067E0071CDFA /* LoginController.swift in Sources */,
 				E7550BA71D526FB500FBD719 /* LoadingController.swift in Sources */,
 				E7FE8A181D4EC1B40071CDFA /* HelpController.swift in Sources */,
+				E7153DFC1D92D77700F169B9 /* LegalInformationController.swift in Sources */,
 				E7FE8A2C1D4F07310071CDFA /* ForgotPasswordController.swift in Sources */,
 				E7FE8A161D4EC1A80071CDFA /* CarsController.swift in Sources */,
 				E7550BA51D5262D600FBD719 /* HttpServerConnection.swift in Sources */,
@@ -427,6 +466,7 @@
 				E7550BA91D5A4AE700FBD719 /* DataBase.swift in Sources */,
 				E7FE8A261D4F04DD0071CDFA /* MapController.swift in Sources */,
 				E71089111D4FECA6006DB612 /* Car.swift in Sources */,
+				E7153DFA1D92D71600F169B9 /* LegalController.swift in Sources */,
 				E71089151D4FECBC006DB612 /* UserCard.swift in Sources */,
 				E7FE8A1C1D4EC1D30071CDFA /* AboutController.swift in Sources */,
 			);
@@ -468,8 +508,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -514,8 +556,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -533,6 +577,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -545,14 +590,26 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Vashen/Vashen.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Alan Ortega (92MFTFMAY7)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Vashen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Braintree\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Braintree/BraintreePayPal/PayPalDataCollector/Risk\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Vashen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Vashen/Vashen-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -562,13 +619,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Vashen/Vashen.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Alan Ortega (T83HJT87GD)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Vashen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$PODS_CONFIGURATION_BUILD_DIR/Braintree\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Braintree/BraintreePayPal/PayPalDataCollector/Risk\"",
+				);
+				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Vashen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Vashen/Vashen-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

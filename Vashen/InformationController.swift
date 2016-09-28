@@ -10,30 +10,66 @@ import Foundation
 
 class InformationController: UIViewController {
 
-    @IBOutlet weak var cleanerImage: UIImageView!
+    @IBOutlet weak var ratingImage: UIImageView!
     @IBOutlet weak var cleanerName: UILabel!
+    @IBOutlet weak var cleanerImage: UIImageView!
+    
+    
+    
     var service:Service!
+    var token:String!
+    
+    
     
     override func viewDidLoad() {
         service = DataBase.getActiveService()
+        token = AppData.readToken()
         cleanerName.text = service?.cleanerName
         setImageDrawableForActiveService()
+        DispatchQueue.global().async {
+            self.readCleanerRating()
+        }
     }
     
-    @IBAction func onClickBack(sender: AnyObject) {
-        let nextViewController = self.storyboard!.instantiateViewControllerWithIdentifier("reveal_controller") as! SWRevealViewController
-        self.presentViewController(nextViewController, animated:true, completion:nil)
+    @IBAction func onClickBack(_ sender: AnyObject) {
+        _ = self.navigationController?.popViewController(animated: true)
+    }
+    
+    func readCleanerRating(){
+        do {
+            let rating = try Cleaner.readCleanerRating(cleanerId: service.cleanerId,withToken: token)
+            DispatchQueue.main.async {
+                self.setCleanerRatingImage(rating: rating)
+            }
+        } catch {
+            
+        }
+    }
+    
+    func setCleanerRatingImage(rating:Double) {
+        switch rating.rounded() {
+        case 0:
+            ratingImage.image = UIImage(named: "rating0")
+        case 1:
+            ratingImage.image = UIImage(named: "rating1")
+        case 2:
+            ratingImage.image = UIImage(named: "rating2")
+        case 3:
+            ratingImage.image = UIImage(named: "rating3")
+        case 4:
+            ratingImage.image = UIImage(named: "rating4")
+        case 5:
+            ratingImage.image = UIImage(named: "rating5")
+        default:
+            ratingImage.image = UIImage(named: "rating0")
+        }
     }
     
     func setImageDrawableForActiveService(){
         let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/" + service.cleanerId + "/profile_image.jpg")
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
-            if let data = NSData(contentsOfURL: url!){
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.cleanerImage.image = UIImage(data: data)
-                });
-            }
-        }
+        do {
+        let data:Data = try Data(contentsOf: url! as URL)
+        self.cleanerImage.image = UIImage(data: data)
+        } catch {}
     }
 }

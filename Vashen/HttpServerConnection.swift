@@ -10,7 +10,7 @@ import Foundation
 
 public class HttpServerConnection
 {
-    private static var dev = "192.168.0.9"
+    private static var dev = "192.168.0.2"
     private static var prod = "imanio.zone"
     
     public static func buildURL(location: String) -> String {
@@ -20,21 +20,21 @@ public class HttpServerConnection
     
     public static func sendHttpRequestPost(urlPath: String, withParams params: String) throws -> Dictionary<String,AnyObject>{
         do {
-            let request = NSMutableURLRequest.init(URL: NSURL.init(string: urlPath)!)
-            request.HTTPMethod = "POST"
+            var response : URLResponse?
+            let request = NSMutableURLRequest.init(url: NSURL.init(string: urlPath)! as URL)
+            request.httpMethod = "POST"
             request.timeoutInterval = 10
-            request.HTTPBody = params.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true)
-            var response : NSURLResponse?
+            request.httpBody = params.data(using: String.Encoding.utf8, allowLossyConversion: true)
         
-            let data = try NSURLConnection.sendSynchronousRequest(request, returningResponse: &response)
-            let dataString = try NSJSONSerialization.JSONObjectWithData(data, options: [])
+            let data = try NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response)
+            let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
             return dataString as! Dictionary<String, AnyObject>
         } catch (let e) {
             print(e)
-            throw Error.connectionException
+            throw HTTPError.connectionException
         }
     }
-    enum  Error: ErrorType {
+    enum  HTTPError: Error {
         case connectionException
     }
 }
