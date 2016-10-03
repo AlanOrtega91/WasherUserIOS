@@ -27,6 +27,7 @@ public class HttpServerConnection
             request.httpBody = params.data(using: String.Encoding.utf8, allowLossyConversion: true)
         
             let data = try NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response)
+            print(String(data: data, encoding: String.Encoding.utf8))
             let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
             return dataString as! Dictionary<String, AnyObject>
         } catch (let e) {

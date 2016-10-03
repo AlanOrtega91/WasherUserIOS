@@ -20,15 +20,21 @@ class InitController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        initValues()
+        initView()
+        DispatchQueue.global().async {
+            self.decideNextView()
+        }
+    }
+    
+    func initView(){
         var imgList = [UIImage]()
-        for countValue in 0...119 {
-            if countValue%2 == 0 {
+        for countValue in 0...119{
             let strImageName = "frame_\(countValue)_delay-0.04s"
             let image = UIImage(named: strImageName)
             if image != nil {
                 imgList.append(image!)
             }
-        }
         }
         self.loading.animationImages = imgList
         self.loading.animationDuration = 5.0
@@ -36,25 +42,17 @@ class InitController: UIViewController {
         imgList.removeAll()
     }
     
-    
-    override func didReceiveMemoryWarning() {
+    public override func didReceiveMemoryWarning() {
+        self.loading.stopAnimating()
+        self.loading.animationImages = []
+        self.loading.image = UIImage(named: "frame_199_delay-0.04s")
         print("memory warning bato")
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        initValues()
-        initView()
     }
     
     func initValues() {
         token = AppData.readToken()
     }
     
-    func initView() {
-        DispatchQueue.global().async {
-            self.decideNextView()
-        }
-    }
     
     func decideNextView(){
         if token == "" {

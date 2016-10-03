@@ -248,27 +248,19 @@
                             </textField>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3b2-ft-cMX">
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="GgS-6X-gbj">
-                                        <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGX-fH-oCz">
-                                                <state key="normal" image="bikeActive"/>
-                                                <connections>
-                                                    <action selector="vehicleClicked:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="Gtx-bd-hkh"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <constraints>
-                                            <constraint firstItem="VGX-fH-oCz" firstAttribute="top" secondItem="GgS-6X-gbj" secondAttribute="top" id="62j-Te-FWJ"/>
-                                            <constraint firstAttribute="bottom" secondItem="VGX-fH-oCz" secondAttribute="bottom" id="j5d-7q-YmG"/>
-                                        </constraints>
-                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGX-fH-oCz">
+                                        <state key="normal" image="bikeActive"/>
+                                        <connections>
+                                            <action selector="vehicleClicked:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="Gtx-bd-hkh"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="GgS-6X-gbj" firstAttribute="leading" secondItem="3b2-ft-cMX" secondAttribute="leading" id="2yS-VN-RFV"/>
-                                    <constraint firstAttribute="bottom" secondItem="GgS-6X-gbj" secondAttribute="bottom" id="PjN-ZM-5lE"/>
-                                    <constraint firstAttribute="trailing" secondItem="GgS-6X-gbj" secondAttribute="trailing" id="eGm-ss-Nss"/>
-                                    <constraint firstItem="GgS-6X-gbj" firstAttribute="top" secondItem="3b2-ft-cMX" secondAttribute="top" id="lRc-A0-z6s"/>
+                                    <constraint firstItem="VGX-fH-oCz" firstAttribute="top" secondItem="3b2-ft-cMX" secondAttribute="top" constant="10" id="0jH-sk-qUd"/>
+                                    <constraint firstAttribute="trailing" secondItem="VGX-fH-oCz" secondAttribute="trailing" constant="40" id="0pN-CJ-sac"/>
+                                    <constraint firstItem="VGX-fH-oCz" firstAttribute="leading" secondItem="3b2-ft-cMX" secondAttribute="leading" constant="40" id="FIm-8G-n4c"/>
+                                    <constraint firstAttribute="bottom" secondItem="VGX-fH-oCz" secondAttribute="bottom" constant="10" id="PZD-BD-QgB"/>
                                     <constraint firstAttribute="height" constant="50" id="ozH-d5-gdt"/>
                                 </constraints>
                             </view>
@@ -418,6 +410,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="uzo-AC-pb4" secondAttribute="trailing" constant="-20" id="55J-h0-1ja"/>
                             <constraint firstItem="iJJ-Mb-xNJ" firstAttribute="top" secondItem="uzo-AC-pb4" secondAttribute="bottom" id="95U-8Y-WAp"/>
                             <constraint firstItem="kIv-Z3-HPw" firstAttribute="width" secondItem="VhR-Da-NsS" secondAttribute="width" id="Bc1-qk-Lxj"/>
+                            <constraint firstItem="3b2-ft-cMX" firstAttribute="top" secondItem="iYe-vj-6AR" secondAttribute="bottom" constant="10" id="CkK-TC-8HD"/>
                             <constraint firstItem="3b2-ft-cMX" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="Dz6-k7-e8e"/>
                             <constraint firstItem="iJJ-Mb-xNJ" firstAttribute="top" secondItem="kIv-Z3-HPw" secondAttribute="bottom" id="GPb-kF-o5G"/>
                             <constraint firstItem="8Vi-Fs-PFt" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" constant="30" id="Hjc-vq-95C"/>
@@ -432,7 +425,6 @@
                             <constraint firstItem="kIv-Z3-HPw" firstAttribute="centerY" secondItem="VhR-Da-NsS" secondAttribute="centerY" id="XAj-MA-mX5"/>
                             <constraint firstItem="3b2-ft-cMX" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" id="aRY-k2-JnN"/>
                             <constraint firstItem="dU3-R6-rJ9" firstAttribute="top" secondItem="3b2-ft-cMX" secondAttribute="bottom" id="dC4-mf-I4l"/>
-                            <constraint firstItem="GgS-6X-gbj" firstAttribute="top" secondItem="iYe-vj-6AR" secondAttribute="bottom" constant="10" id="fjZ-w6-XUn"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3b2-ft-cMX" secondAttribute="trailing" constant="-20" id="iIC-Qa-t0W"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eE2-De-VnG" secondAttribute="trailing" constant="-20" id="l11-Ai-LFM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="kIv-Z3-HPw" secondAttribute="trailing" constant="-20" id="o90-yM-sAZ"/>
@@ -443,11 +435,11 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="aRY-k2-JnN"/>
                                 <exclude reference="Bc1-qk-Lxj"/>
                                 <exclude reference="XAj-MA-mX5"/>
                                 <exclude reference="oqr-1m-ppG"/>
                                 <exclude reference="ve9-pS-ij0"/>
+                                <exclude reference="aRY-k2-JnN"/>
                             </mask>
                         </variation>
                     </view>

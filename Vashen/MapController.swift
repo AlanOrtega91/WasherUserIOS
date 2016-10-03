@@ -42,7 +42,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     @IBOutlet weak var locationText: UITextField!
 
     
-    
+    var geoLocationQueue = DispatchQueue(label: "com.alan.geoLocation", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     
     var showCancelAler: Bool = false
     
@@ -301,10 +301,11 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
                 }
                 
                 if placemarks!.count > 0 {
-                    //TODO:check for convert
                     let pm = placemarks![0]
                     DispatchQueue.main.async {
-                        //self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!), \(pm.locality!), \(pm.administrativeArea!)"
+                        if pm.thoroughfare != nil && pm.subThoroughfare != nil && pm.subLocality != nil && pm.locality != nil && pm.administrativeArea != nil {
+                            self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!), \(pm.locality!), \(pm.administrativeArea!)"
+                        }
                         print(self.locationText.text)
                     }
                 }
@@ -470,7 +471,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             configureActiveServiceForLooking()
             break
         case "Accepted":
-            var diffInMillis = activeService.acceptedTime.addingTimeInterval(60 * 1).timeIntervalSinceNow
+            var diffInMillis = activeService.acceptedTime.addingTimeInterval(60 * 2).timeIntervalSinceNow
             if diffInMillis < 0 {
                 diffInMillis = 0
             } else {
@@ -488,7 +489,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             
             let cancelAlarmClockQueue = DispatchQueue(label: "com.alan.clockCancel", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
             cancelAlarmClock = DispatchSource.makeTimerSource(flags: .strict, queue: cancelAlarmClockQueue)
-            cancelAlarmClock.scheduleRepeating(deadline: .now() + .seconds(20), interval: .seconds(20), leeway: .seconds(1))
+            cancelAlarmClock.scheduleRepeating(deadline: .now() + .seconds(60*15), interval: .seconds(60*15), leeway: .seconds(60))
             cancelAlarmClock.setEventHandler(handler: {
                 DispatchQueue.main.async {
                     self.alertForCancel()
@@ -577,7 +578,9 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             cancelTimers()
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "summary") as! SummaryController
-            self.navigationController?.pushViewController(nextViewController, animated: true)
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(nextViewController, animated: true)
+            }
         }
         serviceRequestFlag = false
         DispatchQueue.main.async {
@@ -801,10 +804,12 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
         if activeService == nil{
             centralMarker.position = CLLocationCoordinate2D(latitude: position.target.latitude, longitude: position.target.longitude)
-            //TODO: change to send geocoder async in xs time
-            DispatchQueue.global().async {
+            self.locationText.text = ""
+            geoLocationQueue.suspend()
+            geoLocationQueue.asyncAfter(deadline: .now() + 2, execute: {
                 self.reloadAddress(location: self.requestLocation)
-            }
+            })
+            geoLocationQueue.resume()
         }
     }
     
@@ -824,9 +829,5 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             self.clickedAlertOK = true
         }))
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    enum MapError: Error{
-        case invalidVehicle
     }
 }

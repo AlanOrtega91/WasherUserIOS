@@ -41,7 +41,7 @@ class ConfigurationController: UIViewController {
     }
     
     func setUserImage(){
-        let imageData = NSData(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
+        let imageData = Data(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
         userImage.image = UIImage(data: imageData! as Data)
     }
     

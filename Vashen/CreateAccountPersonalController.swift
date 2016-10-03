@@ -81,9 +81,9 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         image.image = imagePicked
-        let imageData = UIImageJPEGRepresentation(imagePicked, 1.0)
+        let imageData = UIImageJPEGRepresentation(imagePicked, 0.3)
         DispatchQueue.global(qos: .background).async {
-            self.encodedString = imageData!.base64EncodedString(options: [])
+            self.encodedString = imageData!.base64EncodedString()
         }
         self.dismiss(animated: true, completion: nil);
     }

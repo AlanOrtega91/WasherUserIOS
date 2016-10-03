@@ -42,14 +42,19 @@ public class LoadingController: UIViewController {
 
     override public func viewDidLoad() {
         super.viewDidLoad()
+        initView()
+        DispatchQueue.global(qos: .background).async {
+            self.initValues()
+        }
+    }
+    
+    func initView(){
         var imgList = [UIImage]()
-        for countValue in 0...119 {
-            if countValue%2 == 0{
-                let strImageName = "frame_\(countValue)_delay-0.04s"
-                let image = UIImage(named: strImageName)
-                if image != nil {
-                    imgList.append(image!)
-                }
+        for countValue in 0...119{
+            let strImageName = "frame_\(countValue)_delay-0.04s"
+            let image = UIImage(named: strImageName)
+            if image != nil {
+                imgList.append(image!)
             }
         }
         self.loading.animationImages = imgList
@@ -58,10 +63,10 @@ public class LoadingController: UIViewController {
         imgList.removeAll()
     }
     
-    override public func viewDidAppear(_ animated: Bool) {
-        DispatchQueue.global(qos: .background).async {
-            self.initValues()
-        }
+    public override func didReceiveMemoryWarning() {
+        self.loading.stopAnimating()
+        self.loading.animationImages = []
+        self.loading.image = UIImage(named: "frame_199_delay-0.04s")
     }
     
     func initValues(){

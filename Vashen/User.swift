@@ -73,7 +73,6 @@ public class User {
             params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=" + billingName + "&newRFC=" + rfc + "&newBillingAddress=" + billingAddress
         }
         if encodedImage != nil {
-            print(encodedImage)
             params += "&encoded_string=" + encodedImage
         }
         do{

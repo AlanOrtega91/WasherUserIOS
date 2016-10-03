@@ -19,10 +19,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="loading" translatesAutoresizingMaskIntoConstraints="NO" id="Lm1-M6-U0N"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="Lm1-M6-U0N"/>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="izv-dU-d1B">
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="0Ia-GA-VwO"/>
+                                    <constraint firstAttribute="height" constant="40" id="0Ia-GA-VwO"/>
                                 </constraints>
                                 <state key="normal" title="INICIAR SESION" backgroundImage="button_image">
                                     <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -34,7 +34,7 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dgp-wA-bld">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="KgH-up-YPS"/>
-                                    <constraint firstAttribute="height" constant="50" id="dYn-JK-7Xw"/>
+                                    <constraint firstAttribute="height" constant="40" id="dYn-JK-7Xw"/>
                                 </constraints>
                                 <state key="normal" title="REGISTRATE" backgroundImage="button_image">
                                     <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -48,11 +48,17 @@
                                     <segue destination="G9c-j8-Oir" kind="show" id="hWD-mB-eeK"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Washer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zm8-Ck-2FX">
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WASHER" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zm8-Ck-2FX">
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="1oR-EC-lFU">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="0BH-oQ-m0N"/>
+                                    <constraint firstAttribute="width" constant="200" id="T7V-6d-D31"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -63,17 +69,19 @@
                             <constraint firstItem="dgp-wA-bld" firstAttribute="leading" secondItem="Uhe-Jr-uVr" secondAttribute="leadingMargin" constant="5" id="EHK-Aw-DAC"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Zm8-Ck-2FX" secondAttribute="trailing" constant="5" id="F5p-C1-eEd"/>
                             <constraint firstItem="Lm1-M6-U0N" firstAttribute="leading" secondItem="Uhe-Jr-uVr" secondAttribute="leadingMargin" constant="-20" id="Fh2-gJ-h8S"/>
+                            <constraint firstItem="Zm8-Ck-2FX" firstAttribute="top" secondItem="1oR-EC-lFU" secondAttribute="bottom" constant="30" id="HQ3-2x-D5B"/>
                             <constraint firstItem="Zm8-Ck-2FX" firstAttribute="centerX" secondItem="Uhe-Jr-uVr" secondAttribute="centerX" id="Jfn-1M-rh1"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dgp-wA-bld" secondAttribute="trailing" constant="5" id="Jwx-a7-Mkq"/>
-                            <constraint firstItem="dgp-wA-bld" firstAttribute="top" secondItem="izv-dU-d1B" secondAttribute="bottom" constant="5" id="K0V-hg-Imc"/>
+                            <constraint firstItem="dgp-wA-bld" firstAttribute="top" secondItem="izv-dU-d1B" secondAttribute="bottom" constant="15" id="K0V-hg-Imc"/>
                             <constraint firstItem="Dgv-5e-Nh3" firstAttribute="top" secondItem="dgp-wA-bld" secondAttribute="bottom" constant="5" id="KVv-CU-eRR"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dgp-wA-bld" secondAttribute="trailing" constant="-5" id="OJm-3F-6vZ"/>
                             <constraint firstItem="Zm8-Ck-2FX" firstAttribute="leading" secondItem="Uhe-Jr-uVr" secondAttribute="leadingMargin" constant="5" id="Z0P-pY-Pcs"/>
+                            <constraint firstItem="1oR-EC-lFU" firstAttribute="centerY" secondItem="Lm1-M6-U0N" secondAttribute="centerY" constant="-100" id="bVf-cT-Rut"/>
                             <constraint firstItem="dgp-wA-bld" firstAttribute="top" secondItem="izv-dU-d1B" secondAttribute="bottom" constant="5" id="hzc-SB-rEz"/>
                             <constraint firstItem="Dgv-5e-Nh3" firstAttribute="top" secondItem="Lm1-M6-U0N" secondAttribute="bottom" id="kNe-0d-V3o"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dgp-wA-bld" secondAttribute="trailing" constant="5" id="o5q-HS-gzX"/>
+                            <constraint firstItem="1oR-EC-lFU" firstAttribute="centerX" secondItem="Lm1-M6-U0N" secondAttribute="centerX" id="rsF-Lk-jhM"/>
                             <constraint firstItem="dgp-wA-bld" firstAttribute="leading" secondItem="Uhe-Jr-uVr" secondAttribute="leadingMargin" constant="5" id="u8B-B0-yiX"/>
-                            <constraint firstItem="izv-dU-d1B" firstAttribute="top" secondItem="Zm8-Ck-2FX" secondAttribute="bottom" constant="50" id="w8u-wa-Yii"/>
                             <constraint firstItem="izv-dU-d1B" firstAttribute="trailing" secondItem="Uhe-Jr-uVr" secondAttribute="trailingMargin" constant="5" id="yxB-uG-0cd"/>
                         </constraints>
                         <variation key="default">
@@ -92,13 +100,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7K5-wc-2Ug" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="212" y="-97"/>
+            <point key="canvasLocation" x="212" y="-97.601199400299862"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="zNV-AF-KzO">
             <objects>
                 <navigationController navigationBarHidden="YES" id="yv3-u2-rAq" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="wvZ-Rg-9mp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wvZ-Rg-9mp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -386,7 +394,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="Jyg-SN-siz">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="Jyg-SN-siz">
                                 <frame key="frameInset" minX="-1" minY="70" width="376" height="500"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_image" translatesAutoresizingMaskIntoConstraints="NO" id="f60-fv-Jco">
@@ -865,9 +873,9 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Logo" width="372" height="246"/>
         <image name="background" width="318" height="567"/>
         <image name="button_image" width="599" height="88"/>
         <image name="default_image" width="475" height="478"/>
-        <image name="loading" width="640" height="1136"/>
     </resources>
 </document>

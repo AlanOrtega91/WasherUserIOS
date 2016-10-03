@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "CreateAccountPersonalController.imagePickerController(UIImagePickerController, didFinishPickingImage : UIImage!, editingInfo : [NSObject : AnyObject]!) -&gt; ():CreateAccountPersonalController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CreateAccountPersonalController.clickedCancel(AnyObject) -&gt; ():CreateAccountPersonalController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CreateAccountController.sendContinue(AnyObject) -&gt; ():CreateAccountController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "static Car.addNewFavoriteCar(Car, withToken : String) throws -&gt; String:Car.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "(NSDictionary)response">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AddCarController.saveNewCar(AnyObject) -&gt; ():AddCarController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CarsController.initValues() -&gt; ():CarsController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "LoadingController.tryEditAccount() -&gt; ():LoadingController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CreateAccountController.reviewCredentials() throws -&gt; ():CreateAccountController.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

@@ -23,9 +23,72 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     var selectedVehicleId: Int = 0
     var car:Car!
     
-    var brands: [String] = ["toyota","Volvo","Ford"]
-    var types: [String] = ["Moto","Coche Chico","Coche Grande","Camioneta Chica","Camioneta Grande"]
-    var colors: [String] = ["Rojo","Azul","Negro"]
+    var brands: [String] = [
+        "Acura",
+        "Alfa Romeo",
+        "Aston Martin",
+        "Audi",
+        "BAIC",
+        "Bentley",
+        "BMW",
+        "Buick",
+        "Cadillac",
+        "Chevrolet",
+        "Chrysler",
+        "Dodge",
+        "Ferrari",
+        "Fiat",
+        "Ford",
+        "GMC",
+        "Honda",
+        "Hyundai",
+        "Infiniti",
+        "Jaguar",
+        "Jeep",
+        "Kia",
+        "Lamborghini",
+        "Land Rover",
+        "Lincoln",
+        "Maserati",
+        "Mazda",
+        "McLaren Automotive",
+        "Mercedes Benz",
+        "MINI",
+        "Mitsubishi",
+        "Nissan",
+        "Peugeot",
+        "Porsche",
+        "RAM",
+        "Renault",
+        "SEAT",
+        "Smart",
+        "Subaru",
+        "Suzuki",
+        "Tesla",
+        "Toyota",
+        "Volkswagen",
+        "Volvo"]
+    var types: [String] = [
+        "Moto",
+        "Coche Chico",
+        "Coche Grande",
+        "Camioneta Chica",
+        "Camioneta Grande"]
+    var colors: [String] = [
+        "Azul",
+        "Rojo",
+        "Morado",
+        "Verde",
+        "Negro",
+        "Blanco",
+        "Rosa",
+        "Naranja",
+        "Amarillo",
+        "Gris",
+        "Plateado",
+        "Purpura",
+        "Cafe",
+        "Dorado"]
     
     //TODO: ocultar teclado onclick de botones
     override func viewDidLoad() {
@@ -42,6 +105,11 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         color.setTitle(car.color, for: .normal)
         brand.setTitle(car.brand, for: .normal)
         plates.text = car.plates
+        
+        selectedColor = car.color
+        selectedBrand = car.brand
+        selectedType = Int(car.type)! - 1
+
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
     }
@@ -106,6 +174,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         case brand:
             selected = 0
             picker.reloadAllComponents()
+            picker.selectRow(0, inComponent: 0, animated: true)
             break
         case type:
             selected = 1

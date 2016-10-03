@@ -122,7 +122,7 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         userImage.image = imagePicked
-        let imageData = UIImageJPEGRepresentation(imagePicked, 1.0)
+        let imageData = UIImageJPEGRepresentation(imagePicked, 0.3)
         DispatchQueue.global(qos: .background).async {
             self.encodedString = imageData?.base64EncodedString()
         }
