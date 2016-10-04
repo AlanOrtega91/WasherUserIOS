@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		43A04F9C9DECB3EFA5CD9715 /* libPods-Vashen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F79E4307398B5E40D08BBF58 /* libPods-Vashen.a */; };
+		99EB035F9513C916B771DE26 /* libPods-Vashen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 309DF7813DDEFAB103AEEB65 /* libPods-Vashen.a */; };
 		E71089011D4FA4FB006DB612 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089001D4FA4FB006DB612 /* AppData.swift */; };
 		E71089031D4FA853006DB612 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089021D4FA853006DB612 /* User.swift */; };
 		E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089041D4FD10B006DB612 /* ProfileReader.swift */; };
@@ -64,8 +64,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		077EFB224D53E3910FF3AA26 /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
-		C4FDF147F78A060C969435F0 /* Pods-Vashen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.debug.xcconfig"; sourceTree = "<group>"; };
+		309DF7813DDEFAB103AEEB65 /* libPods-Vashen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vashen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		321AFE069AE595486A38F00D /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
+		5F2A612447C6099EC950C276 /* Pods-Vashen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.debug.xcconfig"; sourceTree = "<group>"; };
 		E71089001D4FA4FB006DB612 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		E71089021D4FA853006DB612 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E71089041D4FD10B006DB612 /* ProfileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileReader.swift; sourceTree = "<group>"; };
@@ -128,7 +129,6 @@
 		E7FE8A331D4F230E0071CDFA /* EditBillingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBillingController.swift; sourceTree = "<group>"; };
 		E7FE8A351D4F248E0071CDFA /* AddCarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCarController.swift; sourceTree = "<group>"; };
 		E7FE8A371D4F24C70071CDFA /* EditAccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAccountController.swift; sourceTree = "<group>"; };
-		F79E4307398B5E40D08BBF58 /* libPods-Vashen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vashen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,28 +136,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43A04F9C9DECB3EFA5CD9715 /* libPods-Vashen.a in Frameworks */,
+				99EB035F9513C916B771DE26 /* libPods-Vashen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		5C9575984BF6CA747C189F57 /* Frameworks */ = {
+		7C8C301922ED7C2C4DCA9BB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F79E4307398B5E40D08BBF58 /* libPods-Vashen.a */,
+				309DF7813DDEFAB103AEEB65 /* libPods-Vashen.a */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		E2D1F88EB68F9BD7B03C2AAE /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				C4FDF147F78A060C969435F0 /* Pods-Vashen.debug.xcconfig */,
-				077EFB224D53E3910FF3AA26 /* Pods-Vashen.release.xcconfig */,
-			);
-			name = Pods;
 			sourceTree = "<group>";
 		};
 		E71088FF1D4FA4E0006DB612 /* Model */ = {
@@ -210,8 +201,8 @@
 				E7FE89EB1D4E69DC0071CDFA /* Vashen */,
 				E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */,
 				E7FE89EA1D4E69DC0071CDFA /* Products */,
-				E2D1F88EB68F9BD7B03C2AAE /* Pods */,
-				5C9575984BF6CA747C189F57 /* Frameworks */,
+				FA2459FF7D44F7B6969046F6 /* Pods */,
+				7C8C301922ED7C2C4DCA9BB3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -286,6 +277,15 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
+		FA2459FF7D44F7B6969046F6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5F2A612447C6099EC950C276 /* Pods-Vashen.debug.xcconfig */,
+				321AFE069AE595486A38F00D /* Pods-Vashen.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -293,12 +293,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7FE89FE1D4E69DC0071CDFA /* Build configuration list for PBXNativeTarget "Vashen" */;
 			buildPhases = (
-				88228EE3C1C48BC5EB11677D /* [CP] Check Pods Manifest.lock */,
+				EAE1D2B619A9FE344CDE111C /* [CP] Check Pods Manifest.lock */,
 				E7FE89E51D4E69DC0071CDFA /* Sources */,
 				E7FE89E61D4E69DC0071CDFA /* Frameworks */,
 				E7FE89E71D4E69DC0071CDFA /* Resources */,
-				30BFB7F6BBE36C073B3B1213 /* [CP] Embed Pods Frameworks */,
-				3784C18CA53A7D587E67BFD6 /* [CP] Copy Pods Resources */,
+				99DC11CEA96C72538C44FBFC /* [CP] Embed Pods Frameworks */,
+				7E6A1ACB1C7AC75702CF8B3B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -370,22 +370,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		30BFB7F6BBE36C073B3B1213 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3784C18CA53A7D587E67BFD6 /* [CP] Copy Pods Resources */ = {
+		7E6A1ACB1C7AC75702CF8B3B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -400,7 +385,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		88228EE3C1C48BC5EB11677D /* [CP] Check Pods Manifest.lock */ = {
+		99DC11CEA96C72538C44FBFC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EAE1D2B619A9FE344CDE111C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -586,7 +586,7 @@
 		};
 		E7FE89FF1D4E69DC0071CDFA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C4FDF147F78A060C969435F0 /* Pods-Vashen.debug.xcconfig */;
+			baseConfigurationReference = 5F2A612447C6099EC950C276 /* Pods-Vashen.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -596,12 +596,7 @@
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Vashen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$PODS_CONFIGURATION_BUILD_DIR/Braintree\"",
-					"$(inherited)",
-					"\"${PODS_ROOT}/Braintree/BraintreePayPal/PayPalDataCollector/Risk\"",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Vashen;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -615,7 +610,7 @@
 		};
 		E7FE8A001D4E69DC0071CDFA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 077EFB224D53E3910FF3AA26 /* Pods-Vashen.release.xcconfig */;
+			baseConfigurationReference = 321AFE069AE595486A38F00D /* Pods-Vashen.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -626,12 +621,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Vashen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$PODS_CONFIGURATION_BUILD_DIR/Braintree\"",
-					"$(inherited)",
-					"\"${PODS_ROOT}/Braintree/BraintreePayPal/PayPalDataCollector/Risk\"",
-				);
+				LIBRARY_SEARCH_PATHS = "";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Vashen;
 				PRODUCT_NAME = "$(TARGET_NAME)";

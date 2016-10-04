@@ -9,7 +9,7 @@
 import UIKit
 import GoogleMaps
 
-class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelegate {
+class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelegate,UITextFieldDelegate {
     
     @IBOutlet weak var menuOpenButton: UIBarButtonItem!
     
@@ -776,6 +776,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         menuOpenButton.target = self.revealViewController()
         menuOpenButton.action = #selector(SWRevealViewController.revealToggle(_:))       
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        self.locationText.delegate = self
     }
     
     func initMap(){
@@ -802,6 +803,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+        self.view.endEditing(true)
         if activeService == nil{
             centralMarker.position = CLLocationCoordinate2D(latitude: position.target.latitude, longitude: position.target.longitude)
             self.locationText.text = ""
@@ -811,6 +813,10 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             })
             geoLocationQueue.resume()
         }
+    }
+    
+    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+        self.view.endEditing(true)
     }
     
     @IBAction func myLocationClicked(_ sender: AnyObject) {
@@ -829,5 +835,26 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             self.clickedAlertOK = true
         }))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        DispatchQueue.global().async {
+            self.modifyLocation()
+        }
+        return true
+    }
+    
+    func modifyLocation(){
+        CLGeocoder().geocodeAddressString(self.locationText.text!, completionHandler: {(placemarks, error) -> Void in
+            if error != nil {
+                print("Reverse geocoder failed with error" + error!.localizedDescription)
+            } else if let placemark = placemarks?[0]{
+                let camera = GMSCameraPosition.camera(withLatitude: (placemark.location?.coordinate.latitude)!, longitude: (placemark.location?.coordinate.longitude)!, zoom: 15.0)
+                self.map.animate(to: camera)
+            }
+            
+        })
+
     }
 }

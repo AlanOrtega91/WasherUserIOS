@@ -4,5 +4,4 @@ target ‘Vashen’ do
   pod 'GooglePlaces'
   pod ‘Firebase’
   pod ‘Firebase/Messaging’
-  pod ‘Braintree’
 end

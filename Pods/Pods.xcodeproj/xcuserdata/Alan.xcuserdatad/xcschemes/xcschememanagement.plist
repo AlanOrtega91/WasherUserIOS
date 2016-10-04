@@ -4,21 +4,6 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>Braintree-Braintree-Drop-In-Localization.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Braintree-Braintree-UI-Localization.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Braintree.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-Vashen.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -27,22 +12,7 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>60748F53AF56442A823499532648F695</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>91B5A5F883EBFCD31883E93D2003A0A3</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>BD6B1F5552F460A90FD552A9EF4AEF35</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>DBE3DCC2562130893820DAAAAD09A6A1</key>
+		<key>0F9D6E2F27BC16DF5A38348357806400</key>
 		<dict>
 			<key>primary</key>
 			<true/>
