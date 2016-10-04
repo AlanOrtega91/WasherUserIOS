@@ -23,7 +23,7 @@ public class HttpServerConnection
             var response : URLResponse?
             let request = NSMutableURLRequest.init(url: NSURL.init(string: urlPath)! as URL)
             request.httpMethod = "POST"
-            request.timeoutInterval = 10
+            request.timeoutInterval = 5
             request.httpBody = params.data(using: String.Encoding.utf8, allowLossyConversion: true)
         
             let data = try NSURLConnection.sendSynchronousRequest(request as URLRequest, returning: &response)
