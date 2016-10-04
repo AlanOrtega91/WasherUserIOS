@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		99EB035F9513C916B771DE26 /* libPods-Vashen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 309DF7813DDEFAB103AEEB65 /* libPods-Vashen.a */; };
+		73DDCDDF2F5865EC1B056ACD /* libPods-Vashen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABF73A98A419A56EE4694BF8 /* libPods-Vashen.a */; };
 		E71089011D4FA4FB006DB612 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089001D4FA4FB006DB612 /* AppData.swift */; };
 		E71089031D4FA853006DB612 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089021D4FA853006DB612 /* User.swift */; };
 		E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089041D4FD10B006DB612 /* ProfileReader.swift */; };
@@ -64,9 +64,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		309DF7813DDEFAB103AEEB65 /* libPods-Vashen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vashen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		321AFE069AE595486A38F00D /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
-		5F2A612447C6099EC950C276 /* Pods-Vashen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.debug.xcconfig"; sourceTree = "<group>"; };
+		ABF73A98A419A56EE4694BF8 /* libPods-Vashen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vashen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE2D5C5C014DEED29BC53A39 /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
+		DDB7217C41FB69DF49302059 /* Pods-Vashen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.debug.xcconfig"; sourceTree = "<group>"; };
 		E71089001D4FA4FB006DB612 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		E71089021D4FA853006DB612 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E71089041D4FD10B006DB612 /* ProfileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileReader.swift; sourceTree = "<group>"; };
@@ -136,17 +136,26 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				99EB035F9513C916B771DE26 /* libPods-Vashen.a in Frameworks */,
+				73DDCDDF2F5865EC1B056ACD /* libPods-Vashen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		7C8C301922ED7C2C4DCA9BB3 /* Frameworks */ = {
+		C15789EEA53FF4702887D743 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				309DF7813DDEFAB103AEEB65 /* libPods-Vashen.a */,
+				DDB7217C41FB69DF49302059 /* Pods-Vashen.debug.xcconfig */,
+				AE2D5C5C014DEED29BC53A39 /* Pods-Vashen.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		C1AE6063369312EA90B452C3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ABF73A98A419A56EE4694BF8 /* libPods-Vashen.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -201,8 +210,8 @@
 				E7FE89EB1D4E69DC0071CDFA /* Vashen */,
 				E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */,
 				E7FE89EA1D4E69DC0071CDFA /* Products */,
-				FA2459FF7D44F7B6969046F6 /* Pods */,
-				7C8C301922ED7C2C4DCA9BB3 /* Frameworks */,
+				C15789EEA53FF4702887D743 /* Pods */,
+				C1AE6063369312EA90B452C3 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -277,15 +286,6 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		FA2459FF7D44F7B6969046F6 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5F2A612447C6099EC950C276 /* Pods-Vashen.debug.xcconfig */,
-				321AFE069AE595486A38F00D /* Pods-Vashen.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -293,12 +293,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = E7FE89FE1D4E69DC0071CDFA /* Build configuration list for PBXNativeTarget "Vashen" */;
 			buildPhases = (
-				EAE1D2B619A9FE344CDE111C /* [CP] Check Pods Manifest.lock */,
+				6920B3911E973CA3816FD5A9 /* [CP] Check Pods Manifest.lock */,
 				E7FE89E51D4E69DC0071CDFA /* Sources */,
 				E7FE89E61D4E69DC0071CDFA /* Frameworks */,
 				E7FE89E71D4E69DC0071CDFA /* Resources */,
-				99DC11CEA96C72538C44FBFC /* [CP] Embed Pods Frameworks */,
-				7E6A1ACB1C7AC75702CF8B3B /* [CP] Copy Pods Resources */,
+				EE35B6CA979D72894A69A999 /* [CP] Embed Pods Frameworks */,
+				8A078E82C7C348552D979D0B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -370,7 +370,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		7E6A1ACB1C7AC75702CF8B3B /* [CP] Copy Pods Resources */ = {
+		6920B3911E973CA3816FD5A9 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		8A078E82C7C348552D979D0B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -385,7 +400,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		99DC11CEA96C72538C44FBFC /* [CP] Embed Pods Frameworks */ = {
+		EE35B6CA979D72894A69A999 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -398,21 +413,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EAE1D2B619A9FE344CDE111C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -586,7 +586,7 @@
 		};
 		E7FE89FF1D4E69DC0071CDFA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5F2A612447C6099EC950C276 /* Pods-Vashen.debug.xcconfig */;
+			baseConfigurationReference = DDB7217C41FB69DF49302059 /* Pods-Vashen.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -610,7 +610,7 @@
 		};
 		E7FE8A001D4E69DC0071CDFA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 321AFE069AE595486A38F00D /* Pods-Vashen.release.xcconfig */;
+			baseConfigurationReference = AE2D5C5C014DEED29BC53A39 /* Pods-Vashen.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
