@@ -21,9 +21,72 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
     var selectedBrand:String = ""
     var selectedType:Int = 0
     
-    var brands: [String] = ["toyota","Volvo","Ford"]
-    var types: [String] = ["Moto","Coche Chico","Coche Grande","Camioneta Chica","Camioneta Grande"]
-    var colors: [String] = ["Rojo","Azul","Negro"]
+    var brands: [String] = [
+        "Acura",
+        "Alfa Romeo",
+        "Aston Martin",
+        "Audi",
+        "BAIC",
+        "Bentley",
+        "BMW",
+        "Buick",
+        "Cadillac",
+        "Chevrolet",
+        "Chrysler",
+        "Dodge",
+        "Ferrari",
+        "Fiat",
+        "Ford",
+        "GMC",
+        "Honda",
+        "Hyundai",
+        "Infiniti",
+        "Jaguar",
+        "Jeep",
+        "Kia",
+        "Lamborghini",
+        "Land Rover",
+        "Lincoln",
+        "Maserati",
+        "Mazda",
+        "McLaren Automotive",
+        "Mercedes Benz",
+        "MINI",
+        "Mitsubishi",
+        "Nissan",
+        "Peugeot",
+        "Porsche",
+        "RAM",
+        "Renault",
+        "SEAT",
+        "Smart",
+        "Subaru",
+        "Suzuki",
+        "Tesla",
+        "Toyota",
+        "Volkswagen",
+        "Volvo"]
+    var types: [String] = [
+        "Moto",
+        "Coche Chico",
+        "Coche Grande",
+        "Camioneta Chica",
+        "Camioneta Grande"]
+    var colors: [String] = [
+        "Azul",
+        "Rojo",
+        "Morado",
+        "Verde",
+        "Negro",
+        "Blanco",
+        "Rosa",
+        "Naranja",
+        "Amarillo",
+        "Gris",
+        "Plateado",
+        "Purpura",
+        "Cafe",
+        "Dorado"]
     
     //TODO: ocultar teclado onclick de botones
     override func viewDidLoad() {
@@ -113,7 +176,7 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
         car.plates = plates.text
         car.model = "Car"
         car.color = selectedColor
-        car.type = String(selectedType)
+        car.type = String(selectedType + 1)
         car.brand = selectedBrand
         
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)

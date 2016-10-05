@@ -7,15 +7,14 @@
 //
 
 import UIKit
+import MapKit
 import GoogleMaps
 
-class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelegate,UITextFieldDelegate {
+class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,SWRevealViewControllerDelegate {
     
     @IBOutlet weak var menuOpenButton: UIBarButtonItem!
     
-    @IBOutlet weak var mapView: UIView!
-    var map: GMSMapView!
-    
+    @IBOutlet weak var mapViewIOS: MKMapView!
     
     @IBOutlet weak var upLayout: UIView!
     @IBOutlet weak var upLayoutHeight: NSLayoutConstraint!
@@ -73,9 +72,9 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     var nearbyCleanersTimer:DispatchSourceTimer!
     var reloadMapTimer:DispatchSourceTimer!
     
-    let centralMarker = GMSMarker()
-    let cleanerMarker = GMSMarker()
-    var markers: Array<GMSMarker> = Array<GMSMarker>()
+    let centralMarker = CustomCentralMarker()
+    let cleanerMarker = CustomCleanerMarker()
+    var markers: Array<CustomCleanerMarker> = Array<CustomCleanerMarker>()
     var cleaner:Cleaner!
     var showCancelAlert:Bool = false
     var userLocation: CLLocation!
@@ -223,7 +222,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     func reloadMap(){
         do{
             if self.activeService != nil {
-                if self.activeService.status != "Looking" {
+                if self.activeService.cleanerId != nil {
                     self.cleaner = try Cleaner.getCleanerLocation(cleanerId: self.activeService.cleanerId,withToken: self.token)
                 }
             }
@@ -242,13 +241,12 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         //TODO: check fo nil
         if activeService != nil {
             if activeService.status != "Looking" && cleaner != nil{
-                cleanerMarker.map = map
-                cleanerMarker.position = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
-                cleanerMarker.icon = UIImage(named: "washer")
+                self.mapViewIOS.removeAnnotation(cleanerMarker)
+                cleanerMarker.coordinate = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
             }
         } else {
-            cleanerMarker.map = nil
-            requestLocation = CLLocation(latitude: centralMarker.position.latitude, longitude: centralMarker.position.longitude)
+            self.mapViewIOS.removeAnnotation(cleanerMarker)
+            requestLocation = CLLocation(latitude: centralMarker.coordinate.latitude, longitude: centralMarker.coordinate.longitude)
             if cleaners.count >= markers.count {
                 addMarkersAndUpdate()
             } else {
@@ -258,16 +256,17 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func addMarkersAndUpdate(){
-        var aux = Array<GMSMarker>()
+        var aux = Array<CustomCleanerMarker>()
         var i = 0
         while cleaners.count > i {
             if markers.count > i {
                 aux.append(markers[i])
-                aux[i].map = map
+                self.mapViewIOS.addAnnotation(aux[i])
             } else {
-                aux.append(GMSMarker(position: CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)))
-                aux[i].map = map
-                aux[i].icon = UIImage(named: "washer")
+                let newMarker = CustomCleanerMarker()
+                newMarker.coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+                aux.append(newMarker)
+                self.mapViewIOS.addAnnotation(aux[i])
             }
             i += 1
         }
@@ -275,18 +274,41 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
     }
     
     func removeMarkersAndUpdate(){
-        var aux = Array<GMSMarker>()
+        var aux = Array<CustomCleanerMarker>()
         var i = 0
         while cleaners.count > i {
             aux.append(markers[i])
-            aux[i].position = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+            aux[i].coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
             i += 1
         }
-        while markers.count > i {
-            markers[i].map = nil
-            i += 1
-        }
+        self.mapViewIOS.removeAnnotations(markers)
         markers = aux
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        if !(annotation is MKPointAnnotation) {
+            return nil
+        }
+        if annotation is CustomCleanerMarker {
+            var anView = mapView.dequeueReusableAnnotationView(withIdentifier: "washer")
+            if anView == nil {
+                anView = MKAnnotationView(annotation: annotation, reuseIdentifier: "washer")
+            }
+            anView?.image = UIImage(named: "washer")
+            
+            return anView
+        } else if annotation is CustomCentralMarker {
+            var anView = mapView.dequeueReusableAnnotationView(withIdentifier: "central")
+            if anView == nil {
+                anView = MKAnnotationView(annotation: annotation, reuseIdentifier: "central")
+            }
+            anView?.image = UIImage(named: "Location")
+            
+            return anView
+        }
+        else {
+            return MKAnnotationView()
+        }
     }
     
     func reloadAddress(location:CLLocation){
@@ -562,10 +584,10 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             self.serviceInfo.text = "Buscando lavador"
             self.cancelButton.isHidden = false
             if self.activeService != nil{
-                self.centralMarker.position = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
+                self.centralMarker.coordinate = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
             }
             for marker in self.markers {
-                marker.map = nil
+                self.mapViewIOS.removeAnnotation(marker)
             }
         }
     }
@@ -614,7 +636,7 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
                 self.cleanerImageInfo.isHidden = false
                 self.cleanerInfo.text = self.activeService.cleanerName
                 self.serviceInfo.text = display
-                self.centralMarker.position = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
+                self.centralMarker.coordinate = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
             }
         }
         setImageDrawableForActiveService()
@@ -776,57 +798,83 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
         menuOpenButton.target = self.revealViewController()
         menuOpenButton.action = #selector(SWRevealViewController.revealToggle(_:))       
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+        let slide: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.stateBack))
+        slide.direction = UISwipeGestureRecognizerDirection.down
+        self.lowLayout.addGestureRecognizer(slide)
+        self.upLayout.addGestureRecognizer(slide)
         self.locationText.delegate = self
+        self.revealViewController().delegate = self
+    }
+    
+    func stateBack(){
+        self.viewState = self.STANDBY
+        self.configureState()
     }
     
     func initMap(){
-            var camera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 15.0)
-            self.map = GMSMapView.map(withFrame: self.mapView.bounds, camera: camera)
-            self.map.delegate = self
-            self.map.isMyLocationEnabled = true
-            self.map.accessibilityElementsHidden = false
-            self.mapView.addSubview(self.map)
+        self.mapViewIOS.showsUserLocation = true
+        self.mapViewIOS.userTrackingMode = .follow
+        let span = MKCoordinateSpanMake(0.02, 0.02)
+        var location = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        self.mapViewIOS.delegate = self
+        
+        if self.userLocation != nil {
+            location = CLLocationCoordinate2D(latitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude)
             
-            if self.userLocation != nil {
-                camera = GMSCameraPosition.camera(withLatitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
-            } else if self.map.myLocation != nil{
-                camera = GMSCameraPosition.camera(withLatitude: self.map.myLocation!.coordinate.latitude, longitude: self.map.myLocation!.coordinate.longitude, zoom: 15.0)
-            }
-            
-            //self.view.sendSubviewToBack(self.mapView)
-            self.map.camera = camera
-            
-            // Creates a marker in the center of the map.
-            self.centralMarker.position = CLLocationCoordinate2D(latitude: camera.target.latitude, longitude: camera.target.longitude)
-            self.requestLocation = CLLocation(latitude: self.centralMarker.position.latitude, longitude: self.centralMarker.position.longitude)
-            self.centralMarker.map = self.map
+        } else if self.mapViewIOS.userLocation.location != nil{
+            location = CLLocationCoordinate2D(latitude: (self.mapViewIOS.userLocation.location?.coordinate.latitude)!, longitude: (self.mapViewIOS.userLocation.location?.coordinate.longitude)!)
+        }
+        let region = MKCoordinateRegionMake(location, span)
+        mapViewIOS.setRegion(region, animated: true)
+        self.centralMarker.coordinate = location
+        self.requestLocation = CLLocation(latitude: self.centralMarker.coordinate.latitude, longitude: self.centralMarker.coordinate.longitude)
+        mapViewIOS.addAnnotation(centralMarker)
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.tapMap))
+        self.mapViewIOS.addGestureRecognizer(tap)
+        
+        let mapDragRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.dragMap))
+        mapDragRecognizer.delegate = self
+        self.mapViewIOS.addGestureRecognizer(mapDragRecognizer)
     }
     
-    func mapView(_ mapView: GMSMapView, didChange position: GMSCameraPosition) {
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         self.view.endEditing(true)
-        if activeService == nil{
-            centralMarker.position = CLLocationCoordinate2D(latitude: position.target.latitude, longitude: position.target.longitude)
-            self.locationText.text = ""
-            geoLocationQueue.suspend()
-            geoLocationQueue.asyncAfter(deadline: .now() + 2, execute: {
-                self.reloadAddress(location: self.requestLocation)
-            })
-            geoLocationQueue.resume()
+        let position = mapViewIOS.region.center
+        if activeService == nil {
+            centralMarker.coordinate = CLLocationCoordinate2D(latitude: position.latitude, longitude: position.longitude)
+            self.mapViewIOS.addAnnotation(centralMarker)
+            if let tempLocation = self.requestLocation {
+                geoLocationQueue.asyncAfter(deadline: .now() + 2, execute: {
+                    self.reloadAddress(location: tempLocation)
+                })
+            }
         }
     }
     
-    func mapView(_ mapView: GMSMapView, didTap overlay: GMSOverlay) {
+    func dragMap(gestureRecognizer: UIGestureRecognizer){
+        self.view.endEditing(true)
+        let position = mapViewIOS.region.center
+        if activeService == nil {
+            centralMarker.coordinate = CLLocationCoordinate2D(latitude: position.latitude, longitude: position.longitude)
+            self.mapViewIOS.addAnnotation(centralMarker)
+            self.locationText.text = ""
+        }
+    }
+    
+    func tapMap(){
         self.view.endEditing(true)
     }
     
     @IBAction func myLocationClicked(_ sender: AnyObject) {
-        var camera:GMSCameraPosition
-        if self.userLocation == nil {
-            camera = GMSCameraPosition.camera(withLatitude: 0, longitude: 0, zoom: 15.0)
-        } else {
-            camera = GMSCameraPosition.camera(withLatitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude, zoom: 15.0)
+        var location = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        if self.userLocation != nil {
+            location = CLLocationCoordinate2D(latitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude)
         }
-        self.map.animate(to: camera)
+        let span = MKCoordinateSpanMake(0.02, 0.02)
+        let region = MKCoordinateRegionMake(location, span)
+        self.mapViewIOS.setRegion(region, animated: true)
     }
     
     func createAlertInfo(message:String){
@@ -850,11 +898,31 @@ class MapController: UIViewController,GMSMapViewDelegate,CLLocationManagerDelega
             if error != nil {
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
             } else if let placemark = placemarks?[0]{
-                let camera = GMSCameraPosition.camera(withLatitude: (placemark.location?.coordinate.latitude)!, longitude: (placemark.location?.coordinate.longitude)!, zoom: 15.0)
-                self.map.animate(to: camera)
+                let span = MKCoordinateSpanMake(0.02, 0.02)
+                let location = CLLocationCoordinate2D(latitude: (placemark.location?.coordinate.latitude)!, longitude: (placemark.location?.coordinate.longitude)!)
+                let region = MKCoordinateRegionMake(location, span)
+                self.mapViewIOS.setRegion(region, animated: true)
             }
-            
         })
 
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
+        if(position == .left) {
+            self.mapViewIOS.isUserInteractionEnabled = true;
+        } else {
+            self.mapViewIOS.isUserInteractionEnabled = false;
+        }
+    }
+    
+    class CustomCentralMarker: MKPointAnnotation {
+        let image = UIImage(named: "default_marker")
+    }
+    class CustomCleanerMarker: MKPointAnnotation {
+        let image = UIImage(named: "washer")
     }
 }

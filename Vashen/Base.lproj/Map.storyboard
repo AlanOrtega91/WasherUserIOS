@@ -44,7 +44,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0ek-ul-N5Q" id="Keu-pm-9Yp">
-                                    <frame key="frameInset" width="375" height="150"/>
+                                    <frame key="frameInset" width="375" height="149"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1II-p9-BF9">
@@ -86,7 +86,7 @@
                                 <rect key="frame" x="0.0" y="178" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gsB-hS-ema" id="9JG-Q0-Gsx">
-                                    <frame key="frameInset" width="375" height="50"/>
+                                    <frame key="frameInset" width="375" height="49"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YK8-kK-fsb">
@@ -235,9 +235,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kIv-Z3-HPw" customClass="GMSMapView">
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EcP-a2-Xsi"/>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ubicación Servicio" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="8Vi-Fs-PFt">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="ipT-b2-aHq"/>
@@ -261,7 +259,7 @@
                                     <constraint firstAttribute="trailing" secondItem="VGX-fH-oCz" secondAttribute="trailing" constant="40" id="0pN-CJ-sac"/>
                                     <constraint firstItem="VGX-fH-oCz" firstAttribute="leading" secondItem="3b2-ft-cMX" secondAttribute="leading" constant="40" id="FIm-8G-n4c"/>
                                     <constraint firstAttribute="bottom" secondItem="VGX-fH-oCz" secondAttribute="bottom" constant="10" id="PZD-BD-QgB"/>
-                                    <constraint firstAttribute="height" constant="50" id="ozH-d5-gdt"/>
+                                    <constraint firstAttribute="height" constant="70" id="ozH-d5-gdt"/>
                                 </constraints>
                             </view>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dU3-R6-rJ9">
@@ -409,37 +407,29 @@
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="uzo-AC-pb4" secondAttribute="trailing" constant="-20" id="55J-h0-1ja"/>
                             <constraint firstItem="iJJ-Mb-xNJ" firstAttribute="top" secondItem="uzo-AC-pb4" secondAttribute="bottom" id="95U-8Y-WAp"/>
-                            <constraint firstItem="kIv-Z3-HPw" firstAttribute="width" secondItem="VhR-Da-NsS" secondAttribute="width" id="Bc1-qk-Lxj"/>
                             <constraint firstItem="3b2-ft-cMX" firstAttribute="top" secondItem="iYe-vj-6AR" secondAttribute="bottom" constant="10" id="CkK-TC-8HD"/>
+                            <constraint firstItem="EcP-a2-Xsi" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" id="Col-1b-duN"/>
                             <constraint firstItem="3b2-ft-cMX" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="Dz6-k7-e8e"/>
-                            <constraint firstItem="iJJ-Mb-xNJ" firstAttribute="top" secondItem="kIv-Z3-HPw" secondAttribute="bottom" id="GPb-kF-o5G"/>
                             <constraint firstItem="8Vi-Fs-PFt" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" constant="30" id="Hjc-vq-95C"/>
                             <constraint firstItem="uzo-AC-pb4" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="KOy-X1-50a"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iYe-vj-6AR" secondAttribute="trailing" id="OaH-MV-pDg"/>
                             <constraint firstItem="dU3-R6-rJ9" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="Qfr-NB-hHC"/>
                             <constraint firstItem="8Vi-Fs-PFt" firstAttribute="centerX" secondItem="VhR-Da-NsS" secondAttribute="centerX" id="R8X-GQ-c0g"/>
-                            <constraint firstItem="kIv-Z3-HPw" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="SRA-In-5yc"/>
-                            <constraint firstItem="kIv-Z3-HPw" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" id="SVb-p5-REy"/>
                             <constraint firstItem="eE2-De-VnG" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="TzP-bk-Y5U"/>
                             <constraint firstItem="eE2-De-VnG" firstAttribute="top" secondItem="5KI-hK-VbN" secondAttribute="bottom" id="UtP-Lu-DbL"/>
-                            <constraint firstItem="kIv-Z3-HPw" firstAttribute="centerY" secondItem="VhR-Da-NsS" secondAttribute="centerY" id="XAj-MA-mX5"/>
                             <constraint firstItem="3b2-ft-cMX" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" id="aRY-k2-JnN"/>
+                            <constraint firstItem="EcP-a2-Xsi" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="cBZ-B0-qbw"/>
                             <constraint firstItem="dU3-R6-rJ9" firstAttribute="top" secondItem="3b2-ft-cMX" secondAttribute="bottom" id="dC4-mf-I4l"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="EcP-a2-Xsi" secondAttribute="trailing" constant="-20" id="eW6-rw-Ch2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3b2-ft-cMX" secondAttribute="trailing" constant="-20" id="iIC-Qa-t0W"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eE2-De-VnG" secondAttribute="trailing" constant="-20" id="l11-Ai-LFM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="kIv-Z3-HPw" secondAttribute="trailing" constant="-20" id="o90-yM-sAZ"/>
+                            <constraint firstItem="iJJ-Mb-xNJ" firstAttribute="top" secondItem="EcP-a2-Xsi" secondAttribute="bottom" id="npi-Q3-oiV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dU3-R6-rJ9" secondAttribute="trailing" constant="-20" id="oSB-ex-akv"/>
-                            <constraint firstItem="kIv-Z3-HPw" firstAttribute="height" secondItem="VhR-Da-NsS" secondAttribute="height" id="oqr-1m-ppG"/>
-                            <constraint firstItem="kIv-Z3-HPw" firstAttribute="centerX" secondItem="VhR-Da-NsS" secondAttribute="centerX" id="ve9-pS-ij0"/>
                             <constraint firstItem="uzo-AC-pb4" firstAttribute="top" secondItem="dU3-R6-rJ9" secondAttribute="bottom" id="yp0-kt-Qoc"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
                                 <exclude reference="aRY-k2-JnN"/>
-                                <exclude reference="Bc1-qk-Lxj"/>
-                                <exclude reference="XAj-MA-mX5"/>
-                                <exclude reference="oqr-1m-ppG"/>
-                                <exclude reference="ve9-pS-ij0"/>
                             </mask>
                         </variation>
                     </view>
@@ -455,7 +445,7 @@
                         <outlet property="locationText" destination="8Vi-Fs-PFt" id="ssf-YY-j5U"/>
                         <outlet property="lowLayout" destination="dU3-R6-rJ9" id="laV-Aq-hDf"/>
                         <outlet property="lowLayoutHeight" destination="OxG-Tw-cWM" id="wbQ-xH-xoW"/>
-                        <outlet property="mapView" destination="kIv-Z3-HPw" id="e0X-OX-8DO"/>
+                        <outlet property="mapViewIOS" destination="EcP-a2-Xsi" id="ifp-zY-Zuo"/>
                         <outlet property="menuOpenButton" destination="y9e-DX-gaG" id="u6K-xS-yZS"/>
                         <outlet property="rightButton" destination="8kX-9m-598" id="4XS-UZ-xIg"/>
                         <outlet property="rightDescription" destination="3pL-w6-NNf" id="46X-Fa-bJI"/>
