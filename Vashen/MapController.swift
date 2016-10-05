@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import GoogleMaps
 
 class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegate,UITextFieldDelegate,UIGestureRecognizerDelegate,SWRevealViewControllerDelegate {
     
