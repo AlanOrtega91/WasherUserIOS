@@ -9,6 +9,7 @@
 import Foundation
 import Firebase
 import FirebaseMessaging
+import AVFoundation
 
 public class LoadingController: UIViewController {
     public static let LOGIN: Int = 10
@@ -38,35 +39,29 @@ public class LoadingController: UIViewController {
     var user:User!
     var clickedAlertOK = false
     
-    @IBOutlet weak var loading: UIImageView!
+    @IBOutlet var videoView: UIView!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-        initView()
+        self.animateView()
         DispatchQueue.global(qos: .background).async {
             self.initValues()
         }
     }
     
-    func initView(){
-        var imgList = [UIImage]()
-        for countValue in 0...119{
-            let strImageName = "frame_\(countValue)_delay-0.04s"
-            let image = UIImage(named: strImageName)
-            if image != nil {
-                imgList.append(image!)
-            }
-        }
-        self.loading.animationImages = imgList
-        self.loading.animationDuration = 5.0
-        self.loading.startAnimating()
-        imgList.removeAll()
-    }
-    
-    public override func didReceiveMemoryWarning() {
-        self.loading.stopAnimating()
-        self.loading.animationImages = []
-        self.loading.image = UIImage(named: "frame_199_delay-0.04s")
+    func animateView()
+    {
+        
+        let path = URL(fileURLWithPath: Bundle.main.path(forResource: "Splash", ofType: "mov")!)
+        let player = AVPlayer(url: path)
+        let newLayer = AVPlayerLayer(player: player)
+        newLayer.frame = self.videoView.frame
+        self.videoView.layer.addSublayer(newLayer)
+        newLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        player.play()
+        
+        
     }
     
     func initValues(){

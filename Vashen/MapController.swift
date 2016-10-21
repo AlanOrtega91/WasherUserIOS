@@ -42,8 +42,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     var geoLocationQueue = DispatchQueue(label: "com.alan.geoLocation", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     
-    var showCancelAler: Bool = false
-    
     var locManager = CLLocationManager()
     var cleaners: Array<Cleaner> = Array<Cleaner>()
     
@@ -239,9 +237,11 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         }
         //TODO: check fo nil
         if activeService != nil {
-            if activeService.status != "Looking" && cleaner != nil{
+            if activeService.status != "Looking" && cleaner != nil {
+                if cleaner.latitud != nil && cleaner.longitud != nil {
                 self.mapViewIOS.removeAnnotation(cleanerMarker)
                 cleanerMarker.coordinate = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
+                }
             }
         } else {
             self.mapViewIOS.removeAnnotation(cleanerMarker)
@@ -466,6 +466,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func startActiveServiceCycle(){
+        //TODO: change to Dispatch
         if activeServiceCycleThread == nil {
             activeServiceCycleThread = Thread(target: self, selector:#selector(activeServiceCycle), object: nil)
             activeServiceCycleThread.start()
@@ -683,42 +684,43 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     @IBAction func clickCancel(_ sender: AnyObject) {
-        if cancelCode == 0 {
+        if cancelCode == 0 && !cancelSent{
             sendCancel()
         } else if cancelCode == 1 {
             buildAlertForCancel()
         }
     }
+    
     func sendCancel(){
-        do {
-            if cancelSent {
-                return
-            }
-            cancelSent = true
-            try Service.cancelService(idService: activeService.id,withToken: token,withTimeOutCancel: cancelCode)
-            
-            activeService.status = "Canceled"
-            var services = DataBase.readServices()
-            let index = services?.index(where: {$0.id == activeService.id})
-            services?.remove(at: index!)
-            DataBase.saveServices(services: services!)
-            AppData.notifyNewData(newData: true)
-            if cancelAlarmClock != nil {
-                cancelAlarmClock.cancel()
-            }
-        } catch Service.ServiceError.noSessionFound{
-            cancelSent = false
-            createAlertInfo(message: "Error de sesion")
-            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
-            DispatchQueue.main.async {
-                self.present(nextViewController, animated: true, completion: nil)
-            }
-        } catch {
-            createAlertInfo(message: "Error al cancelar")
-            cancelSent = false
-            if cancelAlarmClock != nil {
-                cancelAlarmClock.resume()
+        cancelSent = true
+        DispatchQueue.global().async {
+            do {
+                try Service.cancelService(idService: self.activeService.id,withToken: self.token,withTimeOutCancel: self.cancelCode)
+                if self.activeService != nil {
+                    var services = DataBase.readServices()
+                    if let index = services?.index(where: {$0.id == self.activeService.id}) {
+                        services?.remove(at: index)
+                        DataBase.saveServices(services: services!)
+                        AppData.notifyNewData(newData: true)
+                    }
+                }
+                if self.cancelAlarmClock != nil {
+                    self.cancelAlarmClock.cancel()
+                }
+            } catch Service.ServiceError.noSessionFound{
+                self.cancelSent = false
+                self.createAlertInfo(message: "Error de sesion")
+                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+                DispatchQueue.main.async {
+                    self.present(nextViewController, animated: true, completion: nil)
+                }
+            } catch {
+                self.createAlertInfo(message: "Error al cancelar")
+                self.cancelSent = false
+                if self.cancelAlarmClock != nil {
+                    self.cancelAlarmClock.resume()
+                }
             }
         }
     }

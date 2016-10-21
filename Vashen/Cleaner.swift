@@ -59,8 +59,12 @@ public class Cleaner{
             let parameters = response["cleaner"] as! NSDictionary
             let cleaner = Cleaner()
             cleaner.id = parameters["idLavador"] as! String
-            cleaner.latitud = Double((parameters["Latitud"] as? String)!)
-            cleaner.longitud = Double((parameters["Longitud"] as? String)!)
+            if let latitud = parameters["Latitud"] as? String {
+                cleaner.latitud = Double(latitud)
+            }
+            if let longitud = parameters["Longitud"] as? String {
+                cleaner.longitud = Double(longitud)
+            }
             return cleaner
         } catch HttpServerConnection.HTTPError.connectionException{
             throw CleanerError.errorGettingCleaners

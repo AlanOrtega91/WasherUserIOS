@@ -106,7 +106,7 @@
         <scene sceneID="zNV-AF-KzO">
             <objects>
                 <navigationController navigationBarHidden="YES" id="yv3-u2-rAq" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="wvZ-Rg-9mp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="wvZ-Rg-9mp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -129,20 +129,11 @@
                     <view key="view" contentMode="scaleToFill" id="Eqn-8D-Mxq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="NaS-Wt-r1I"/>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="NaS-Wt-r1I" firstAttribute="leading" secondItem="Eqn-8D-Mxq" secondAttribute="leadingMargin" constant="-20" id="OfU-CZ-ukH"/>
-                            <constraint firstItem="NaS-Wt-r1I" firstAttribute="top" secondItem="6LW-Zq-hjb" secondAttribute="bottom" id="bIn-fC-xTz"/>
-                            <constraint firstItem="vhs-Q9-oWi" firstAttribute="top" secondItem="NaS-Wt-r1I" secondAttribute="bottom" id="crk-va-WmZ"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="NaS-Wt-r1I" secondAttribute="trailing" constant="-20" id="yCh-Pz-m2B"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="goZ-DV-twy"/>
                     <connections>
-                        <outlet property="loading" destination="NaS-Wt-r1I" id="cjl-bB-S5k"/>
+                        <outlet property="videoView" destination="Eqn-8D-Mxq" id="fo3-U5-v34"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gnw-2J-Ggr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -172,13 +163,13 @@
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="CREAR CUENTA" id="7PU-y9-nn8">
-                                        <barButtonItem key="leftBarButtonItem" title="CANCELAR" style="plain" id="dht-vF-fEQ">
+                                        <barButtonItem key="leftBarButtonItem" title="CANCELAR" id="dht-vF-fEQ">
                                             <color key="tintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <connections>
                                                 <action selector="clickedCancel:" destination="G9c-j8-Oir" id="GF8-XM-q7g"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" title="CONTINUAR" style="plain" id="E9G-Is-pIE">
+                                        <barButtonItem key="rightBarButtonItem" title="CONTINUAR" id="E9G-Is-pIE">
                                             <color key="tintColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <connections>
                                                 <action selector="sendContinue:" destination="G9c-j8-Oir" id="gcI-ha-YS1"/>
@@ -189,7 +180,7 @@
                             </navigationBar>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background" translatesAutoresizingMaskIntoConstraints="NO" id="WIg-Sr-hIY"/>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="9Lp-Sa-HSy">
-                                <frame key="frameInset" minY="64" width="320" height="500"/>
+                                <frame key="frameInset" minY="64" width="375" height="500"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="ejemplo@mail.com" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="UBt-mN-xDl">
                                         <accessibility key="accessibilityConfiguration">
@@ -250,7 +241,7 @@
                                     <constraint firstItem="UBt-mN-xDl" firstAttribute="centerX" secondItem="9Lp-Sa-HSy" secondAttribute="centerX" id="JlS-uX-c1L"/>
                                     <constraint firstItem="qol-Gj-5Vh" firstAttribute="centerX" secondItem="9Lp-Sa-HSy" secondAttribute="centerX" id="LDv-v4-LQC"/>
                                     <constraint firstAttribute="trailing" secondItem="qol-Gj-5Vh" secondAttribute="trailing" id="Mhu-1w-SHS"/>
-                                    <constraint firstAttribute="height" constant="500" id="N0T-uk-i0r"/>
+                                    <constraint firstAttribute="height" constant="600" id="N0T-uk-i0r"/>
                                     <constraint firstAttribute="width" constant="320" id="O7E-HM-JeS"/>
                                     <constraint firstItem="UBt-mN-xDl" firstAttribute="leading" secondItem="9Lp-Sa-HSy" secondAttribute="leading" constant="30" id="QAn-BB-nFU"/>
                                     <constraint firstAttribute="trailing" secondItem="UBt-mN-xDl" secondAttribute="trailing" constant="20" id="Qp8-Ne-5BZ"/>
@@ -296,8 +287,10 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="9Lp-Sa-HSy" firstAttribute="height" secondItem="HcG-e2-cpI" secondAttribute="height" id="5fz-Hn-r3P"/>
+                            <constraint firstItem="9Lp-Sa-HSy" firstAttribute="leading" secondItem="HcG-e2-cpI" secondAttribute="leadingMargin" constant="-16" id="7d4-XP-xhF"/>
                             <constraint firstAttribute="trailingMargin" secondItem="WIg-Sr-hIY" secondAttribute="trailing" constant="-20" id="7wl-Fh-7Cw"/>
                             <constraint firstItem="9Lp-Sa-HSy" firstAttribute="top" secondItem="Yw1-kP-Z5v" secondAttribute="bottom" id="9rU-ai-5XO"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="9Lp-Sa-HSy" secondAttribute="trailing" constant="-16" id="EtG-wC-JfT"/>
                             <constraint firstAttribute="trailingMargin" secondItem="9Lp-Sa-HSy" secondAttribute="trailing" id="F8W-tX-wc1"/>
                             <constraint firstItem="BhK-PV-K47" firstAttribute="top" secondItem="9Lp-Sa-HSy" secondAttribute="bottom" id="FVE-1B-qiu"/>
                             <constraint firstItem="Yw1-kP-Z5v" firstAttribute="top" secondItem="HcG-e2-cpI" secondAttribute="topMargin" id="GL4-SG-fUw"/>
@@ -306,7 +299,6 @@
                             <constraint firstItem="WIg-Sr-hIY" firstAttribute="top" secondItem="Yw1-kP-Z5v" secondAttribute="bottom" id="H6C-LD-e0r"/>
                             <constraint firstItem="WIg-Sr-hIY" firstAttribute="leading" secondItem="HcG-e2-cpI" secondAttribute="leadingMargin" constant="-20" id="Igb-gD-tBn"/>
                             <constraint firstItem="9Lp-Sa-HSy" firstAttribute="top" secondItem="Yw1-kP-Z5v" secondAttribute="bottom" constant="10" id="Ikq-H7-Wkt"/>
-                            <constraint firstItem="9Lp-Sa-HSy" firstAttribute="width" secondItem="HcG-e2-cpI" secondAttribute="width" id="LI1-gY-E4p"/>
                             <constraint firstItem="9Lp-Sa-HSy" firstAttribute="centerY" secondItem="HcG-e2-cpI" secondAttribute="centerY" id="OXI-64-3HD"/>
                             <constraint firstItem="Yw1-kP-Z5v" firstAttribute="top" secondItem="eGh-bX-k26" secondAttribute="bottom" id="R2M-2J-zZq"/>
                             <constraint firstItem="9Lp-Sa-HSy" firstAttribute="centerY" secondItem="HcG-e2-cpI" secondAttribute="centerY" id="WrI-9R-ghi"/>
@@ -351,7 +343,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QfI-Ua-ImQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1005" y="300"/>
+            <point key="canvasLocation" x="1004.5" y="299.5"/>
         </scene>
         <!--Create Account Personal Controller-->
         <scene sceneID="ui0-wd-ylP">
@@ -394,7 +386,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="Jyg-SN-siz">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" keyboardDismissMode="interactive" translatesAutoresizingMaskIntoConstraints="NO" id="Jyg-SN-siz">
                                 <frame key="frameInset" minX="-1" minY="70" width="376" height="500"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_image" translatesAutoresizingMaskIntoConstraints="NO" id="f60-fv-Jco">
@@ -749,19 +741,10 @@
                     <view key="view" contentMode="scaleToFill" id="ZfZ-6k-lY2">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="xuo-Sy-W4v"/>
-                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="xuo-Sy-W4v" firstAttribute="leading" secondItem="ZfZ-6k-lY2" secondAttribute="leadingMargin" constant="-20" id="D3y-Gq-Lel"/>
-                            <constraint firstItem="xuo-Sy-W4v" firstAttribute="top" secondItem="jLb-Sb-fE0" secondAttribute="bottom" id="ee9-8v-HwM"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="xuo-Sy-W4v" secondAttribute="trailing" constant="-20" id="hP1-Bd-wmS"/>
-                            <constraint firstItem="u5J-y9-sVm" firstAttribute="top" secondItem="xuo-Sy-W4v" secondAttribute="bottom" id="wSj-kc-AMs"/>
-                        </constraints>
                     </view>
                     <connections>
-                        <outlet property="loading" destination="xuo-Sy-W4v" id="tsm-Zb-W5D"/>
+                        <outlet property="videoView" destination="ZfZ-6k-lY2" id="y12-Zy-GH4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5PJ-VN-LTC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -792,7 +775,7 @@
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="OLVIDASTE TU CONSTRASEÑA" id="AjD-wx-VJy">
-                                        <barButtonItem key="leftBarButtonItem" style="plain" id="aei-EP-Atg">
+                                        <barButtonItem key="leftBarButtonItem" id="aei-EP-Atg">
                                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dsa-mD-tXH">
                                                 <rect key="frame" x="16" y="7" width="78" height="30"/>
                                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

@@ -35,6 +35,7 @@ public class HttpServerConnection
             throw HTTPError.connectionException
         }
     }
+
     enum  HTTPError: Error {
         case connectionException
     }

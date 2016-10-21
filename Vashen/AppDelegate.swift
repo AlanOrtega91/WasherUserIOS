@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import GoogleMaps
 import Firebase
 import FirebaseMessaging
 
@@ -18,7 +17,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         // Override point for customization after application launch.
-        GMSServices.provideAPIKey("AIzaSyAk33tRPYRLW3jQfD463DSgt-Jr8tX4LO0")
         FIRApp.configure()
         let notificationType: UIUserNotificationType = [UIUserNotificationType.alert,UIUserNotificationType.badge,UIUserNotificationType.sound]
         let notificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
@@ -130,11 +128,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func deleteService(serviceJson:NSDictionary){
         var services = DataBase.readServices()
         let id = serviceJson["id"] as! String
-        let i = services?.index(where: {$0.id == id})
-        
-        services?.remove(at: i!)
-        DataBase.saveServices(services: services!)
-        AppData.notifyNewData(newData: true)
+        if let i = services?.index(where: {$0.id == id}) {
+            
+            services?.remove(at: i)
+            DataBase.saveServices(services: services!)
+            AppData.notifyNewData(newData: true)
+        }
     }
     
     func sendPopUp(message:String){

@@ -27,6 +27,7 @@
 		E7550BB11D5BAB3200FBD719 /* HistoryRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */; };
 		E7550BB31D6360B400FBD719 /* CarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BB21D6360B400FBD719 /* CarCell.swift */; };
 		E7615F221D64C823001607D3 /* Cleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7615F211D64C823001607D3 /* Cleaner.swift */; };
+		E7D7D4F21DB8593100103925 /* Splash.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7D7D4F11DB8593100103925 /* Splash.mov */; };
 		E7F528101D99FF6400BA2B16 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F528091D99FF6400BA2B16 /* Card.m */; };
 		E7F528111D99FF6400BA2B16 /* Conekta.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280B1D99FF6400BA2B16 /* Conekta.m */; };
 		E7F528121D99FF6400BA2B16 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280D1D99FF6400BA2B16 /* Connection.m */; };
@@ -36,7 +37,6 @@
 		E7FC6CBB1D647CD800A54B2B /* EditCarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */; };
 		E7FD0EFA1D754786001C2A06 /* InformationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FD0EF91D754786001C2A06 /* InformationController.swift */; };
 		E7FE89ED1D4E69DC0071CDFA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */; };
-		E7FE89EF1D4E69DC0071CDFA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */; };
 		E7FE89F21D4E69DC0071CDFA /* Map.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F01D4E69DC0071CDFA /* Map.storyboard */; };
 		E7FE89FA1D4E69DC0071CDFA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7FE89F81D4E69DC0071CDFA /* LaunchScreen.storyboard */; };
 		E7FE8A041D4E6AAB0071CDFA /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E7FE8A031D4E6AAB0071CDFA /* SWRevealViewController.m */; };
@@ -87,6 +87,7 @@
 		E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryRowTableViewCell.swift; sourceTree = "<group>"; };
 		E7550BB21D6360B400FBD719 /* CarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarCell.swift; sourceTree = "<group>"; };
 		E7615F211D64C823001607D3 /* Cleaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cleaner.swift; sourceTree = "<group>"; };
+		E7D7D4F11DB8593100103925 /* Splash.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Splash.mov; sourceTree = "<group>"; };
 		E7F528081D99FF6400BA2B16 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
 		E7F528091D99FF6400BA2B16 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
 		E7F5280A1D99FF6400BA2B16 /* Conekta.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Conekta.h; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		E7FD0EF91D754786001C2A06 /* InformationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationController.swift; sourceTree = "<group>"; };
 		E7FE89E91D4E69DC0071CDFA /* Vashen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Vashen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		E7FE89F11D4E69DC0071CDFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Map.storyboard; sourceTree = "<group>"; };
 		E7FE89F91D4E69DC0071CDFA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E7FE89FB1D4E69DC0071CDFA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -189,6 +189,7 @@
 				E7FE8A021D4E6AAB0071CDFA /* SWRevealViewController.h */,
 				E7FE8A031D4E6AAB0071CDFA /* SWRevealViewController.m */,
 				E7FE89EC1D4E69DC0071CDFA /* AppDelegate.swift */,
+				E7D7D4F11DB8593100103925 /* Splash.mov */,
 			);
 			name = "Support Files";
 			sourceTree = "<group>";
@@ -236,7 +237,6 @@
 				E71088FF1D4FA4E0006DB612 /* Model */,
 				E7FE8A221D4ED6BA0071CDFA /* Views */,
 				E7FE8A211D4ED6A80071CDFA /* Controllers */,
-				E7FE89EE1D4E69DC0071CDFA /* ViewController.swift */,
 				E7FE89F81D4E69DC0071CDFA /* LaunchScreen.storyboard */,
 				E7FE89FB1D4E69DC0071CDFA /* Info.plist */,
 			);
@@ -371,6 +371,7 @@
 				E7FE89F21D4E69DC0071CDFA /* Map.storyboard in Resources */,
 				E7153DF81D92D06000F169B9 /* Assets.xcassets in Resources */,
 				E7F951031D66069D00BA9DE2 /* GoogleService-Info.plist in Resources */,
+				E7D7D4F21DB8593100103925 /* Splash.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +434,6 @@
 				E71089031D4FA853006DB612 /* User.swift in Sources */,
 				E7FE8A1A1D4EC1C90071CDFA /* ConfigurationController.swift in Sources */,
 				E7F528131D99FF6400BA2B16 /* Token.m in Sources */,
-				E7FE89EF1D4E69DC0071CDFA /* ViewController.swift in Sources */,
 				E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */,
 				E7F528101D99FF6400BA2B16 /* Card.m in Sources */,
 				E7FE8A241D4F01A90071CDFA /* InitController.swift in Sources */,
@@ -600,7 +600,7 @@
 				CODE_SIGN_ENTITLEMENTS = Vashen/Vashen.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Alan Ortega (92MFTFMAY7)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = T83HJT87GD;
 				INFOPLIST_FILE = Vashen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "";
@@ -624,7 +624,7 @@
 				CODE_SIGN_ENTITLEMENTS = Vashen/Vashen.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Alan Ortega (T83HJT87GD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = T83HJT87GD;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INFOPLIST_FILE = Vashen/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

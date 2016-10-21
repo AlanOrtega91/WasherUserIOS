@@ -9,48 +9,41 @@
 import UIKit
 import Firebase
 import FirebaseMessaging
+import AVFoundation
 
 class InitController: UIViewController {
     
     var settings : UserDefaults = UserDefaults.standard
-    var token : String = ""
+    var token : String = AppData.readToken()
     var clickedAlertOK = false
-
-    @IBOutlet weak var loading: UIImageView!
+    
+    @IBOutlet var videoView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initValues()
-        initView()
+        self.animateView()
         DispatchQueue.global().async {
             self.decideNextView()
         }
     }
     
-    func initView(){
-        var imgList = [UIImage]()
-        for countValue in 0...119{
-            let strImageName = "frame_\(countValue)_delay-0.04s"
-            let image = UIImage(named: strImageName)
-            if image != nil {
-                imgList.append(image!)
-            }
-        }
-        self.loading.animationImages = imgList
-        self.loading.animationDuration = 5.0
-        self.loading.startAnimating()
-        imgList.removeAll()
+    func animateView()
+    {
+        
+        let path = URL(fileURLWithPath: Bundle.main.path(forResource: "Splash", ofType: "mov")!)
+        let player = AVPlayer(url: path)
+        let newLayer = AVPlayerLayer(player: player)
+        newLayer.frame = self.videoView.frame
+        self.videoView.layer.addSublayer(newLayer)
+        newLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        
+        player.play()
+        
+        
     }
     
     public override func didReceiveMemoryWarning() {
-        self.loading.stopAnimating()
-        self.loading.animationImages = []
-        self.loading.image = UIImage(named: "frame_199_delay-0.04s")
         print("memory warning bato")
-    }
-    
-    func initValues() {
-        token = AppData.readToken()
     }
     
     
@@ -66,9 +59,8 @@ class InitController: UIViewController {
         do{
             try ProfileReader.run()
             
-            let firebaseToken = FIRInstanceID.instanceID().token()
-            if firebaseToken != nil {
-                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken!)
+            if let firebaseToken = FIRInstanceID.instanceID().token() {
+                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
             }
             changeView(storyBoardName: "Map", controllerName: "reveal_controller")
         } catch User.UserError.errorSavingFireBaseToken{
