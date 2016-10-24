@@ -65,7 +65,7 @@ public class Service {
             service.longitud = Double(parameters["longitud"] as! String)
             service.rating = -1
             return service
-        } catch HttpServerConnection.HTTPError.connectionException {
+        } catch HttpServerConnection.HttpError.connectionException {
             throw ServiceError.errorRequestingService
         }
     
@@ -83,7 +83,7 @@ public class Service {
                 throw ServiceError.errorCancelingRequest
             }
 
-        } catch HttpServerConnection.HTTPError.connectionException {
+        } catch HttpServerConnection.HttpError.connectionException {
             throw ServiceError.errorCancelingRequest
         }
     }
@@ -100,7 +100,7 @@ public class Service {
                 throw ServiceError.errorCancelingRequest
             }
             
-        } catch HttpServerConnection.HTTPError.connectionException {
+        } catch HttpServerConnection.HttpError.connectionException {
             throw ServiceError.errorCancelingRequest
         }
     }

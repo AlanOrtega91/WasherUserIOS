@@ -26,7 +26,7 @@ public class UserCard {
                 throw UserCardError.errorSavingCard
             }
             
-        } catch HttpServerConnection.HTTPError.connectionException {
+        } catch HttpServerConnection.HttpError.connectionException {
             throw UserCardError.errorSavingCard
         }
     }

@@ -40,7 +40,7 @@ public class Cleaner{
                 cleaners.append(cleaner)
             }
             return cleaners
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CleanerError.errorGettingCleaners
         }
     }
@@ -66,7 +66,7 @@ public class Cleaner{
                 cleaner.longitud = Double(longitud)
             }
             return cleaner
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CleanerError.errorGettingCleaners
         }
     }
@@ -88,7 +88,7 @@ public class Cleaner{
             } else {
                 return 0
             }
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CleanerError.errorGettingCleaners
         }
     }

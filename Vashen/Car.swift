@@ -36,7 +36,7 @@ public class Car {
             }
 
             return String(describing: response["carId"])
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CarError.errorAddingCar
         }
     }
@@ -54,7 +54,7 @@ public class Car {
                 throw CarError.errorAddingFavoriteCar
             }
             
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CarError.errorAddingFavoriteCar
         }
     }
@@ -72,7 +72,7 @@ public class Car {
                 throw CarError.errorEditingCar
             }
             
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CarError.errorEditingCar
         }
     }
@@ -90,7 +90,7 @@ public class Car {
                 throw CarError.errorDeletingCar
             }
             
-        } catch HttpServerConnection.HTTPError.connectionException{
+        } catch HttpServerConnection.HttpError.connectionException{
             throw CarError.errorDeletingCar
         }
     }
