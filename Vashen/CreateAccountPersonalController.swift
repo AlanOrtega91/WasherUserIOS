@@ -16,14 +16,12 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
     @IBOutlet weak public var name: UITextField!
     @IBOutlet weak public var lastName: UITextField!
     @IBOutlet weak public var image: UIImageView!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     var encodedString: String!
     var token: String!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.contentSize.height = 600
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
         image.isUserInteractionEnabled = true
         image.addGestureRecognizer(tapGestureRecognizer)

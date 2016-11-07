@@ -29,7 +29,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         var message:String!
-        print(userInfo)
         if let state = userInfo["state"] as? String{
             switch state {
             case "2":
@@ -39,12 +38,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let data = serviceJson.data(using: String.Encoding.utf8)
                     do {
                         let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-
-                        print(service)
                         saveNewServiceState(serviceJson: service)
                     } catch {}
-                    
-                    //TODO: check if notify or popup
                 }
                 break
             case "4":
@@ -54,11 +49,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let data = serviceJson.data(using: String.Encoding.utf8)
                     do {
                         let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        print(service)
                         saveNewServiceState(serviceJson: service)
                     } catch {}
-                    
-                    //TODO: check if notify or popup
                 }
                 break
             case "5":
@@ -67,15 +59,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let data = serviceJson.data(using: String.Encoding.utf8)
                     do {
                     let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        print(service)
                         saveNewServiceState(serviceJson: service)
                     } catch {}
-                    
-                    //TODO: check if notify or popup
                 }
                 break
             case "6":
-                print(userInfo["message"])
                 if userInfo["message"] as? String == "5" {
                     sendPopUp(message: "Canceled")
                 }
@@ -83,11 +71,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     let data = serviceJson.data(using: String.Encoding.utf8)
                     do {
                         let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        print(service)
                         deleteService(serviceJson: service)
                     } catch {}
-                    
-                    //TODO: check if notify or popup
                 }
                 break
             default:
@@ -142,7 +127,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func tokenRefreshNotificaiton(notification: NSNotification) {
         if let refreshedToken = FIRInstanceID.instanceID().token() {
-            print("InstanceID token: \(refreshedToken)")
             // Connect to FCM since connection may have failed when attempted before having a token.
             connectToFcm()
             if AppData.readToken() != "" {
@@ -172,7 +156,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        print(NSString(data: deviceToken as Data, encoding: String.Encoding.utf8.rawValue))
         FIRInstanceID.instanceID().setAPNSToken(deviceToken as Data, type: FIRInstanceIDAPNSTokenType.unknown)
     }
 

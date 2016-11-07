@@ -88,7 +88,6 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
         "Cafe",
         "Dorado"]
     
-    //TODO: ocultar teclado onclick de botones
     override func viewDidLoad() {
         super.viewDidLoad()
         token = AppData.readToken()

@@ -14,11 +14,9 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var password2: UITextField!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.contentSize.height = 600
         email.delegate = self
         phone.delegate = self
         password.delegate = self

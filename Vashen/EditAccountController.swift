@@ -8,7 +8,7 @@
 
 import UIKit
 
-class EditAccountController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate {
+class EditAccountController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate, UIScrollViewDelegate {
     
     var user: User!
 
@@ -17,8 +17,6 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var userImage: UIImageView!
-    
-    @IBOutlet weak var scrollView: UIScrollView!
     
     var encodedString: String!
     
@@ -45,7 +43,6 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     func initView(){
         readUserImage()
         fillUserTextFields()
-        scrollView.contentSize.height = 1200
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
         userImage.isUserInteractionEnabled = true
         userImage.addGestureRecognizer(tapGestureRecognizer)

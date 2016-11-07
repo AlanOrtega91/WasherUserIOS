@@ -28,7 +28,6 @@ public class User {
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewUser")
         var params = "name=" + user.name + "&lastName=" + user.lastName + "&email=" + user.email + "&password=" + password + "&phone=" + user.phone
         if user.encodedImage != nil {
-            //print(user.encodedImage)
             params += "&encoded_string=" + user.encodedImage
         }
         do{

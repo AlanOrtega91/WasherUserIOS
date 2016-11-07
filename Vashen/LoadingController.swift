@@ -29,7 +29,6 @@ public class LoadingController: UIViewController {
     var password: String!
     var image: UIImage!
     //NewCard
-    //TODO: change to Conekta
     var tokenConekta:Token!
     //EditCar
     var selectedIndex:Int!
@@ -100,7 +99,6 @@ public class LoadingController: UIViewController {
             if let firebaseToken = FIRInstanceID.instanceID().token() {
                 try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
             }
-            //TODO: new stack
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller")
             DispatchQueue.main.async {
@@ -158,9 +156,7 @@ public class LoadingController: UIViewController {
     }
     
     func tryNewCard(){
-        //TODO: change to Conekta
         tokenConekta?.create(success: { (data) -> Void in
-            print(data)
             if data?["object"] as! String == "error" {
                 let stackSize = self.navigationController?.viewControllers.count
                 let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
@@ -187,7 +183,6 @@ public class LoadingController: UIViewController {
                 }
             }
             }, andError: { (error) -> Void in
-                print(error)
                 let stackSize = self.navigationController?.viewControllers.count
                 let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
                 DispatchQueue.main.async {

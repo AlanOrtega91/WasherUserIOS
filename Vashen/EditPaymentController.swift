@@ -120,7 +120,6 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
     }
     
     @IBAction func saveNewCard(_ sender: AnyObject) {
-        //TODO: change to Conekta
         let user = DataBase.readUser()
         let conekta = Conekta()
         conekta.delegate = self

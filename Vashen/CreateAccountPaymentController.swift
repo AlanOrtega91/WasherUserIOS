@@ -19,7 +19,6 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     @IBOutlet weak var month: UIButton!
     @IBOutlet weak var year: UIButton!
     @IBOutlet weak var picker: UIPickerView!
-    @IBOutlet weak var scrollView: UIScrollView!
     
     var selected:Int = 0
     var months: [String] = ["01","02","03","04","05","06","07","08","09","10","11","12"]
@@ -41,7 +40,6 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     }
     
     func initView(){
-        scrollView.contentSize.height = 600
         picker.dataSource = self
         picker.delegate = self
         picker.isHidden = true

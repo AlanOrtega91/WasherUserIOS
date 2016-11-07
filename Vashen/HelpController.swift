@@ -65,7 +65,7 @@ class HelpController: UIViewController {
     }
     
     @IBAction func clickedOption(_ sender: AnyObject) {
-        let email = "help@bvashen.com"
+        let email = "help@washer.mx"
         let url = NSURL(string: "mailto:\(email)?subject:Help")
         UIApplication.shared.openURL(url! as URL)
     }

@@ -10,9 +10,11 @@ import Foundation
 
 class AboutController: UIViewController {
     
-    
     @IBAction func clickedCancel(_ sender: AnyObject) {
         _ = self.navigationController?.popViewController(animated: true)
     }
 
+    @IBAction func clickedWasher(_ sender: AnyObject) {
+        UIApplication.shared.openURL(URL(string: "http://washer.mx/")!)
+    }
 }

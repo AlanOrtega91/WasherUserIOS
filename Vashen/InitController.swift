@@ -27,25 +27,15 @@ class InitController: UIViewController {
         }
     }
     
-    func animateView()
-    {
-        
+    func animateView() {
         let path = URL(fileURLWithPath: Bundle.main.path(forResource: "Splash", ofType: "mov")!)
         let player = AVPlayer(url: path)
         let newLayer = AVPlayerLayer(player: player)
         newLayer.frame = self.videoView.frame
         self.videoView.layer.addSublayer(newLayer)
         newLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        
         player.play()
-        
-        
     }
-    
-    public override func didReceiveMemoryWarning() {
-        print("memory warning bato")
-    }
-    
     
     func decideNextView(){
         if token == "" {

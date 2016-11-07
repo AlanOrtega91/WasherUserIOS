@@ -33,11 +33,13 @@ public class HttpServerConnection
                 }.resume()
             
             _ = semaphore.wait(timeout: .distantFuture)
-            print(String(data: data, encoding: String.Encoding.utf8))
-            let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
-            return dataString as! Dictionary<String, AnyObject>
-        } catch (let e) {
-            print(e)
+            if data != nil {
+                let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
+                return dataString as! Dictionary<String, AnyObject>
+            } else {
+                throw HttpError.connectionException
+            }
+        } catch {
             throw HttpError.connectionException
         }
     }

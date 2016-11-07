@@ -178,6 +178,7 @@ public class DataBase {
                 newService.setValue(service.cleanerId, forKey: "cleanerId")
                 newService.setValue(service.finalTime, forKey: "finalTime")
                 newService.setValue(service.acceptedTime, forKey: "acceptedTime")
+                print(newService)
                 try context.save()
             }
         } catch {

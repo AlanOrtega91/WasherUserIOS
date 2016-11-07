@@ -90,7 +90,6 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         "Cafe",
         "Dorado"]
     
-    //TODO: ocultar teclado onclick de botones
     override func viewDidLoad() {
         super.viewDidLoad()
         picker.dataSource = self

@@ -73,7 +73,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
         if indexPath.row >= cars.count {
             return 50
         } else {
-            return 90
+            return 100
         }
     }
     

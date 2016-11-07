@@ -244,9 +244,17 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </textField>
+                            <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ubicacion Cliente" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="aRI-kh-7tS">
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3b2-ft-cMX">
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGX-fH-oCz">
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="VGX-fH-oCz" secondAttribute="height" multiplier="303:50" id="yvB-yD-8Lh"/>
+                                        </constraints>
                                         <state key="normal" image="bikeActive"/>
                                         <connections>
                                             <action selector="vehicleClicked:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="Gtx-bd-hkh"/>
@@ -255,70 +263,73 @@
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="VGX-fH-oCz" firstAttribute="top" secondItem="3b2-ft-cMX" secondAttribute="top" constant="10" id="0jH-sk-qUd"/>
                                     <constraint firstAttribute="trailing" secondItem="VGX-fH-oCz" secondAttribute="trailing" constant="40" id="0pN-CJ-sac"/>
                                     <constraint firstItem="VGX-fH-oCz" firstAttribute="leading" secondItem="3b2-ft-cMX" secondAttribute="leading" constant="40" id="FIm-8G-n4c"/>
-                                    <constraint firstAttribute="bottom" secondItem="VGX-fH-oCz" secondAttribute="bottom" constant="10" id="PZD-BD-QgB"/>
+                                    <constraint firstItem="VGX-fH-oCz" firstAttribute="centerY" secondItem="3b2-ft-cMX" secondAttribute="centerY" id="lND-Kg-2hL"/>
                                     <constraint firstAttribute="height" constant="70" id="ozH-d5-gdt"/>
                                 </constraints>
                             </view>
                             <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dU3-R6-rJ9">
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8kX-9m-598">
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="30" id="7rF-Fn-lTb"/>
-                                            <constraint firstAttribute="width" constant="130" id="ge9-cv-rcK"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Tradicional" image="tradicional">
-                                            <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="rightClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="f3m-66-eIf"/>
-                                        </connections>
-                                    </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="wordWrap" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xXA-Wh-vPo">
-                                        <string key="text">Lavado de auto en seco, con nuestro producto de máxima calidad, que brinda un acabado brillante, sin rayar el auto, protegiendo la pintura, al mismo tiempo que deja una capa de cera protectora.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                        <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="justified" lineBreakMode="wordWrap" numberOfLines="10" baselineAdjustment="alignBaselines" adjustsLetterSpacingToFitWidth="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3pL-w6-NNf">
-                                        <string key="text">Lavado de auto con agua y shampoo, que deja una capa protectora de cera. Para este servicio, el usuario deberá proporcionar el agua al momento de la llegada de nuestros socios lavadores.</string>
-                                        <fontDescription key="fontDescription" type="system" pointSize="9"/>
-                                        <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oxf-J4-Yzz">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oxf-J4-Yzz">
                                         <constraints>
                                             <constraint firstAttribute="width" constant="130" id="k1Q-EJ-Nk7"/>
-                                            <constraint firstAttribute="height" constant="30" id="yoj-Lc-MxE"/>
+                                            <constraint firstAttribute="height" constant="40" id="yoj-Lc-MxE"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <state key="normal" title="Ecologico" image="ecologico">
+                                        <state key="normal" title="Ecologico" image="ecologico" backgroundImage="options_up">
                                             <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="leftClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="zDg-4l-fWm"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-ak-Mh2">
+                                        <fontDescription key="fontDescription" type="system" pointSize="7"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                        <state key="normal" backgroundImage="options_down">
+                                            <string key="title">Consiste en lavado de carrocería, cris- tales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).</string>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8kX-9m-598">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="7rF-Fn-lTb"/>
+                                            <constraint firstAttribute="width" constant="130" id="ge9-cv-rcK"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <state key="normal" title="Tradicional" image="tradicional" backgroundImage="options_up">
+                                            <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="rightClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="f3m-66-eIf"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="xkP-XN-jf2">
+                                        <fontDescription key="fontDescription" type="system" pointSize="7"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                        <state key="normal" backgroundImage="options_down">
+                                            <string key="title">Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo).</string>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="3pL-w6-NNf" firstAttribute="centerX" secondItem="8kX-9m-598" secondAttribute="centerX" id="2gb-gy-imH"/>
                                     <constraint firstItem="oxf-J4-Yzz" firstAttribute="leading" secondItem="dU3-R6-rJ9" secondAttribute="leading" constant="20" id="3lc-7O-0qW"/>
-                                    <constraint firstAttribute="bottom" secondItem="3pL-w6-NNf" secondAttribute="bottom" id="6Wq-6f-PqH"/>
-                                    <constraint firstItem="xXA-Wh-vPo" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="bottom" constant="10" id="HWz-EC-Tnw"/>
+                                    <constraint firstItem="xkP-XN-jf2" firstAttribute="top" secondItem="8kX-9m-598" secondAttribute="bottom" id="70P-G7-vsi"/>
+                                    <constraint firstItem="xkP-XN-jf2" firstAttribute="centerX" secondItem="8kX-9m-598" secondAttribute="centerX" id="9YS-Ra-gqW"/>
                                     <constraint firstAttribute="height" constant="150" id="OxG-Tw-cWM"/>
                                     <constraint firstAttribute="trailing" secondItem="8kX-9m-598" secondAttribute="trailing" constant="37" id="Qaf-er-ikX"/>
-                                    <constraint firstItem="xXA-Wh-vPo" firstAttribute="centerX" secondItem="oxf-J4-Yzz" secondAttribute="centerX" id="RQu-4d-1rS"/>
-                                    <constraint firstItem="xXA-Wh-vPo" firstAttribute="width" secondItem="oxf-J4-Yzz" secondAttribute="width" id="T6A-1f-9M7"/>
-                                    <constraint firstItem="3pL-w6-NNf" firstAttribute="top" secondItem="8kX-9m-598" secondAttribute="bottom" constant="10" id="UMP-IP-Qry"/>
                                     <constraint firstItem="8kX-9m-598" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="top" id="V5M-MM-8m9"/>
                                     <constraint firstItem="oxf-J4-Yzz" firstAttribute="top" secondItem="dU3-R6-rJ9" secondAttribute="top" constant="10" id="VVF-S2-gv1"/>
-                                    <constraint firstAttribute="bottom" secondItem="xXA-Wh-vPo" secondAttribute="bottom" constant="5" id="XyO-V0-3mo"/>
-                                    <constraint firstItem="3pL-w6-NNf" firstAttribute="width" secondItem="8kX-9m-598" secondAttribute="width" id="ext-h2-AtV"/>
+                                    <constraint firstItem="WAc-ak-Mh2" firstAttribute="width" secondItem="oxf-J4-Yzz" secondAttribute="width" id="ZRj-Rg-ZpR"/>
+                                    <constraint firstItem="WAc-ak-Mh2" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="bottom" id="ags-56-EwD"/>
+                                    <constraint firstAttribute="bottom" secondItem="xkP-XN-jf2" secondAttribute="bottom" constant="5" id="jOw-8a-GzL"/>
+                                    <constraint firstItem="WAc-ak-Mh2" firstAttribute="centerX" secondItem="oxf-J4-Yzz" secondAttribute="centerX" id="jVt-qX-AQs"/>
                                     <constraint firstAttribute="height" constant="100" id="m1e-SQ-unT"/>
+                                    <constraint firstItem="xkP-XN-jf2" firstAttribute="width" secondItem="8kX-9m-598" secondAttribute="width" id="r5e-d1-sG9"/>
+                                    <constraint firstAttribute="bottom" secondItem="WAc-ak-Mh2" secondAttribute="bottom" constant="5" id="rXl-Fg-CsZ"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
@@ -412,6 +423,7 @@
                             <constraint firstItem="3b2-ft-cMX" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="Dz6-k7-e8e"/>
                             <constraint firstItem="8Vi-Fs-PFt" firstAttribute="top" secondItem="eE2-De-VnG" secondAttribute="bottom" constant="30" id="Hjc-vq-95C"/>
                             <constraint firstItem="uzo-AC-pb4" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="KOy-X1-50a"/>
+                            <constraint firstItem="aRI-kh-7tS" firstAttribute="top" secondItem="8Vi-Fs-PFt" secondAttribute="bottom" id="LHO-QU-7AI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="iYe-vj-6AR" secondAttribute="trailing" id="OaH-MV-pDg"/>
                             <constraint firstItem="dU3-R6-rJ9" firstAttribute="leading" secondItem="VhR-Da-NsS" secondAttribute="leadingMargin" constant="-20" id="Qfr-NB-hHC"/>
                             <constraint firstItem="8Vi-Fs-PFt" firstAttribute="centerX" secondItem="VhR-Da-NsS" secondAttribute="centerX" id="R8X-GQ-c0g"/>
@@ -422,7 +434,9 @@
                             <constraint firstItem="dU3-R6-rJ9" firstAttribute="top" secondItem="3b2-ft-cMX" secondAttribute="bottom" id="dC4-mf-I4l"/>
                             <constraint firstAttribute="trailingMargin" secondItem="EcP-a2-Xsi" secondAttribute="trailing" constant="-20" id="eW6-rw-Ch2"/>
                             <constraint firstAttribute="trailingMargin" secondItem="3b2-ft-cMX" secondAttribute="trailing" constant="-20" id="iIC-Qa-t0W"/>
+                            <constraint firstItem="aRI-kh-7tS" firstAttribute="width" secondItem="8Vi-Fs-PFt" secondAttribute="width" id="iYJ-oL-kKb"/>
                             <constraint firstAttribute="trailingMargin" secondItem="eE2-De-VnG" secondAttribute="trailing" constant="-20" id="l11-Ai-LFM"/>
+                            <constraint firstItem="aRI-kh-7tS" firstAttribute="centerX" secondItem="8Vi-Fs-PFt" secondAttribute="centerX" id="lz4-TB-ZaV"/>
                             <constraint firstItem="iJJ-Mb-xNJ" firstAttribute="top" secondItem="EcP-a2-Xsi" secondAttribute="bottom" id="npi-Q3-oiV"/>
                             <constraint firstAttribute="trailingMargin" secondItem="dU3-R6-rJ9" secondAttribute="trailing" constant="-20" id="oSB-ex-akv"/>
                             <constraint firstItem="uzo-AC-pb4" firstAttribute="top" secondItem="dU3-R6-rJ9" secondAttribute="bottom" id="yp0-kt-Qoc"/>
@@ -441,19 +455,20 @@
                         <outlet property="cleanerImageInfo" destination="8W8-g1-RN5" id="JVf-aS-sxe"/>
                         <outlet property="cleanerInfo" destination="pjc-fI-fGQ" id="4vF-Uv-61m"/>
                         <outlet property="leftButton" destination="oxf-J4-Yzz" id="Whg-DC-BUv"/>
-                        <outlet property="leftDescription" destination="xXA-Wh-vPo" id="PVE-Bm-lc7"/>
+                        <outlet property="leftDescription" destination="WAc-ak-Mh2" id="j5g-2W-oW8"/>
                         <outlet property="locationText" destination="8Vi-Fs-PFt" id="ssf-YY-j5U"/>
                         <outlet property="lowLayout" destination="dU3-R6-rJ9" id="laV-Aq-hDf"/>
                         <outlet property="lowLayoutHeight" destination="OxG-Tw-cWM" id="wbQ-xH-xoW"/>
                         <outlet property="mapViewIOS" destination="EcP-a2-Xsi" id="ifp-zY-Zuo"/>
                         <outlet property="menuOpenButton" destination="y9e-DX-gaG" id="u6K-xS-yZS"/>
                         <outlet property="rightButton" destination="8kX-9m-598" id="4XS-UZ-xIg"/>
-                        <outlet property="rightDescription" destination="3pL-w6-NNf" id="46X-Fa-bJI"/>
+                        <outlet property="rightDescription" destination="xkP-XN-jf2" id="AYP-dS-2cG"/>
                         <outlet property="serviceInfo" destination="1cf-Nz-pM3" id="8hg-Bo-3b7"/>
                         <outlet property="startLayout" destination="uzo-AC-pb4" id="Cs3-c1-AlY"/>
                         <outlet property="startLayoutHeight" destination="QPQ-7a-eXQ" id="ETx-Dq-Apc"/>
                         <outlet property="upLayout" destination="3b2-ft-cMX" id="Auc-UJ-olP"/>
                         <outlet property="upLayoutHeight" destination="ozH-d5-gdt" id="qsJ-jH-PnI"/>
+                        <outlet property="userLocationText" destination="aRI-kh-7tS" id="dyt-jQ-Oa3"/>
                         <outlet property="vehiclesButton" destination="VGX-fH-oCz" id="yw2-c8-DGn"/>
                     </connections>
                 </viewController>
@@ -689,6 +704,8 @@
         <image name="default_image" width="475" height="478"/>
         <image name="ecologico" width="35" height="29"/>
         <image name="myLocation" width="225" height="225"/>
+        <image name="options_down" width="292" height="156"/>
+        <image name="options_up" width="292" height="87"/>
         <image name="rating0" width="182" height="23"/>
         <image name="ratingEmpty" width="20" height="20"/>
         <image name="tradicional" width="35" height="33"/>
