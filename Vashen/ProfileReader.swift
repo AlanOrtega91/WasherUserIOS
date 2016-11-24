@@ -43,6 +43,7 @@ public class ProfileReader {
         let params = "token=\(token)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
+            print(response)
             if response["Status"] as! String != "OK" {
                 throw ProfileReaderError.errorReadingData
             }
@@ -120,7 +121,6 @@ public class ProfileReader {
             car.type = carJSON["idVehiculo"]! as! String
             car.color = carJSON["Color"]! as! String
             car.plates = carJSON["Placas"]! as! String
-            car.model = carJSON["Modelo"]! as! String
             car.brand = carJSON["Marca"]! as! String
             car.multiplier = Double(carJSON["Multiplicador"] as! String)!
             car.favorite = Int(carJSON["Favorito"] as! String)!

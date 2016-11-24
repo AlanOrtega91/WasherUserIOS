@@ -34,7 +34,7 @@
         <scene sceneID="IE6-ue-G6B">
             <objects>
                 <tableViewController id="bGG-lk-isV" customClass="MenuVC" customModule="Vashen" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="48" sectionHeaderHeight="28" sectionFooterHeight="28" id="I9P-5H-F3G">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="48" sectionHeaderHeight="28" sectionFooterHeight="28" id="I9P-5H-F3G">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -44,7 +44,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="150"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0ek-ul-N5Q" id="Keu-pm-9Yp">
-                                    <frame key="frameInset" width="375" height="149"/>
+                                    <frame key="frameInset" width="375" height="150"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1II-p9-BF9">
@@ -86,9 +86,19 @@
                                 <rect key="frame" x="0.0" y="178" width="375" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gsB-hS-ema" id="9JG-Q0-Gsx">
-                                    <frame key="frameInset" width="375" height="49"/>
+                                    <frame key="frameInset" width="375" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbd-EP-4XB">
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="2" id="Bxy-Qq-Hbi"/>
+                                                <constraint firstAttribute="width" constant="200" id="EPf-NI-o0o"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="YK8-kK-fsb">
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="20" id="6eh-E3-Vii"/>
@@ -103,6 +113,8 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottomMargin" secondItem="J9G-iM-vKE" secondAttribute="bottom" constant="7" id="2GJ-9i-JgH"/>
+                                        <constraint firstItem="cbd-EP-4XB" firstAttribute="leading" secondItem="9JG-Q0-Gsx" secondAttribute="leadingMargin" constant="15" id="AHb-CY-A8k"/>
+                                        <constraint firstItem="cbd-EP-4XB" firstAttribute="top" secondItem="9JG-Q0-Gsx" secondAttribute="topMargin" id="EoI-dk-uoN"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="J9G-iM-vKE" secondAttribute="trailing" constant="5" id="FQl-lQ-PDH"/>
                                         <constraint firstItem="J9G-iM-vKE" firstAttribute="leading" secondItem="YK8-kK-fsb" secondAttribute="trailing" constant="8" id="LrG-sY-aZC"/>
                                         <constraint firstItem="YK8-kK-fsb" firstAttribute="leading" secondItem="9JG-Q0-Gsx" secondAttribute="leadingMargin" constant="5" id="N2c-UI-K28"/>
@@ -120,6 +132,7 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
+                                    <outlet property="menuDivider" destination="cbd-EP-4XB" id="bhF-5j-Bcg"/>
                                     <outlet property="menuImage" destination="YK8-kK-fsb" id="ZZi-Um-ntO"/>
                                     <outlet property="menuLabel" destination="J9G-iM-vKE" id="2uL-wM-Pep"/>
                                 </connections>
@@ -255,7 +268,7 @@
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="VGX-fH-oCz" secondAttribute="height" multiplier="303:50" id="yvB-yD-8Lh"/>
                                         </constraints>
-                                        <state key="normal" image="bikeActive"/>
+                                        <state key="normal" image="bike_active"/>
                                         <connections>
                                             <action selector="vehicleClicked:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="Gtx-bd-hkh"/>
                                         </connections>
@@ -700,7 +713,7 @@
     <resources>
         <image name="Menu_Icon" width="31" height="25"/>
         <image name="background" width="318" height="567"/>
-        <image name="bikeActive" width="515" height="81"/>
+        <image name="bike_active" width="415" height="81"/>
         <image name="default_image" width="475" height="478"/>
         <image name="ecologico" width="35" height="29"/>
         <image name="myLocation" width="225" height="225"/>

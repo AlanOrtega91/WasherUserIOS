@@ -80,7 +80,6 @@ public class DataBase {
             newCar.setValue(car.type, forKey: "type")
             newCar.setValue(car.color, forKey: "color")
             newCar.setValue(car.plates, forKey: "plates")
-            newCar.setValue(car.model, forKey: "model")
             newCar.setValue(car.brand, forKey: "brand")
             newCar.setValue(car.favorite, forKey: "favorite")
             try context.save()
@@ -105,7 +104,6 @@ public class DataBase {
                 car.type = carResult.value(forKey: "type") as! String
                 car.color = carResult.value(forKey: "color") as! String
                 car.plates = carResult.value(forKey: "plates") as! String
-                car.model = carResult.value(forKey: "model") as! String
                 car.brand = carResult.value(forKey: "brand") as! String
                 car.favorite = carResult.value(forKey: "favorite") as! Int
                 cars.append(car)
@@ -130,7 +128,6 @@ public class DataBase {
                 car.type = results[0].value(forKey: "type") as! String
                 car.color = results[0].value(forKey: "color") as! String
                 car.plates = results[0].value(forKey: "plates") as! String
-                car.model = results[0].value(forKey: "model") as! String
                 car.brand = results[0].value(forKey: "brand") as! String
                 car.favorite = results[0].value(forKey: "favorite") as! Int
                 
@@ -178,7 +175,6 @@ public class DataBase {
                 newService.setValue(service.cleanerId, forKey: "cleanerId")
                 newService.setValue(service.finalTime, forKey: "finalTime")
                 newService.setValue(service.acceptedTime, forKey: "acceptedTime")
-                print(newService)
                 try context.save()
             }
         } catch {

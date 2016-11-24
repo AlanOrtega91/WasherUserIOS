@@ -9,7 +9,6 @@
 import Foundation
 
 class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate {
-
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var rightBarButton: UIBarButtonItem!

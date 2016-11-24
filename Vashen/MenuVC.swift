@@ -79,7 +79,9 @@ class MenuVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "menuCell", for: indexPath as IndexPath) as! MenuCell
         cell.menuLabel.text = TableArray[indexPath.row]
+        cell.menuDivider.isHidden = false
         if TableArray[indexPath.row] != "Acerca de" {
+            cell.menuDivider.isHidden = true
             cell.menuImage.image = ImageMenuArray[indexPath.row]
         }
         return cell

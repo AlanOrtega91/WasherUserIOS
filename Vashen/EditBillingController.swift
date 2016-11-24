@@ -16,7 +16,6 @@ class EditBillingController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var rfc: UITextField!
     @IBOutlet weak var billingAddress: UITextField!
     
-    @IBOutlet weak var scrollView: UIScrollView!
     override func viewDidLoad() {
         super.viewDidLoad()
         initValues()
@@ -28,7 +27,6 @@ class EditBillingController: UIViewController, UITextFieldDelegate {
     }
     
     func initView() {
-        self.scrollView.contentSize.height = 1000
         self.billingName.delegate = self
         self.rfc.delegate = self
         self.billingAddress.delegate = self

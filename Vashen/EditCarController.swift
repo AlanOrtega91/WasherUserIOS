@@ -70,8 +70,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         "Volvo"]
     var types: [String] = [
         "Moto",
-        "Coche Chico",
-        "Coche Grande",
+        "Coche",
         "Camioneta Chica",
         "Camioneta Grande"]
     var colors: [String] = [
@@ -191,7 +190,6 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     
     @IBAction func sendEdit(_ sender: AnyObject) {
         car.plates = plates.text
-        car.model = "Car"
         car.color = selectedColor
         car.type = String(selectedType + 1)
         car.brand = selectedBrand

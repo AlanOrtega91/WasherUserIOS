@@ -10,12 +10,10 @@ import Foundation
 
 public class HttpServerConnection
 {
-    private static var dev = "192.168.0.2"
     private static var prod = "imanio.zone"
     
     public static func buildURL(location: String) -> String {
-        let path = ("http://" + prod + "/Vashen/API/" + location + "/")
-        return path
+        return ("http://" + prod + "/Vashen/API/" + location + "/")
     }
     
     public static func sendHttpRequestPost(urlPath: String, withParams params: String) throws -> Dictionary<String,AnyObject>{
@@ -34,12 +32,17 @@ public class HttpServerConnection
             
             _ = semaphore.wait(timeout: .distantFuture)
             if data != nil {
+                let stringResponseUTF8 = String(data: data, encoding: .utf8)
+                print(stringResponseUTF8)
+                
                 let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
                 return dataString as! Dictionary<String, AnyObject>
             } else {
+                print("No data")
                 throw HttpError.connectionException
             }
-        } catch {
+        } catch (let e){
+            print(e)
             throw HttpError.connectionException
         }
     }

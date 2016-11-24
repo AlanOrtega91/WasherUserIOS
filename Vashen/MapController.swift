@@ -154,23 +154,19 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         case Service.BIKE:
             vehiclesButton.alpha = 1
             vehiclesButton.isUserInteractionEnabled = true
-            vehiclesButton.setImage(UIImage(named: "bikeActive") , for: .normal)
-        case Service.SMALL_CAR:
+            vehiclesButton.setImage(UIImage(named: "bike_active") , for: .normal)
+        case Service.CAR:
             vehiclesButton.alpha = 1
             vehiclesButton.isUserInteractionEnabled = true
-            vehiclesButton.setImage(UIImage(named: "smallCarActive") , for: .normal)
-        case Service.BIG_CAR:
-            vehiclesButton.alpha = 1
-            vehiclesButton.isUserInteractionEnabled = true
-            vehiclesButton.setImage(UIImage(named: "bigCarActive") , for: .normal)
+            vehiclesButton.setImage(UIImage(named: "car_active") , for: .normal)
         case Service.SMALL_VAN:
             vehiclesButton.alpha = 1
             vehiclesButton.isUserInteractionEnabled = true
-            vehiclesButton.setImage(UIImage(named: "smallVanActive") , for: .normal)
+            vehiclesButton.setImage(UIImage(named: "small_van_active") , for: .normal)
         case Service.BIG_VAN:
             vehiclesButton.alpha = 1
             vehiclesButton.isUserInteractionEnabled = true
-            vehiclesButton.setImage(UIImage(named: "bigVanActive") , for: .normal)
+            vehiclesButton.setImage(UIImage(named: "big_van_active") , for: .normal)
         default:
             break
         }
@@ -181,23 +177,20 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         nearbyCleanersTimer = DispatchSource.makeTimerSource(flags: .strict, queue: nearbyCleanersQueue)
         nearbyCleanersTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
         nearbyCleanersTimer.setEventHandler(handler: {
-            if let tempLocation = self.requestLocation {
-            if self.activeService == nil && self.requestLocation != nil {
-                DispatchQueue.main.async {
+            if self.activeService == nil {
+                if let tempLocation:CLLocation = self.requestLocation {
                     self.nearbyCleaners(location: tempLocation)
                 }
             }
-            }
         })
         nearbyCleanersTimer.resume()
-        
         
         let reloadMapQueue = DispatchQueue(label: "com.alan.reloadMap", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         reloadMapTimer = DispatchSource.makeTimerSource(flags: .strict, queue: reloadMapQueue)
         reloadMapTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
         reloadMapTimer.setEventHandler(handler: {
-                DispatchQueue.main.async {
-                    self.reloadMap()
+            DispatchQueue.main.async {
+                self.reloadMap()
             }
         })
         reloadMapTimer.resume()
@@ -419,9 +412,16 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         upLayout.isHidden = false
         lowLayout.isHidden = false
         startLayout.isHidden = true
+        if vehicleType == String(Service.BIKE) {
+            rightButton.isHidden = true
+            rightDescription.isHidden = true
+        } else {
+            rightButton.isHidden = false
+            rightDescription.isHidden = false
+        }
         leftButton.setTitle("Lavado Exterior $$", for: .normal)
         leftButton.setImage(UIImage(named: "exterior"), for: .normal)
-        leftDescription.setTitle("Consiste en lavado de carrocería, cris- tales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).", for: .normal)
+        leftDescription.setTitle("Consiste en lavado de carrocería, cristales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).", for: .normal)
         rightButton.setTitle("Lavado Interior $$", for: .normal)
         rightButton.setImage(UIImage(named: "interior"), for: .normal)
         rightDescription.setTitle("Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo).", for: .normal)

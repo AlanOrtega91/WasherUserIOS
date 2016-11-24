@@ -47,7 +47,7 @@
                                         <rect key="frame" x="0.0" y="28" width="383" height="243"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b9s-Lv-ynG" id="tvb-Au-PZa">
-                                            <frame key="frameInset" width="383" height="242"/>
+                                            <frame key="frameInset" width="383" height="243"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_image" translatesAutoresizingMaskIntoConstraints="NO" id="saW-Ym-Ijf">
@@ -637,7 +637,6 @@
                         <outlet property="date" destination="z6f-q7-4CQ" id="MVv-fZ-4Hp"/>
                         <outlet property="map" destination="KSX-r3-vne" id="kIf-1p-eVe"/>
                         <outlet property="price" destination="SqY-8D-IZs" id="KyR-4U-NeG"/>
-                        <outlet property="scrollView" destination="EPT-Tn-JkC" id="iHh-iT-qlr"/>
                         <outlet property="type" destination="xCq-ws-C7l" id="hMo-Je-gyn"/>
                     </connections>
                 </viewController>
@@ -833,7 +832,6 @@
                         <outlet property="lastName" destination="2TV-Cl-Qh4" id="uQu-4j-8mU"/>
                         <outlet property="name" destination="4Kf-7T-bdX" id="OKY-V0-9yT"/>
                         <outlet property="phone" destination="viX-uk-6DC" id="Hf3-Lz-iBE"/>
-                        <outlet property="scrollView" destination="mHl-Cd-HQR" id="VSC-nt-US1"/>
                         <outlet property="userImage" destination="XVc-X0-KZ0" id="B8I-a5-OeT"/>
                     </connections>
                 </viewController>
@@ -1730,7 +1728,6 @@
                         <outlet property="billingAddress" destination="lv0-UV-OsB" id="OWZ-WV-QEC"/>
                         <outlet property="billingName" destination="JdJ-Mv-RJk" id="GLZ-05-d0P"/>
                         <outlet property="rfc" destination="az8-d3-YnE" id="Hhh-pY-9LP"/>
-                        <outlet property="scrollView" destination="sEr-PA-nDS" id="3SB-ph-vq5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rbh-bE-d3i" userLabel="First Responder" sceneMemberID="firstResponder"/>

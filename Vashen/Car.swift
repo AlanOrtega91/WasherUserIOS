@@ -17,14 +17,13 @@ public class Car {
     public var plates:String!
     public var color:String!
     public var favorite:Int = 0
-    public var model:String!
     public var brand: String!
     public var multiplier: Double!
     
     
     public static func addNewFavoriteCar(car:Car, withToken token:String) throws -> String{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewCar")
-        let params = "vehiculoId=" + car.type + "&token=" + token + "&color=" + car.color + "&placas=" + car.plates + "&modelo=" + car.model + "&marca=" + car.brand
+        let params = "vehiculoId=" + car.type + "&token=" + token + "&color=" + car.color + "&placas=" + car.plates + "&marca=" + car.brand
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params) as NSDictionary
             
@@ -35,7 +34,7 @@ public class Car {
                 throw CarError.errorAddingCar
             }
 
-            return String(describing: response["carId"])
+            return  String(describing: response["carId"]!)
         } catch HttpServerConnection.HttpError.connectionException{
             throw CarError.errorAddingCar
         }
@@ -61,7 +60,7 @@ public class Car {
     
     public static func editFavoriteCar(car:Car, withToken token:String) throws {
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "EditCar")
-        let params = "vehiculoId=\(car.type)&vehiculoFavoritoId=\(car.id)&token=\(token)&color=\(car.color)&placas=\(car.plates)&modelo=\(car.model)&marca=\(car.brand)"
+        let params = "vehiculoId=\(car.type!)&vehiculoFavoritoId=\(car.id!)&token=\(token)&color=\(car.color!)&placas=\(car.plates!)&marca=\(car.brand!)"
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
@@ -79,7 +78,7 @@ public class Car {
     
     public static func deleteFavoriteCar(id:String, token:String) throws{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "DeleteCar")
-        let params = "favoriteCarId=\(id)&token=\(token)"
+        let params = "favoriteCarId=" + id + "&token=\(token)"
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             

@@ -32,11 +32,11 @@ public class Service {
     public static let TRADITIONAL = 1
     public static let OUTSIDE = 1
     public static let OUTSIDE_INSIDE = 2
+    
     public static let BIKE = 1
-    public static let SMALL_CAR = 2
-    public static let BIG_CAR = 3
-    public static let SMALL_VAN = 4
-    public static let BIG_VAN = 5
+    public static let CAR = 2
+    public static let SMALL_VAN = 3
+    public static let BIG_VAN = 4
     
     public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withType idServiceType:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "RequestService")

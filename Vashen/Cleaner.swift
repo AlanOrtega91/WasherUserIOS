@@ -33,8 +33,8 @@ public class Cleaner{
             for json:NSDictionary in parameters {
                 let cleaner = Cleaner()
                 cleaner.id = json["idLavador"] as! String
-                cleaner.name = json["Nombre"] as! String
-                cleaner.lastName = json["PrimerApellido"] as! String
+                cleaner.name = json["Nombre"] as? String
+                cleaner.lastName = json["PrimerApellido"] as? String
                 cleaner.latitud = Double(json["Latitud"] as! String)
                 cleaner.longitud = Double(json["Longitud"] as! String)
                 cleaners.append(cleaner)

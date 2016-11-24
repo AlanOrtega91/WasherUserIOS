@@ -296,7 +296,6 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="GL4-SG-fUw"/>
                                 <exclude reference="5fz-Hn-r3P"/>
                                 <exclude reference="9rU-ai-5XO"/>
                                 <exclude reference="F8W-tX-wc1"/>
@@ -308,6 +307,7 @@
                                 <exclude reference="fZb-VC-AyA"/>
                                 <exclude reference="lcE-Cl-ozF"/>
                                 <exclude reference="upA-gt-k8D"/>
+                                <exclude reference="GL4-SG-fUw"/>
                                 <exclude reference="FVE-1B-qiu"/>
                             </mask>
                         </variation>
@@ -317,7 +317,6 @@
                         <outlet property="password" destination="GIO-5h-Hpc" id="qCF-gY-qk4"/>
                         <outlet property="password2" destination="yaP-7h-Sn7" id="usf-Ho-a46"/>
                         <outlet property="phone" destination="kQG-0L-gbQ" id="O4S-0M-IFE"/>
-                        <outlet property="scrollView" destination="9Lp-Sa-HSy" id="lfE-FW-NPe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QfI-Ua-ImQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -452,7 +451,6 @@
                         <outlet property="image" destination="f60-fv-Jco" id="fXC-64-Bdo"/>
                         <outlet property="lastName" destination="KBo-b1-s1b" id="YfN-Nc-PyP"/>
                         <outlet property="name" destination="P9Q-8Q-pTz" id="GoW-Ls-JKf"/>
-                        <outlet property="scrollView" destination="Jyg-SN-siz" id="56E-YJ-OzY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lWY-K5-uLh" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -611,7 +609,6 @@
                         <outlet property="cvv" destination="0M4-hd-8fp" id="yZN-ko-fVY"/>
                         <outlet property="month" destination="SCf-rU-5iP" id="4Nf-p6-i3C"/>
                         <outlet property="picker" destination="ngn-NN-lmq" id="UQ3-za-UvF"/>
-                        <outlet property="scrollView" destination="IK6-OE-qDU" id="yb5-LN-VnJ"/>
                         <outlet property="year" destination="vKm-n7-34S" id="4hl-2g-jNO"/>
                     </connections>
                 </viewController>
