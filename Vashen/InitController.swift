@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseMessaging
 import AVFoundation
 
 class InitController: UIViewController {
@@ -48,10 +46,10 @@ class InitController: UIViewController {
     func tryReadUser() {
         do{
             try ProfileReader.run()
-            
-            if let firebaseToken = FIRInstanceID.instanceID().token() {
-                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
-            }
+            //TODO: imp;ement APNS Token
+//            if let firebaseToken = FIRInstanceID.instanceID().token() {
+//                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
+//            }
             changeView(storyBoardName: "Map", controllerName: "reveal_controller")
         } catch User.UserError.errorSavingFireBaseToken{
             ProfileReader.delete()

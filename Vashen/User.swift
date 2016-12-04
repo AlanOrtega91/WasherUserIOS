@@ -9,25 +9,31 @@
 import Foundation
 import CoreData
 
-public class User {
+@objc(User)
+public class User:NSManagedObject {
     
-    public var name: String!
-    public var lastName: String!
-    public var email: String!
-    public var phone: String!
-    public var id: String!
-    public var token: String!
-    public var encodedImage: String!
-    public var billingName: String!
-    public var rfc: String!
-    public var billingAddress:String!
+    @NSManaged var name: String
+    @NSManaged var lastName: String
+    @NSManaged var email: String
+    @NSManaged var phone: String
+    @NSManaged var id: String
+    @NSManaged var token: String
+    @NSManaged var encodedImage: String
+    @NSManaged var billingName: String
+    @NSManaged var rfc: String
+    @NSManaged var billingAddress:String
     
     public static let HTTP_LOCATION = "User/"
     
+    public static func newUser()->User{
+        return DataBase.newUser()
+    }
+    
     public static func sendNewUser(user: User, withPassword password: String) throws -> User{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewUser")
+        //TODO Send encoded string
         var params = "name=" + user.name + "&lastName=" + user.lastName + "&email=" + user.email + "&password=" + password + "&phone=" + user.phone
-        if user.encodedImage != nil {
+        if user.encodedImage != "" {
             params += "&encoded_string=" + user.encodedImage
         }
         do{
@@ -65,13 +71,9 @@ public class User {
     
     public func sendChangeUserData(token: String) throws{
         let url = HttpServerConnection.buildURL(location: User.HTTP_LOCATION + "ChangeUserData")
-        var params = ""
-        if rfc == nil {
-            params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=&newRFC=&newBillingAddress="
-        } else {
-            params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=" + billingName + "&newRFC=" + rfc + "&newBillingAddress=" + billingAddress
-        }
-        if encodedImage != nil {
+        //TODO: send encoded string
+        var params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=" + billingName + "&newRFC=" + rfc + "&newBillingAddress=" + billingAddress
+        if encodedImage != "" {
             params += "&encoded_string=" + encodedImage
         }
         do{
@@ -110,11 +112,56 @@ public class User {
         return imageData!.base64EncodedString(options: .lineLength64Characters)
     }
     
+    public static func saveEncodedImageToFileAndGetPath(imageString:String) -> String? {
+        let imageName = "profile.png"
+        if let dataImage = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
+            if let image = UIImage(data: dataImage) {
+                let fileName = getDocumentsDirectory().appendingPathComponent(imageName)
+                do {
+                    if let imageToSave = UIImagePNGRepresentation(image) {
+                        try imageToSave.write(to: fileName)
+                        return imageName
+                    }
+                } catch {
+                    return nil
+                }
+            }
+        }
+        return nil
+    }
+    
+    public static func saveImageToFileAndGetPath(image:UIImage) -> String? {
+        let imageName = "profile.png"
+                let fileName = getDocumentsDirectory().appendingPathComponent(imageName)
+                do {
+                    if let imageToSave = UIImagePNGRepresentation(image) {
+                        try imageToSave.write(to: fileName)
+                        return imageName
+                    }
+                } catch {
+                    return nil
+                }
+        return nil
+    }
+    
+    public static func readImageDataFromFile(name:String) -> UIImage? {
+        let fileName = getDocumentsDirectory().appendingPathComponent(name)
+        let image = UIImage(contentsOfFile: fileName.path)
+        return image
+    }
+    
+    public static func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentsDirectory = paths[0]
+        return documentsDirectory
+    }
+    
     public enum UserError: Error{
         case noSessionFound
         case errorSavingFireBaseToken
         case errorWithNewUser
         case errorChangeData
         case errorWithLogOut
+        case errorSavingImage
     }
 }

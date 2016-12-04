@@ -15,8 +15,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     var idClient: String!
     var token: String!
-    var cars: Array<Car> = Array<Car>()
-    var selectedCar: Car!
+    var cars: [Car] = [Car]()
     var isEditingCar = false
     var clickedAlertOK = false
     
@@ -37,7 +36,6 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     func initValues() {
         cars = DataBase.readCars()
-        selectedCar = DataBase.getFavoriteCar()
         token = AppData.readToken()
     }
     
@@ -55,12 +53,8 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
             let cell = self.tableView.dequeueReusableCell(withIdentifier: "carCell") as! CarCell
             cell.plates.text = car.plates
             cell.brand.text = car.brand
-            if selectedCar != nil {
-                if selectedCar.id == car.id {
-                    cell.selectedIndicator.isHidden = false
-                } else {
-                    cell.selectedIndicator.isHidden = true
-                }
+            if car.favorite {
+                cell.selectedIndicator.isHidden = false
             } else {
                 cell.selectedIndicator.isHidden = true
             }
@@ -88,8 +82,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
                 nextViewController.car = cars[indexPath.row]
                 self.navigationController?.pushViewController(nextViewController, animated: true)
             } else {
-                selectedCar = cars[indexPath.row]
-                sendSelectFavCar()
+                sendSelectFavCar(selectedCar: cars[indexPath.row])
             }
         }
     }
@@ -111,13 +104,13 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     func deleteCar(index:Int){
         do{
             let id = cars[index].id
-            try Car.deleteFavoriteCar(id: id!, token: token)
-            cars.remove(at: index)
+            try Car.deleteFavoriteCar(id: id, token: token)
             if cars.count == 1 {
                 try Car.selectFavoriteCar(carId: cars[0].id, withToken: token)
-                cars[0].favorite = 1
+                cars[0].favorite = true
             }
-            DataBase.saveCars(cars: cars)
+            DataBase.deleteCar(car: cars[index])
+            cars.remove(at: index)
             self.tableView.reloadData()
             
         } catch Car.CarError.errorDeletingCar{
@@ -145,7 +138,7 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
             self.present(alert, animated: true, completion: nil)
     }
     
-    func sendSelectFavCar(){
+    func sendSelectFavCar(selectedCar:Car){
         do{
             try Car.selectFavoriteCar(carId: selectedCar.id, withToken: token)
             DataBase.setFavoriteCar(id: selectedCar.id)

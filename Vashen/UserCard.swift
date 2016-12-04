@@ -9,13 +9,20 @@
 import Foundation
 import CoreData
 
-public class UserCard {
+@objc(UserCard)
+public class UserCard:NSManagedObject {
+    
     static var HTTP_LOCATION = "User/Card/"
-    public var expirationYear: String!
-    public var expirationMonth:String!
-    public var cardNumber: String!
-    public var cvv: String!
-    public var token: String!
+    
+    @NSManaged var expirationYear: String
+    @NSManaged var expirationMonth:String
+    @NSManaged var cardNumber: String
+    @NSManaged var cvv: String
+    @NSManaged var token: String
+    
+    public static func newUserCard()->UserCard{
+        return DataBase.newUserCard()
+    }
     
     public static func saveNewCardToken(token:String, withCard cardToken:String)throws {
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "SaveNewCard")

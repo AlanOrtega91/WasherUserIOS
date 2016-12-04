@@ -32,15 +32,11 @@ class EditBillingController: UIViewController, UITextFieldDelegate {
         self.billingAddress.delegate = self
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        if user.billingName != nil {
+        
             billingName.text = user.billingName
-        }
-        if user.rfc != nil {
             rfc.text = user.rfc
-        }
-        if user.billingAddress != nil {
             billingAddress.text = user.billingAddress
-        }
+        
     }
     
     func dismissKeyboard() {
@@ -52,9 +48,9 @@ class EditBillingController: UIViewController, UITextFieldDelegate {
             self.createAlertInfo(message: "Datos incompletos")
             return
         }
-        user.billingAddress = billingAddress.text
-        user.rfc = rfc.text
-        user.billingName = billingName.text
+        user.billingAddress = billingAddress.text!
+        user.rfc = rfc.text!
+        user.billingName = billingName.text!
 
         let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "loading") as! LoadingController

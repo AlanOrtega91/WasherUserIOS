@@ -10,7 +10,7 @@ import UIKit
 
 class EditAccountController: UIViewController, UIImagePickerControllerDelegate,UINavigationControllerDelegate,UITextFieldDelegate {
     
-    var user: User!
+    var user = DataBase.readUser()
 
     @IBOutlet weak var name: UITextField!
     @IBOutlet weak var lastName: UITextField!
@@ -18,11 +18,10 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var userImage: UIImageView!
     
-    var encodedString: String!
+    var imagePath: String!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initValues()
         initView()
         name.delegate = self
         lastName.delegate = self
@@ -36,53 +35,39 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
         view.endEditing(true)
     }
     
-    func initValues(){
-        user = DataBase.readUser()
-    }
-    
     func initView(){
-        readUserImage()
+        setUserImage()
         fillUserTextFields()
         let tapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(CreateAccountPersonalController.openCamera))
         userImage.isUserInteractionEnabled = true
         userImage.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    func readUserImage(){
-        if user.encodedImage != nil {
-            setUserImage()
+    func setUserImage(){
+        if user?.encodedImage != "" {
+            if let image = User.readImageDataFromFile(name: (user?.encodedImage)!) {
+                userImage.image = image
+            }
         }
     }
     
-    func setUserImage(){
-        let imageData = NSData(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
-        userImage.image = UIImage(data: imageData! as Data)
-    }
     
     func fillUserTextFields(){
-        if user.name != nil {
-            name.text = user.name
-        }
-        if user.lastName != nil {
-            lastName.text = user.lastName
-        }
-        if user.email != nil {
-            email.text = user.email
-        }
-        if user.phone != nil {
-            phone.text = user.phone
-        }
+            name.text = user?.name
+            lastName.text = user?.lastName
+            email.text = user?.email
+            phone.text = user?.phone
     }
     @IBAction func sendModifyData(_ sender: AnyObject) {
         if name.text == "" || lastName.text == "" {
             createAlertInfo(message: "Faltan datos")
             return
         }
-        user.name = name.text
-        user.lastName = lastName.text
-        user.email = email.text
-        user.phone = phone.text
-        user.encodedImage = encodedString
+        user?.name = name.text!
+        user?.lastName = lastName.text!
+        user?.email = email.text!
+        user?.phone = phone.text!
+        user?.encodedImage = imagePath
         do{
         try reviewCredentials()
         
@@ -119,10 +104,7 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage imagePicked: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         userImage.image = imagePicked
-        let imageData = UIImageJPEGRepresentation(imagePicked, 0.3)
-        DispatchQueue.global(qos: .background).async {
-            self.encodedString = imageData?.base64EncodedString()
-        }
+        self.imagePath = User.saveImageToFileAndGetPath(image: imagePicked)
         self.dismiss(animated: true, completion: nil);
     }
 

@@ -189,7 +189,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     }
     
     @IBAction func sendEdit(_ sender: AnyObject) {
-        car.plates = plates.text
+        car.plates = plates.text!
         car.color = selectedColor
         car.type = String(selectedType + 1)
         car.brand = selectedBrand

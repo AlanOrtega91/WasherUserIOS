@@ -33,7 +33,7 @@ public class HttpServerConnection
             _ = semaphore.wait(timeout: .distantFuture)
             if data != nil {
                 let stringResponseUTF8 = String(data: data, encoding: .utf8)
-                print(stringResponseUTF8)
+                print(stringResponseUTF8 ?? "")
                 
                 let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
                 return dataString as! Dictionary<String, AnyObject>

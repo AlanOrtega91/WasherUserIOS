@@ -7,26 +7,29 @@
 //
 
 import Foundation
+import CoreData
 
-public class Service {
+@objc(Service)
+public class Service:NSManagedObject {
     
     static var HTTP_LOCATION = "Service/"
-    public var status:String!
-    public var cleanerName:String!
-    public var car:String!
-    public var service:String!
-    public var price:String!
-    public var description:String!
-    public var estimatedTime:String!
-    public var finalTime:Date!
-    public var acceptedTime:Date!
-    public var latitud:Double!
-    public var longitud:Double!
-    public var startedTime:Date!
-    public var cleanerId:String!
-    public var rating:Int!
-    public var encodedCleanerImage:String!
-    public var id:String!
+    
+    @NSManaged var status:String
+    @NSManaged var cleanerName:String
+    @NSManaged var car:String
+    @NSManaged var service:String
+    @NSManaged var price:String
+    @NSManaged var serviceDescription:String
+    @NSManaged var estimatedTime:String
+    @NSManaged var finalTime:Date
+    @NSManaged var acceptedTime:Date
+    @NSManaged var latitud:Double
+    @NSManaged var longitud:Double
+    @NSManaged var startedTime:Date
+    @NSManaged var cleanerId:String
+    @NSManaged var rating:Int16
+    @NSManaged var encodedCleanerImage:String
+    @NSManaged var id:String
     
     public static let ECO = 2
     public static let TRADITIONAL = 1
@@ -37,6 +40,11 @@ public class Service {
     public static let CAR = 2
     public static let SMALL_VAN = 3
     public static let BIG_VAN = 4
+    
+    
+    public static func newService()->Service{
+        return DataBase.newService()
+    }
     
     public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withType idServiceType:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "RequestService")
@@ -53,16 +61,20 @@ public class Service {
                 throw ServiceError.errorRequestingService
             }
             let parameters = response["info"] as! NSDictionary
-            let service = Service()
+            let service = Service.newService()
             service.id = parameters["id"] as! String
             service.car = parameters["coche"] as! String
             service.status = parameters["status"] as! String
             service.service = parameters["servicio"] as! String
             service.price = parameters["precio"] as! String
-            service.description = parameters["descripcion"] as! String
+            service.serviceDescription = parameters["descripcion"] as! String
             service.estimatedTime = parameters["tiempoEstimado"] as! String
-            service.latitud = Double(parameters["latitud"] as! String)
-            service.longitud = Double(parameters["longitud"] as! String)
+            if let latitud = parameters["latitud"] as? Double {
+                service.latitud = latitud
+            }
+            if let longitud = parameters["longitud"] as? Double {
+                service.longitud = longitud
+            }
             service.rating = -1
             return service
         } catch HttpServerConnection.HttpError.connectionException {
@@ -88,7 +100,7 @@ public class Service {
         }
     }
     
-    public static func sendReview(idService:String, rating:Int, withToken token:String) throws {
+    public static func sendReview(idService:String, rating:Int16, withToken token:String) throws {
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "SendReview")
         let params = "serviceId=\(idService)&rating=\(rating)&token=\(token)"
         do{

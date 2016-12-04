@@ -170,8 +170,8 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
     
     
     @IBAction func saveNewCar(_ sender: AnyObject) {
-        let car = Car()
-        car.plates = plates.text
+        let car = Car.newCar()
+        car.plates = plates.text!
         car.color = selectedColor
         car.type = String(selectedType + 1)
         car.brand = selectedBrand

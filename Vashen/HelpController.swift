@@ -10,7 +10,7 @@ import Foundation
 
 class HelpController: UIViewController {
     
-    var services: Array<Service> = Array<Service>()
+    var services: [Service] = []
     var activeService: Service!
     var idClient: String!
     
@@ -54,7 +54,7 @@ class HelpController: UIViewController {
     }
     
     func setMapImage(map:UIImageView, withService service:Service){
-        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud!),\(service.longitud!)&markers=color:red%7Clabel:S%7C\(service.latitud!),\(service.longitud!)&zoom=15&size=1000x400&key="
+        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=1000x400&key="
         let url = URL(string: urlString)! as URL
         do {
             let data = try Data(contentsOf: url)

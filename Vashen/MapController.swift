@@ -44,7 +44,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     var geoLocationQueue = DispatchQueue(label: "com.alan.geoLocation", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     
     var locManager = CLLocationManager()
-    var cleaners: Array<Cleaner> = Array<Cleaner>()
+    var cleaners: [Cleaner] = []
     
     var idClient:String!
     var token:String!
@@ -73,7 +73,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     let centralMarker = CustomCentralMarker()
     let cleanerMarker = CustomCleanerMarker()
-    var markers: Array<CustomCleanerMarker> = Array<CustomCleanerMarker>()
+    var markers: [CustomCleanerMarker] = []
     var cleaner:Cleaner!
     var showCancelAlert:Bool = false
     var userLocation: CLLocation!
@@ -215,7 +215,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     func reloadMap(){
         do{
             if self.activeService != nil {
-                if self.activeService.cleanerId != nil {
+                if self.activeService.cleanerId != "" {
                     self.cleaner = try Cleaner.getCleanerLocation(cleanerId: self.activeService.cleanerId,withToken: self.token)
                 }
             }
@@ -249,7 +249,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func addMarkersAndUpdate(){
-        var aux = Array<CustomCleanerMarker>()
+        var aux: [CustomCleanerMarker] = []
         var i = 0
         while cleaners.count > i {
             if markers.count > i {
@@ -267,7 +267,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func removeMarkersAndUpdate(){
-        var aux = Array<CustomCleanerMarker>()
+        var aux: [CustomCleanerMarker] = []
         var i = 0
         while cleaners.count > i {
             aux.append(markers[i])
@@ -455,9 +455,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         do{
             let favCar = DataBase.getFavoriteCar()!
             let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude),withLongitud: String(requestLocation.coordinate.longitude),withId: service,withType: serviceType,withToken: token,withCar: vehicleType, withFavoriteCar: favCar.id)
-            var services:Array<Service> = DataBase.readServices()!
-            services.append(serviceRequested)
-            DataBase.saveServices(services: services)
             cancelCode = 0;
             activeService = serviceRequested
             DispatchQueue.main.async {
@@ -497,7 +494,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func startActiveServiceCycle(){
-        //TODO: change to Dispatch
         if !running {
             activeServiceCycleThread.async {
                 self.running = true
@@ -533,7 +529,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                 }
             }
             cancelCode = 1
-            //TODO: Check this
             let t = DispatchTime.now() + diffInMillis
             DispatchQueue.main.asyncAfter(deadline: t, execute: {
                 self.cancelButton.isHidden = true
@@ -616,6 +611,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             self.cancelButton.isHidden = false
             if self.activeService != nil{
                 self.centralMarker.coordinate = CLLocationCoordinate2D(latitude: self.activeService.latitud, longitude: self.activeService.longitud)
+                self.mapViewIOS.addAnnotation(self.centralMarker)
             }
             for marker in self.markers {
                 self.mapViewIOS.removeAnnotation(marker)
@@ -646,7 +642,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func modifyClock(){
-        if activeService != nil && activeService.finalTime != nil {
+        if activeService != nil {
             let diff = activeService.finalTime.timeIntervalSinceNow
             let minutes = Int(diff/60)
             var display = ""
@@ -728,12 +724,8 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             do {
                 try Service.cancelService(idService: self.activeService.id,withToken: self.token,withTimeOutCancel: self.cancelCode)
                 if self.activeService != nil {
-                    var services = DataBase.readServices()
-                    if let index = services?.index(where: {$0.id == self.activeService.id}) {
-                        services?.remove(at: index)
-                        DataBase.saveServices(services: services!)
-                        AppData.notifyNewData(newData: true)
-                    }
+                    DataBase.deleteService(service: self.activeService)
+                    AppData.notifyNewData(newData: true)
                 }
                 if self.cancelAlarmClock != nil {
                     self.cancelAlarmClock.cancel()

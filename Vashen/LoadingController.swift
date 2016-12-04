@@ -7,8 +7,6 @@
 //
 
 import Foundation
-import Firebase
-import FirebaseMessaging
 import AVFoundation
 
 public class LoadingController: UIViewController {
@@ -96,9 +94,10 @@ public class LoadingController: UIViewController {
         do {
             try ProfileReader.run(email: email, withPassword:password)
             token = AppData.readToken()
-            if let firebaseToken = FIRInstanceID.instanceID().token() {
-                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
-            }
+            //TODO: Implement APNS Token
+//            if let firebaseToken = FIRInstanceID.instanceID().token() {
+//                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
+//            }
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller")
             DispatchQueue.main.async {
@@ -126,26 +125,50 @@ public class LoadingController: UIViewController {
     
     func tryRegister(){
         do {
-            var user = User()
+            DataBase.deleteAllTables()
+            var user = User.newUser()
             user.name = self.name
             user.lastName = self.lastName
             user.email = self.email
             user.phone = self.phone
-            user.encodedImage = self.encodedImage
+            if let image = self.encodedImage {
+                user.encodedImage = image
+            }
             user = try User.sendNewUser(user: user, withPassword: self.password)
             AppData.saveData(user: user)
-            DataBase.saveUser(user: user)
-            if let fireBaseToken = FIRInstanceID.instanceID().token() {
-                try User.saveFirebaseToken(token: user.token, pushNotificationToken: fireBaseToken)
-            }
+            //TODO: Implement APNS Token
+//            if let fireBaseToken = FIRInstanceID.instanceID().token() {
+//                try User.saveFirebaseToken(token: user.token, pushNotificationToken: fireBaseToken)
+//            }
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "createPayment") as! CreateAccountPaymentController
             DispatchQueue.main.async {
                 self.navigationController?.pushViewController(nextViewController, animated: true)
             }
-        } catch {
+        } catch User.UserError.errorWithNewUser{
+            DataBase.deleteAllTables()
             createAlertInfo(message: "Error al crear usuario")
+            while !clickedAlertOK {
+                
+            }
+            DispatchQueue.main.async {
+                _ = self.navigationController?.popViewController(animated: true)
+            }
+        } catch User.UserError.errorSavingFireBaseToken{
+            DataBase.deleteAllTables()
+            createAlertInfo(message: "Usuario creado. Error en el sistema de notificaciones se presentaran problemas en el servicio")
+            while !clickedAlertOK {
+                
+            }
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "createPayment") as! CreateAccountPaymentController
+            DispatchQueue.main.async {
+                self.navigationController?.pushViewController(nextViewController, animated: true)
+            }
+        } catch {
+            DataBase.deleteAllTables()
+            createAlertInfo(message: "Error desconocido al crear usuario")
             while !clickedAlertOK {
                 
             }
@@ -158,6 +181,11 @@ public class LoadingController: UIViewController {
     func tryNewCard(){
         tokenConekta?.create(success: { (data) -> Void in
             if data?["object"] as! String == "error" {
+                //ERRORES
+                self.createAlertInfo(message: "Usuario creado. Error en el sistema de notificaciones se presentaran problemas en el servicio")
+                while !self.clickedAlertOK {
+                    
+                }
                 let stackSize = self.navigationController?.viewControllers.count
                 let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
                 DispatchQueue.main.async {
@@ -166,6 +194,7 @@ public class LoadingController: UIViewController {
                 return
             }
             do {
+                //BUENO
                 let cardToken = data?["id"] as! String
                 try UserCard.saveNewCardToken(token: self.token, withCard: cardToken)
                 try ProfileReader.run()
@@ -175,6 +204,11 @@ public class LoadingController: UIViewController {
                     _ = self.navigationController?.popToViewController(destinationVC!, animated: true)
                 }
             } catch {
+                //ERRORES
+                self.createAlertInfo(message: "Usuario creado. Error en el sistema de notificaciones se presentaran problemas en el servicio")
+                while !self.clickedAlertOK {
+                    
+                }
                 print("Error reading credit card on create payment")
                 let stackSize = self.navigationController?.viewControllers.count
                 let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
@@ -183,6 +217,11 @@ public class LoadingController: UIViewController {
                 }
             }
             }, andError: { (error) -> Void in
+                //ERRORES
+                self.createAlertInfo(message: "Usuario creado. Error en el sistema de notificaciones se presentaran problemas en el servicio")
+                while !self.clickedAlertOK {
+                    
+                }
                 let stackSize = self.navigationController?.viewControllers.count
                 let destinationVC = self.navigationController?.viewControllers[stackSize! - 2]
                 DispatchQueue.main.async {
@@ -193,14 +232,13 @@ public class LoadingController: UIViewController {
     
     func tryNewCar(){
         do {
-            var cars = DataBase.readCars()
+            //TODO: Eliminar el coche porque no sirvio de nada
             car.id = try Car.addNewFavoriteCar(car: car,withToken: token)
-            if cars.count == 0 {
+            let cars = DataBase.readCars()
+            if cars.count == 1 {
                 try Car.selectFavoriteCar(carId: car.id,withToken: token)
-                car.favorite = 1
+                car.favorite = true
             }
-            cars.append(car)
-            DataBase.saveCars(cars: cars)
             let stackSize = self.navigationController?.viewControllers.count
             let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]
             DispatchQueue.main.async {
@@ -233,7 +271,6 @@ public class LoadingController: UIViewController {
             var cars = DataBase.readCars()
             cars[selectedIndex] = car
             try Car.editFavoriteCar(car: car,withToken: token)
-            DataBase.saveCars(cars: cars)
             
             let stackSize = self.navigationController?.viewControllers.count
             let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]
@@ -242,6 +279,9 @@ public class LoadingController: UIViewController {
             }
         }  catch Car.CarError.noSessionFound{
             createAlertInfo(message: "Error con la sesion")
+            while !clickedAlertOK {
+                
+            }
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
             self.navigationController?.setViewControllers([nextViewController], animated: true)
@@ -258,7 +298,6 @@ public class LoadingController: UIViewController {
     func tryEditAccount(){
         do {
             try user.sendChangeUserData(token: token)
-            DataBase.saveUser(user: user)
             
             let stackSize = self.navigationController?.viewControllers.count
             let destinationVC = self.navigationController?.viewControllers[stackSize! - 3]

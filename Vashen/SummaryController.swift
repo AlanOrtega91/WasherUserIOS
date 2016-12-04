@@ -9,7 +9,7 @@
 import Foundation
 
 class SummaryController: UIViewController {
-
+    
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var cleaner: UIImageView!
@@ -20,32 +20,27 @@ class SummaryController: UIViewController {
     @IBOutlet weak var third: UIButton!
     @IBOutlet weak var fourth: UIButton!
     @IBOutlet weak var fifth: UIButton!
-
-    var rating = 0
-    var token:String!
-    var activeService:Service!
+    
+    var rating:Int16 = 0
+    var token = AppData.readToken()
     
     var clickedAlertOK = false
     
     override func viewDidLoad() {
-        initValues()
         initView()
     }
     
-    func initValues(){
-        token = AppData.readToken()
-        activeService = DataBase.getActiveService()
-    }
-    
     func initView(){
-            let format = DateFormatter()
-            format.dateFormat = "yyy-MM-dd HH:mm:ss"
-            format.locale = Locale(identifier: "us")
-            date.text = format.string(from: activeService.acceptedTime!)
-            price.text = "$\(activeService.price!)"
-            DispatchQueue.global().async {
-                self.setMapImage()
-            }
+        let format = DateFormatter()
+        format.dateFormat = "yyy-MM-dd HH:mm:ss"
+        format.locale = Locale(identifier: "us")
+        if let activeService = DataBase.getActiveService() {
+            date.text = format.string(from: activeService.acceptedTime)
+            price.text = "$\(activeService.price)"
+        }
+        DispatchQueue.global().async {
+            self.setMapImage()
+        }
         DispatchQueue.global().async {
             self.setCleanerImage()
         }
@@ -53,18 +48,22 @@ class SummaryController: UIViewController {
     
     
     func setMapImage(){
-        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(activeService.latitud!),\(activeService.longitud!)&markers=color:red%7Clabel:S%7C\(activeService.latitud!),\(activeService.longitud!)&zoom=14&size=100x100&key="
-        let url = NSURL(string: urlString)
-        if let data = NSData(contentsOf: url! as URL){
+        if let activeService = DataBase.getActiveService() {
+            let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(activeService.latitud),\(activeService.longitud)&markers=color:red%7Clabel:S%7C\(activeService.latitud),\(activeService.longitud)&zoom=14&size=100x100&key="
+            let url = NSURL(string: urlString)
+            if let data = NSData(contentsOf: url! as URL){
                 self.location.image = UIImage(data: data as Data)
+            }
         }
     }
     
     func setCleanerImage(){
-        let urlString = "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId! + "/profile_image.jpg"
-        let url = NSURL(string: urlString)
-        if let data = NSData(contentsOf: url! as URL){
+        if let activeService = DataBase.getActiveService() {
+            let urlString = "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg"
+            let url = NSURL(string: urlString)
+            if let data = NSData(contentsOf: url! as URL){
                 self.cleaner.image = UIImage(data: data as Data)
+            }
         }
     }
     @IBAction func clickSend(_ sender: UIButton) {
@@ -75,11 +74,10 @@ class SummaryController: UIViewController {
     
     func sendReview() {
         do{
-            try Service.sendReview(idService: (activeService?.id)!,rating: rating, withToken: token)
-            let services = DataBase.readServices()
-            let index = services?.index(where: {$0.id == activeService?.id})
-            services![index!].rating = rating
-            DataBase.saveServices(services: services!)
+            if let activeService = DataBase.getActiveService() {
+                try Service.sendReview(idService: activeService.id,rating: rating, withToken: token)
+                activeService.rating = rating
+            }
             DispatchQueue.main.async {
                 _ = self.navigationController?.popViewController(animated: true)
             }

@@ -51,8 +51,8 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
             cardNumber.text = card.cardNumber
             let monthValue = card.expirationMonth
             let yearValue = card.expirationYear
-            month.setTitle(monthValue, for: .normal)
-            year.setTitle(yearValue, for: .normal)
+            month.setTitle(String(monthValue), for: .normal)
+            year.setTitle(String(yearValue), for: .normal)
         }
     }
     
@@ -127,7 +127,7 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         conekta.collectDevice()
 
         let cardConekta = conekta.card()
-        cardConekta?.setNumber(cardNumber.text, name: user.name + " " + user.lastName, cvc: cvv.text, expMonth: month.titleLabel!.text!, expYear: year.titleLabel!.text!)
+        cardConekta?.setNumber(cardNumber.text, name: (user?.name)! + " " + (user?.lastName)!, cvc: cvv.text, expMonth: month.titleLabel!.text!, expYear: year.titleLabel!.text!)
         let tokenConekta = conekta.token()
         
         tokenConekta?.card = cardConekta

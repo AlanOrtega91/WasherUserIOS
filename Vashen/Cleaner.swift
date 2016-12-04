@@ -9,7 +9,9 @@
 import Foundation
 
 public class Cleaner{
+    
     static var HTTP_LOCATION = "Service/"
+    
     public var id:String!
     public var name:String!
     public var lastName:String!
@@ -17,10 +19,10 @@ public class Cleaner{
     public var longitud:Double!
     
     
-    public static func getNearbyCleaners(latitud:Double, longitud:Double, withToken token:String)throws -> Array<Cleaner>{
+    public static func getNearbyCleaners(latitud:Double, longitud:Double, withToken token:String)throws -> [Cleaner]{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "GetNearbyCleaners")
         let params = "latitud=\(latitud)&longitud=\(longitud)&token=\(token)"
-        var cleaners:Array<Cleaner> = Array<Cleaner>()
+        var cleaners = [Cleaner]()
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String == "SESSION ERROR" {
@@ -29,7 +31,7 @@ public class Cleaner{
             if response["Status"] as! String != "OK" {
                 throw CleanerError.errorGettingCleaners
             }
-            let parameters = response["cleaners"] as! Array<NSDictionary>
+            let parameters = response["cleaners"] as! [NSDictionary]
             for json:NSDictionary in parameters {
                 let cleaner = Cleaner()
                 cleaner.id = json["idLavador"] as! String

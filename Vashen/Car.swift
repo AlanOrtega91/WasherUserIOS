@@ -9,16 +9,22 @@
 import Foundation
 import CoreData
 
-public class Car {
+@objc(Car)
+public class Car:NSManagedObject {
     
     private static let HTTP_LOCATION = "User/Car/"
-    public var id:String!
-    public var type:String!
-    public var plates:String!
-    public var color:String!
-    public var favorite:Int = 0
-    public var brand: String!
-    public var multiplier: Double!
+    
+    @NSManaged var id:String
+    @NSManaged var type:String
+    @NSManaged var plates:String
+    @NSManaged var color:String
+    @NSManaged var favorite:Bool
+    @NSManaged var brand: String
+    @NSManaged var multiplier: Double
+    
+    public static func newCar()->Car{
+        return DataBase.newCar()
+    }
     
     
     public static func addNewFavoriteCar(car:Car, withToken token:String) throws -> String{
@@ -58,9 +64,9 @@ public class Car {
         }
     }
     
-    public static func editFavoriteCar(car:Car, withToken token:String) throws {
+    public static func editFavoriteCar(car:Car!, withToken token:String!) throws {
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "EditCar")
-        let params = "vehiculoId=\(car.type!)&vehiculoFavoritoId=\(car.id!)&token=\(token)&color=\(car.color!)&placas=\(car.plates!)&marca=\(car.brand!)"
+        let params = "vehiculoId=\(car.type)&vehiculoFavoritoId=\(car.id)&token=\(token!)&color=\(car.color)&placas=\(car.plates)&marca=\(car.brand)"
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             

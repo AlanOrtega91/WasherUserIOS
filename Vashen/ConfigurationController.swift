@@ -33,29 +33,18 @@ class ConfigurationController: UIViewController {
     }
     
     func readUserImage(){
-        if user.encodedImage != nil {
-            setUserImage()
+        if user.encodedImage != "" {
+            if let image = User.readImageDataFromFile(name: user.encodedImage) {
+                userImage.image = image
+            }
         }
-    }
-    
-    func setUserImage(){
-        let imageData = Data(base64Encoded: user.encodedImage, options: .ignoreUnknownCharacters)
-        userImage.image = UIImage(data: imageData! as Data)
     }
     
     func fillUserTextFields(){
-        if user.name != nil {
             name.text = String(user.name)
-        }
-        if user.lastName != nil {
             lastName.text = String(user.lastName)
-        }
-        if user.email != nil {
             email.text = String(user.email)
-        }
-        if user.phone != nil {
             phone.text = String(user.phone)
-        }
     }
     
     @IBAction func sendLogOut(_ sender: AnyObject) {

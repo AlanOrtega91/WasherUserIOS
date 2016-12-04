@@ -44,10 +44,10 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="historyCell" rowHeight="243" id="b9s-Lv-ynG" customClass="HistoryRowTableViewCell" customModule="Vashen" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="383" height="243"/>
+                                        <rect key="frame" x="0.0" y="28" width="1000" height="243"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b9s-Lv-ynG" id="tvb-Au-PZa">
-                                            <frame key="frameInset" width="383" height="243"/>
+                                            <frame key="frameInset" width="1000" height="243"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_image" translatesAutoresizingMaskIntoConstraints="NO" id="saW-Ym-Ijf">
@@ -64,7 +64,7 @@
                                                     <color key="textColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="historyCell" image="hist_map_def" translatesAutoresizingMaskIntoConstraints="NO" id="1SE-yg-jlC"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" restorationIdentifier="historyCell" translatesAutoresizingMaskIntoConstraints="NO" id="1SE-yg-jlC"/>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TIPO DE SERVICIO, $00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dVR-nz-KX4">
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="dce-g3-fQo"/>
@@ -171,10 +171,10 @@
                                 <color key="sectionIndexTrackingBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationWidth="0.0" reuseIdentifier="carCell" rowHeight="100" id="kUz-Qn-fK8" customClass="CarCell" customModule="Vashen" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="343" height="100"/>
+                                        <rect key="frame" x="0.0" y="28" width="1000" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kUz-Qn-fK8" id="dM3-5J-vmu">
-                                            <frame key="frameInset" width="343" height="100"/>
+                                            <frame key="frameInset" width="1000" height="100"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pIw-xF-f8g">
@@ -241,10 +241,10 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addCell" rowHeight="50" id="wUe-9H-b3Y" customClass="CarCell" customModule="Vashen" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="128" width="343" height="50"/>
+                                        <rect key="frame" x="0.0" y="128" width="1000" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="wUe-9H-b3Y" id="V68-GZ-OD1">
-                                            <frame key="frameInset" width="343" height="50"/>
+                                            <frame key="frameInset" width="1000" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AGREGAR VEHÍCULO" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FbG-XF-OKj">
@@ -1869,7 +1869,6 @@
         <image name="background" width="318" height="567"/>
         <image name="button_image" width="599" height="88"/>
         <image name="default_image" width="475" height="478"/>
-        <image name="hist_map_def" width="229" height="127"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="y89-H8-mxl"/>

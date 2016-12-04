@@ -26,15 +26,9 @@ class BillingController: UIViewController {
     }
     
     func initView() {
-        if user.billingName != nil {
             billingName.text = user.billingName
-        }
-        if user.rfc != nil {
             rfc.text = user.rfc
-        }
-        if user.billingAddress != nil {
             billingAddress.text = user.billingAddress
-        }
     }
 
     @IBAction func clickedCancel(_ sender: AnyObject) {

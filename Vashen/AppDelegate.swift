@@ -8,8 +8,6 @@
 
 import UIKit
 import CoreData
-import Firebase
-import FirebaseMessaging
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,13 +15,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         // Override point for customization after application launch.
-        FIRApp.configure()
-        let notificationType: UIUserNotificationType = [UIUserNotificationType.alert,UIUserNotificationType.badge,UIUserNotificationType.sound]
-        let notificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
-        application.registerUserNotificationSettings(notificationSettings)
+//        FIRApp.configure()
+//        let notificationType: UIUserNotificationType = [UIUserNotificationType.alert,UIUserNotificationType.badge,UIUserNotificationType.sound]
+//        let notificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
+//        application.registerUserNotificationSettings(notificationSettings)
+//        application.registerForRemoteNotifications()
+//        NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotificaiton),
+//                                               name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
+        
+        
+        //TODO APNS
+        let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.badge, UIUserNotificationType.sound]
+        let pushNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: nil)
+        application.registerUserNotificationSettings(pushNotificationSettings)
         application.registerForRemoteNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotificaiton),
-                                               name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
+        
         return true
     }
     
@@ -83,40 +89,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func saveNewServiceState(serviceJson:NSDictionary){
-        var services = DataBase.readServices()
         let id = serviceJson["id"] as! String
-        let i = services?.index(where: {$0.id == id})
-        services![i!].cleanerName = serviceJson["nombreLavador"] as! String
-        services![i!].cleanerId = serviceJson["idLavador"] as! String
-        services![i!].status = serviceJson["status"] as! String
-        let format = DateFormatter()
-        format.dateFormat = "yyy-MM-dd HH:mm:ss"
-        format.locale = Locale(identifier: "us")
-        if let finalTime = serviceJson["horaFinalEstimada"] as? String{
-            services![i!].finalTime = format.date(from: finalTime)
+        if let service = DataBase.readService(id: id) {
+            if let name = serviceJson["nombreLavador"] as? String {
+                service.cleanerName = name
+            }
+            if let cleanerId = serviceJson["idLavador"] as? String {
+                service.cleanerId = cleanerId
+            }
+            if let status = serviceJson["status"] as? String {
+                service.status = status
+            }
+            let format = DateFormatter()
+            format.dateFormat = "yyy-MM-dd HH:mm:ss"
+            format.locale = Locale(identifier: "us")
+            if let finalTime = serviceJson["horaFinalEstimada"] as? String{
+                service.finalTime = format.date(from: finalTime)!
+            }
+            if let startedTime = serviceJson["fechaEmpezado"] as? String {
+                service.startedTime = format.date(from: startedTime)!
+            }
+            if let acceptedTime = serviceJson["fechaAceptado"] as? String{
+                service.acceptedTime = format.date(from: acceptedTime)!
+            }
+            if let rating = serviceJson["Calificacion"] as? Int16{
+                service.rating = rating
+            } else {
+                service.rating = -1
+            }
+            AppData.notifyNewData(newData: true)
         }
-        if let startedTime = serviceJson["fechaEmpezado"] as? String {
-            services![i!].startedTime = format.date(from: startedTime)
-        }
-        if let acceptedTime = serviceJson["fechaAceptado"] as? String{
-            services![i!].acceptedTime = format.date(from: acceptedTime)
-        }
-        if let rating = serviceJson["Calificacion"] as? String{
-            services![i!].rating = Int(rating)!
-        } else {
-            services![i!].rating = -1
-        }
-        DataBase.saveServices(services: services!)
-        AppData.notifyNewData(newData: true)
     }
     
     func deleteService(serviceJson:NSDictionary){
-        var services = DataBase.readServices()
         let id = serviceJson["id"] as! String
-        if let i = services?.index(where: {$0.id == id}) {
-            
-            services?.remove(at: i)
-            DataBase.saveServices(services: services!)
+        if let service = DataBase.readService(id: id) {
+            DataBase.deleteService(service: service)
             AppData.notifyNewData(newData: true)
         }
     }
@@ -126,26 +134,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func tokenRefreshNotificaiton(notification: NSNotification) {
-        if let refreshedToken = FIRInstanceID.instanceID().token() {
-            // Connect to FCM since connection may have failed when attempted before having a token.
-            connectToFcm()
-            if AppData.readToken() != "" {
-                sendTokenToServer(firebaseToken: refreshedToken)
-            }
-        }
+        //TODO: Implement APNS Token
+//        if let refreshedToken = FIRInstanceID.instanceID().token() {
+//            // Connect to FCM since connection may have failed when attempted before having a token.
+//            connectToFcm()
+//            if AppData.readToken() != "" {
+//                sendTokenToServer(firebaseToken: refreshedToken)
+//            }
+//        }
     }
     // [END refresh_token]
-    
-    // [START connect_to_fcm]
-    func connectToFcm() {
-        FIRMessaging.messaging().connect { (error) in
-            if (error != nil) {
-                print("Unable to connect with FCM. \(error)")
-            } else {
-                print("Connected to FCM.")
-            }
-        }
-    }
     
     func sendTokenToServer(firebaseToken:String){
         do {
@@ -156,8 +154,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        FIRInstanceID.instanceID().setAPNSToken(deviceToken as Data, type: FIRInstanceIDAPNSTokenType.unknown)
+        //FIRInstanceID.instanceID().setAPNSToken(deviceToken as Data, type: FIRInstanceIDAPNSTokenType.unknown)
+        let charset = CharacterSet(charactersIn: "<>")
+        let token = (deviceToken.description).trimmingCharacters(in: charset).replacingOccurrences(of: " ", with: "")
+        print(token)
+        print("Token: %@",deviceToken)
+        print(deviceToken.description)
     }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print(error)
+    }
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -180,6 +188,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+        print("Context Saved")
         self.saveContext()
     }
 

@@ -12,7 +12,11 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
     @IBOutlet weak var tableView: UITableView!
     
     var idClient:String!
-    var services: Array<Service> = Array<Service>()
+    var services: [Service] = []
+    var imagesMap:[UIImage] = []
+    var imageMapSet:[Int] = []
+    var imagesCleaner:[UIImage] = []
+    var imageCleanerSet:[Int] = []
     
     override func viewWillAppear(_ animated: Bool) {
         initValues()
@@ -22,6 +26,12 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
     
     func initValues() {
         services = DataBase.getFinishedServices()
+        for _ in services {
+            imagesMap.append(UIImage())
+            imageMapSet.append(0)
+            imagesCleaner.append(UIImage())
+            imageCleanerSet.append(0)
+        }
     }
     
     
@@ -38,25 +48,43 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
         format.locale = Locale(identifier: "us")
         cell.date.text = format.string(from: service.acceptedTime)
         cell.serviceType.text = service.service + " $" + service.price
-        setCleanerImage(image: cell.cleanerImage, withId: service.cleanerId)
-        setMapImage(map: cell.locationImage, withService: service)
+        if imageCleanerSet[indexPath.row] == 0 {
+            cell.cleanerImage.image = nil
+            DispatchQueue.global().async {
+                self.setCleanerImage(image: cell.cleanerImage, withId: service.cleanerId, withPosition: indexPath.row)
+            }
+        } else {
+            cell.cleanerImage.image = imagesCleaner[indexPath.row]
+        }
+        if imageMapSet[indexPath.row] == 0 {
+            cell.locationImage.image = nil
+            DispatchQueue.global().async {
+                self.setMapImage(map: cell.locationImage, withService: service, withPosition: indexPath.row)
+            }
+        } else {
+            cell.locationImage.image = imagesMap[indexPath.row]
+        }
         return cell
     }
     
-    func setMapImage(map: UIImageView, withService service:Service){
-        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud!),\(service.longitud!)&markers=color:red%7Clabel:S%7C\(service.latitud!),\(service.longitud!)&zoom=15&size=1000x400&key="
+    func setMapImage(map: UIImageView, withService service:Service!, withPosition position:Int){
+        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=1000x400&key="
         let url = URL(string: urlString)! as URL
         do {
         let data = try Data(contentsOf: url)
         map.image = UIImage(data: data)
+            imagesMap[position] = map.image!
+            imageMapSet[position] = 1
         } catch {}
     }
     
-    func setCleanerImage(image:UIImageView, withId id: String){
+    func setCleanerImage(image:UIImageView, withId id: String, withPosition position:Int){
         let url = URL(string: "http://imanio.zone/Vashen/images/cleaners/" + id + "/profile_image.jpg")! as URL
         do {
             let data = try Data(contentsOf: url)
             image.image = UIImage(data: data)
+            imagesCleaner[position] = image.image!
+            imageCleanerSet[position] = 1
         } catch {}
 
     }

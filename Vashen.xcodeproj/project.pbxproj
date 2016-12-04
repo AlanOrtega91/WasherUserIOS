@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4A8562C3062DDF89D44B41EB /* libPods-Vashen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC672FC270A5CC431D29C28C /* libPods-Vashen.a */; };
 		E71089011D4FA4FB006DB612 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089001D4FA4FB006DB612 /* AppData.swift */; };
 		E71089031D4FA853006DB612 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089021D4FA853006DB612 /* User.swift */; };
 		E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089041D4FD10B006DB612 /* ProfileReader.swift */; };
@@ -32,7 +31,6 @@
 		E7F528111D99FF6400BA2B16 /* Conekta.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280B1D99FF6400BA2B16 /* Conekta.m */; };
 		E7F528121D99FF6400BA2B16 /* Connection.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280D1D99FF6400BA2B16 /* Connection.m */; };
 		E7F528131D99FF6400BA2B16 /* Token.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280F1D99FF6400BA2B16 /* Token.m */; };
-		E7F951031D66069D00BA9DE2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */; };
 		E7F951051D66650400BA9DE2 /* SummaryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7F951041D66650400BA9DE2 /* SummaryController.swift */; };
 		E7FC6CBB1D647CD800A54B2B /* EditCarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */; };
 		E7FD0EFA1D754786001C2A06 /* InformationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7FD0EF91D754786001C2A06 /* InformationController.swift */; };
@@ -65,8 +63,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7D09D191C058DF34A6817565 /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
-		E68676338E042E8A56CD6DF5 /* Pods-Vashen.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.debug.xcconfig"; sourceTree = "<group>"; };
 		E71089001D4FA4FB006DB612 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		E71089021D4FA853006DB612 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E71089041D4FD10B006DB612 /* ProfileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileReader.swift; sourceTree = "<group>"; };
@@ -96,7 +92,6 @@
 		E7F5280D1D99FF6400BA2B16 /* Connection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Connection.m; sourceTree = "<group>"; };
 		E7F5280E1D99FF6400BA2B16 /* Token.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Token.h; sourceTree = "<group>"; };
 		E7F5280F1D99FF6400BA2B16 /* Token.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Token.m; sourceTree = "<group>"; };
-		E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E7F951041D66650400BA9DE2 /* SummaryController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SummaryController.swift; sourceTree = "<group>"; };
 		E7FC6CBA1D647CD800A54B2B /* EditCarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditCarController.swift; sourceTree = "<group>"; };
 		E7FD0EF91D754786001C2A06 /* InformationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InformationController.swift; sourceTree = "<group>"; };
@@ -130,7 +125,6 @@
 		E7FE8A331D4F230E0071CDFA /* EditBillingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditBillingController.swift; sourceTree = "<group>"; };
 		E7FE8A351D4F248E0071CDFA /* AddCarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddCarController.swift; sourceTree = "<group>"; };
 		E7FE8A371D4F24C70071CDFA /* EditAccountController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditAccountController.swift; sourceTree = "<group>"; };
-		EC672FC270A5CC431D29C28C /* libPods-Vashen.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Vashen.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,27 +133,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				E72C5E711DA45BD60069AE94 /* MapKit.framework in Frameworks */,
-				4A8562C3062DDF89D44B41EB /* libPods-Vashen.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A106E65DBDF51B110D57DBDB /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				E68676338E042E8A56CD6DF5 /* Pods-Vashen.debug.xcconfig */,
-				7D09D191C058DF34A6817565 /* Pods-Vashen.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		C1AE6063369312EA90B452C3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				E72C5E701DA45BD60069AE94 /* MapKit.framework */,
-				EC672FC270A5CC431D29C28C /* libPods-Vashen.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -213,10 +196,8 @@
 			isa = PBXGroup;
 			children = (
 				E7FE89EB1D4E69DC0071CDFA /* Vashen */,
-				E7F951021D66069D00BA9DE2 /* GoogleService-Info.plist */,
 				E7FE89EA1D4E69DC0071CDFA /* Products */,
 				C1AE6063369312EA90B452C3 /* Frameworks */,
-				A106E65DBDF51B110D57DBDB /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -370,7 +351,6 @@
 				E7FE8A1E1D4EC30C0071CDFA /* Menu.storyboard in Resources */,
 				E7FE89F21D4E69DC0071CDFA /* Map.storyboard in Resources */,
 				E7153DF81D92D06000F169B9 /* Assets.xcassets in Resources */,
-				E7F951031D66069D00BA9DE2 /* GoogleService-Info.plist in Resources */,
 				E7D7D4F21DB8593100103925 /* Splash.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,7 +370,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-resources.sh\"\n";
+			shellScript = "";
 			showEnvVarsInLog = 0;
 		};
 		BEA828D87C74933B42025A6B /* [CP] Embed Pods Frameworks */ = {
@@ -405,7 +385,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Vashen/Pods-Vashen-frameworks.sh\"\n";
+			shellScript = "
+";
 			showEnvVarsInLog = 0;
 		};
 		F9444B65D5970DC776C04FB9 /* [CP] Check Pods Manifest.lock */ = {
@@ -420,7 +401,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "
+";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -521,6 +503,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
@@ -542,7 +525,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -569,7 +552,8 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -593,7 +577,6 @@
 		};
 		E7FE89FF1D4E69DC0071CDFA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E68676338E042E8A56CD6DF5 /* Pods-Vashen.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -617,7 +600,6 @@
 		};
 		E7FE8A001D4E69DC0071CDFA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7D09D191C058DF34A6817565 /* Pods-Vashen.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
