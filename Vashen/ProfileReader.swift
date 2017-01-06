@@ -23,9 +23,10 @@ public class ProfileReader {
         do{
             DataBase.deleteAllTables()
             let profile = ProfileReader()
-            let token = AppData.readToken()
-            try profile.initialRead(token: token)
-            AppData.saveData(user: profile.user)
+            if let token = AppData.readToken() {
+                try profile.initialRead(token: token)
+                AppData.saveData(user: profile.user)
+            }
             
         } catch{
             print("Error reading profile")
@@ -35,7 +36,7 @@ public class ProfileReader {
     
     private func initialRead(token:String) throws{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "InitialRead")
-        let params = "token=\(token)"
+        let params = "token=\(token)&device=ios"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             print(response)
@@ -66,7 +67,7 @@ public class ProfileReader {
     
     private func login(email: String, withPassword password: String) throws{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "LogIn")
-        let params = "email=\(email)&password=\(password)"
+        let params = "email=\(email)&password=\(password)&device=ios"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String != "OK" {
@@ -100,7 +101,9 @@ public class ProfileReader {
             user.billingAddress = billingAddress
         }
         if (parameters["FotoURL"] as? String) != nil{
-            user.encodedImage = User.saveEncodedImageToFileAndGetPath(imageString: User.getEncodedImageForUser(id: user.id))!
+            if let image = User.getEncodedImageForUser(id: user.id) {
+                user.encodedImage = User.saveEncodedImageToFileAndGetPath(imageString: image)!
+            }
         }
     }
     

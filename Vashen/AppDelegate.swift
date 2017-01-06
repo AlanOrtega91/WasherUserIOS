@@ -8,84 +8,131 @@
 
 import UIKit
 import CoreData
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var stateReceived = 0
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         // Override point for customization after application launch.
-//        FIRApp.configure()
-//        let notificationType: UIUserNotificationType = [UIUserNotificationType.alert,UIUserNotificationType.badge,UIUserNotificationType.sound]
-//        let notificationSettings = UIUserNotificationSettings(types: notificationType, categories: nil)
-//        application.registerUserNotificationSettings(notificationSettings)
-//        application.registerForRemoteNotifications()
-//        NotificationCenter.default.addObserver(self, selector: #selector(self.tokenRefreshNotificaiton),
-//                                               name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
+        FIRApp.configure()
+        self.registrerForRemoteNotifications(application: application)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(AppDelegate.tokenRefreshNotificaiton),
+                         name: NSNotification.Name.firInstanceIDTokenRefresh, object: nil)
         
-        //TODO APNS
+        return true
+    }
+    
+    func registrerForRemoteNotifications(application: UIApplication){
         let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.badge, UIUserNotificationType.sound]
         let pushNotificationSettings = UIUserNotificationSettings(types: notificationTypes, categories: nil)
         application.registerUserNotificationSettings(pushNotificationSettings)
         application.registerForRemoteNotifications()
-        
-        return true
+    }
+    
+    func tokenRefreshNotificaiton(notification: NSNotification) {
+        if let refreshedToken = FIRInstanceID.instanceID().token() {
+        print("FCM InstanceID token: \(refreshedToken)")
+        AppData.saveNotificationToken(notificationToken: refreshedToken)
+        // Connect to FCM since connection may have failed when attempted before having a token.
+        connectToFcm()
+        } else {
+            print("FCM error reading token")
+        }
+    }
+    
+    func connectToFcm() {
+        FIRMessaging.messaging().connect { (error) in
+            if (error != nil) {
+                print("Unable to connect with FCM in app delegate. \(error)")
+            } else {
+                print("Connected to FCM in app delegate.")
+                self.sendNotificationToken()
+            }
+        }
+    }
+    
+    func sendNotificationToken() {
+        do {
+            if let token = AppData.readToken() {
+                if let fbToken = AppData.readNotificationToken() {
+                    try User.saveFirebaseToken(token: token, pushNotificationToken: fbToken)
+                }
+            }
+        } catch {
+            
+        }
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         var message:String!
         if let state = userInfo["state"] as? String{
+            print("Firebase Message\(state)")
             switch state {
             case "2":
-                message = "Tu servicio fue aceptado"
-                sendPopUp(message: message)
-                if let serviceJson = userInfo["serviceInfo"] as? String{
-                    let data = serviceJson.data(using: String.Encoding.utf8)
-                    do {
-                        let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        saveNewServiceState(serviceJson: service)
-                    } catch {}
+                if stateReceived != 2 {
+                    stateReceived = 2
+                    message = "Tu servicio fue aceptado"
+                    AppData.deleteMessage()
+                    sendPopUp(message: message)
+                    if let serviceJson = userInfo["serviceInfo"] as? String{
+                        let data = serviceJson.data(using: String.Encoding.utf8)
+                        do {
+                            let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                            saveNewServiceState(serviceJson: service)
+                        } catch {}
+                    }
                 }
                 break
             case "4":
-                message = "Tu servicio comenzo"
-                sendPopUp(message: message)
-                if let serviceJson = userInfo["serviceInfo"] as? String{
-                    let data = serviceJson.data(using: String.Encoding.utf8)
-                    do {
-                        let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        saveNewServiceState(serviceJson: service)
-                    } catch {}
+                if stateReceived != 4 {
+                    stateReceived = 4
+                    message = "Tu servicio comenzo"
+                    AppData.deleteMessage()
+                    sendPopUp(message: message)
+                    if let serviceJson = userInfo["serviceInfo"] as? String{
+                        let data = serviceJson.data(using: String.Encoding.utf8)
+                        do {
+                            let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                            saveNewServiceState(serviceJson: service)
+                        } catch {}
+                    }
                 }
                 break
             case "5":
-                message = "Terminado"
-                if let serviceJson = userInfo["serviceInfo"] as? String{
-                    let data = serviceJson.data(using: String.Encoding.utf8)
-                    do {
-                    let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        saveNewServiceState(serviceJson: service)
-                    } catch {}
+                if stateReceived != 5 {
+                    stateReceived = 5
+                    AppData.deleteMessage()
+                    if let serviceJson = userInfo["serviceInfo"] as? String{
+                        let data = serviceJson.data(using: String.Encoding.utf8)
+                        do {
+                            let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                            saveNewServiceState(serviceJson: service)
+                        } catch {}
+                    }
                 }
                 break
             case "6":
-                if userInfo["message"] as? String == "5" {
-                    sendPopUp(message: "Canceled")
-                }
-                if let serviceJson = userInfo["serviceInfo"] as? String{
-                    let data = serviceJson.data(using: String.Encoding.utf8)
-                    do {
-                        let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
-                        deleteService(serviceJson: service)
-                    } catch {}
+                if stateReceived != 6 {
+                    stateReceived = 6
+                    AppData.deleteMessage()
+                    sendPopUp(message: "Cancelado")
+                    if let serviceJson = userInfo["serviceInfo"] as? String{
+                        let data = serviceJson.data(using: String.Encoding.utf8)
+                        do {
+                            let service = try JSONSerialization.jsonObject(with: data!, options: []) as! NSDictionary
+                            deleteService(serviceJson: service)
+                        } catch {}
+                    }
                 }
                 break
             default:
                 break
             }
         }
-        
     }
     
     func saveNewServiceState(serviceJson:NSDictionary){
@@ -133,37 +180,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppData.saveMessage(message: message)
     }
     
-    func tokenRefreshNotificaiton(notification: NSNotification) {
-        //TODO: Implement APNS Token
-//        if let refreshedToken = FIRInstanceID.instanceID().token() {
-//            // Connect to FCM since connection may have failed when attempted before having a token.
-//            connectToFcm()
-//            if AppData.readToken() != "" {
-//                sendTokenToServer(firebaseToken: refreshedToken)
-//            }
-//        }
-    }
-    // [END refresh_token]
-    
-    func sendTokenToServer(firebaseToken:String){
-        do {
-            try User.saveFirebaseToken(token: AppData.readToken(),pushNotificationToken: firebaseToken)
-        } catch {
-            print("Error saving firebase Token")
-        }
-    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        //FIRInstanceID.instanceID().setAPNSToken(deviceToken as Data, type: FIRInstanceIDAPNSTokenType.unknown)
-        let charset = CharacterSet(charactersIn: "<>")
-        let token = (deviceToken.description).trimmingCharacters(in: charset).replacingOccurrences(of: " ", with: "")
-        print(token)
-        print("Token: %@",deviceToken)
-        print(deviceToken.description)
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: .prod)
+        if let tokenF = FIRInstanceID.instanceID().token() {
+            AppData.saveNotificationToken(notificationToken: tokenF)
+            connectToFcm()
+            print("FCM Token:\(tokenF)")
+        } else {
+            print("FCM Couldnt save token")
+        }
     }
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print(error)
+        AppData.saveNotificationToken(notificationToken: "")
     }
     
 

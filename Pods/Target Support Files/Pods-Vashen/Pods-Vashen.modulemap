@@ -1,0 +1,6 @@
+framework module Pods_Vashen {
+  umbrella header "Pods-Vashen-umbrella.h"
+
+  export *
+  module * { export * }
+}

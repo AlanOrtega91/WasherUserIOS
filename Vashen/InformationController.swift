@@ -14,12 +14,8 @@ class InformationController: UIViewController {
     @IBOutlet weak var cleanerName: UILabel!
     @IBOutlet weak var cleanerImage: UIImageView!
     
-    
-    
     var service:Service!
     var token:String!
-    
-    
     
     override func viewDidLoad() {
         service = DataBase.getActiveService()
@@ -68,8 +64,8 @@ class InformationController: UIViewController {
     func setImageDrawableForActiveService(){
         let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/" + service.cleanerId + "/profile_image.jpg")
         do {
-        let data:Data = try Data(contentsOf: url! as URL)
-        self.cleanerImage.image = UIImage(data: data)
+            let data:Data = try Data(contentsOf: url! as URL)
+            self.cleanerImage.image = UIImage(data: data)
         } catch {}
     }
 }

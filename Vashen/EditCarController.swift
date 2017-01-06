@@ -15,6 +15,9 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
     @IBOutlet weak var type: UIButton!
     @IBOutlet weak var color: UIButton!
     @IBOutlet weak var picker: UIPickerView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     var selected:Int = 0
     var selectedColor:String = ""
     var selectedBrand:String = ""
@@ -70,7 +73,7 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
         "Volvo"]
     var types: [String] = [
         "Moto",
-        "Coche",
+        "Auto",
         "Camioneta Chica",
         "Camioneta Grande"]
     var colors: [String] = [
@@ -110,6 +113,13 @@ class EditCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDel
 
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
 
     func dismissKeyboard() {

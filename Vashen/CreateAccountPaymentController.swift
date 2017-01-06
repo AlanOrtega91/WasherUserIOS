@@ -19,6 +19,9 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     @IBOutlet weak var month: UIButton!
     @IBOutlet weak var year: UIButton!
     @IBOutlet weak var picker: UIPickerView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     var selected:Int = 0
     var months: [String] = ["01","02","03","04","05","06","07","08","09","10","11","12"]
@@ -45,6 +48,13 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
         picker.isHidden = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func dismissKeyboard() {

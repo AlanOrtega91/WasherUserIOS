@@ -15,6 +15,9 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
     @IBOutlet weak var type: UIButton!
     @IBOutlet weak var color: UIButton!
     @IBOutlet weak var picker: UIPickerView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     var token:String!
     var selected:Int = 0
     var selectedColor:String = ""
@@ -68,7 +71,7 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
         "Volvo"]
     var types: [String] = [
         "Moto",
-        "Coche",
+        "Auto",
         "Camioneta Chica",
         "Camioneta Grande"]
     var colors: [String] = [
@@ -95,6 +98,13 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
         picker.isHidden = true
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
 
     func dismissKeyboard() {

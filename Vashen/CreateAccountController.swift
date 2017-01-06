@@ -14,6 +14,9 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var password2: UITextField!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +26,13 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         password2.delegate = self
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func dismissKeyboard() {
@@ -45,9 +54,9 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         } catch CreateAccountError.invalidCredentialsEmail{
             createAlertInfo(message: "Error con el Email")
         } catch CreateAccountError.invalidCredentialsPassword {
-            createAlertInfo(message: "Error con la contrasena")
+            createAlertInfo(message: "Error con la contraseña: Debe contener al menos 6 caracteres")
         } catch CreateAccountError.passwordDontMatch{
-            createAlertInfo(message: "Contrasenas diferentes")
+            createAlertInfo(message: "Contraseñas diferentes")
         } catch {
             createAlertInfo(message: "Error desconocido")
         }
@@ -57,7 +66,7 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         if email.text! == "" || !(email.text?.contains("@"))! || !(email.text?.components(separatedBy: "@")[1].contains("."))!{
             throw CreateAccountError.invalidCredentialsEmail
         }
-        if password.text == "" || NSString(string: password.text!).length < 6 {
+        if password.text == "" || (password.text?.characters.count)! < 6 {
             throw CreateAccountError.invalidCredentialsPassword
         }
     }
@@ -97,7 +106,8 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
             self.phone.deleteBackward()
         }
     }
-    func createAlertInfo(message:String){            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
+    func createAlertInfo(message:String){
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
     }

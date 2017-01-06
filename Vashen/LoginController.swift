@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 public class LoginController: UIViewController {
 
@@ -14,9 +15,20 @@ public class LoginController: UIViewController {
     public var emailSet:String = ""
     @IBOutlet weak var password: UITextField!
     public var passwordSet:String = ""
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
+        connectToFcm()
         if emailSet != "" {
             email.text = emailSet
         }
@@ -65,6 +77,16 @@ public class LoginController: UIViewController {
             let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
+    }
+    
+    func connectToFcm() {
+        FIRMessaging.messaging().connect { (error) in
+            if (error != nil) {
+                print("Unable to connect with FCM. \(error)")
+            } else {
+                print("Connected to FCM.")
+            }
+        }
     }
     
     enum LoginError: Error{

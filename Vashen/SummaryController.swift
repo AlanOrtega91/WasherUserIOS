@@ -20,9 +20,10 @@ class SummaryController: UIViewController {
     @IBOutlet weak var third: UIButton!
     @IBOutlet weak var fourth: UIButton!
     @IBOutlet weak var fifth: UIButton!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+
     
     var rating:Int16 = 0
-    var token = AppData.readToken()
     
     var clickedAlertOK = false
     
@@ -49,10 +50,14 @@ class SummaryController: UIViewController {
     
     func setMapImage(){
         if let activeService = DataBase.getActiveService() {
-            let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(activeService.latitud),\(activeService.longitud)&markers=color:red%7Clabel:S%7C\(activeService.latitud),\(activeService.longitud)&zoom=14&size=100x100&key="
-            let url = NSURL(string: urlString)
-            if let data = NSData(contentsOf: url! as URL){
-                self.location.image = UIImage(data: data as Data)
+            let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(activeService.latitud),\(activeService.longitud)&markers=color:red%7Clabel:S%7C\(activeService.latitud),\(activeService.longitud)&zoom=14&size=200x100&key=AIzaSyCqA_ATaV7UWg-fiMStmBUStYr1FSgELmM"
+            if let url = URL(string: urlString) {
+                do {
+                    let data = try Data(contentsOf: url)
+                    DispatchQueue.main.async {
+                        self.location.image = UIImage(data: data)
+                    }
+                } catch {}
             }
         }
     }
@@ -60,12 +65,18 @@ class SummaryController: UIViewController {
     func setCleanerImage(){
         if let activeService = DataBase.getActiveService() {
             let urlString = "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg"
-            let url = NSURL(string: urlString)
-            if let data = NSData(contentsOf: url! as URL){
-                self.cleaner.image = UIImage(data: data as Data)
+            if let url = URL(string: urlString) {
+                do {
+                    let data = try Data(contentsOf: url)
+                    DispatchQueue.main.async {
+                        self.cleaner.image = UIImage(data: data)
+                    }
+                } catch {}
             }
         }
     }
+    
+    
     @IBAction func clickSend(_ sender: UIButton) {
         DispatchQueue.global(qos: .background).async {
             self.sendReview()
@@ -75,12 +86,15 @@ class SummaryController: UIViewController {
     func sendReview() {
         do{
             if let activeService = DataBase.getActiveService() {
-                try Service.sendReview(idService: activeService.id,rating: rating, withToken: token)
-                activeService.rating = rating
+                if let token = AppData.readToken() {
+                    try Service.sendReview(idService: activeService.id,rating: rating, withToken: token)
+                    activeService.rating = rating
+                }
             }
             DispatchQueue.main.async {
                 _ = self.navigationController?.popViewController(animated: true)
             }
+            AppData.deleteMessage()
         } catch Service.ServiceError.noSessionFound{
             createAlertInfo(message: "Error con sesion")
             while !clickedAlertOK {

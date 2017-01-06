@@ -12,6 +12,9 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var rightBarButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     var idClient: String!
     var token: String!
@@ -32,6 +35,13 @@ class CarsController: UIViewController,UITableViewDataSource,UITableViewDelegate
         rightBarButton.title = "Editar"
         initValues()
         self.tableView.reloadData()
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func initValues() {

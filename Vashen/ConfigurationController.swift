@@ -17,6 +17,8 @@ class ConfigurationController: UIViewController {
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var phone: UILabel!
     @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
     
     override func viewWillAppear(_ animated: Bool) {
         initValues()
@@ -30,6 +32,12 @@ class ConfigurationController: UIViewController {
     func initView(){
         readUserImage()
         fillUserTextFields()
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func readUserImage(){

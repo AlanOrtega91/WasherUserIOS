@@ -11,7 +11,7 @@ import Foundation
 class MenuVC: UITableViewController {
     
     var TableArray = ["PAGO","FACTURACION","HISTORIAL","VEHICULOS","AYUDA","SE PARTE DEL EQUIPO","CONFIGURACION","Acerca de"]
-    var ImageMenuArray = [UIImage(named: "pay_icon")!,UIImage(named: "bill_icon")!,UIImage(named: "hist_icon")!,UIImage(named: "car_icon")!,UIImage(named: "help_icon")!,UIImage(named: "work_icon")!,UIImage(named: "config_icon")!]
+    var ImageMenuArray = [UIImage(named: "pay_icon")!,UIImage(named: "billing_icon")!,UIImage(named: "history_icon")!,UIImage(named: "vehicle_icon")!,UIImage(named: "help_icon")!,UIImage(named: "work_icon")!,UIImage(named: "config_icon")!]
     
     override func viewDidLoad() {
         let imageView = UIImageView(frame: self.tableView.frame)
@@ -42,7 +42,7 @@ class MenuVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyBoard: UIStoryboard = UIStoryboard(name: "Menu", bundle:nil)
-        var nextViewController = storyBoard.instantiateViewController(withIdentifier: "payment")
+        var nextViewController:UIViewController? = nil
         switch TableArray[indexPath.row] {
         case TableArray[0]:
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "payment") as! PaymentController
@@ -60,8 +60,9 @@ class MenuVC: UITableViewController {
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "help") as! HelpController
             break
         case TableArray[5]:
-            let url = NSURL(string: "https://google.com")!
-            UIApplication.shared.openURL(url as URL)
+            if let url = URL(string: "http://www.washer.mx") {
+                UIApplication.shared.openURL(url)
+            }
             break
         case TableArray[6]:
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "configuration") as! ConfigurationController
@@ -72,7 +73,9 @@ class MenuVC: UITableViewController {
         default:
             return
         }
-        self.navigationController?.pushViewController(nextViewController, animated: true)
+        if (nextViewController != nil) {
+            self.navigationController?.pushViewController(nextViewController!, animated: true)
+        }
     }
 
     

@@ -48,7 +48,7 @@ public class Service:NSManagedObject {
     
     public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withType idServiceType:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "RequestService")
-        let params = "direccion=\(direccion)&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&idTipoServicio=\(idServiceType)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)"
+        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&idTipoServicio=\(idServiceType)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String == "SESSION ERROR" {
@@ -69,11 +69,11 @@ public class Service:NSManagedObject {
             service.price = parameters["precio"] as! String
             service.serviceDescription = parameters["descripcion"] as! String
             service.estimatedTime = parameters["tiempoEstimado"] as! String
-            if let latitud = parameters["latitud"] as? Double {
-                service.latitud = latitud
+            if let latitud = parameters["latitud"] as? String {
+                service.latitud = Double(latitud)!
             }
-            if let longitud = parameters["longitud"] as? Double {
-                service.longitud = longitud
+            if let longitud = parameters["longitud"] as? String {
+                service.longitud = Double(longitud)!
             }
             service.rating = -1
             return service

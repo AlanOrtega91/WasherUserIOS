@@ -10,12 +10,11 @@ import Foundation
 
 public class AppData {
     
-    
         static var TOKEN  = "token"
         static var IDCLIENT  = "idClient"
         static var SENT_ALERT  = "alert"
         static var IN_BACKGROUND  = "inBackground"
-        static var FB_TOKEN  = "fireBase"
+        static var NOTIFICATION_TOKEN  = "notificationToken"
         static var MESSAGE  = "notificationMessage"
         static var SERVICE_CHANGED  = "serviceChanged"
     
@@ -25,30 +24,35 @@ public class AppData {
         settings.set(user.id, forKey: IDCLIENT)
     }
     
-    public static func readToken() -> String{
+    public static func readToken() -> String? {
         let settings : UserDefaults = UserDefaults.standard
         if let token = settings.string(forKey: TOKEN) {
             return token
         } else {
-            return ""
+            return nil
         }
     }
     
-    public static func readUserId() -> String{
+    public static func readUserId() -> String? {
         let settings : UserDefaults = UserDefaults.standard
         if let idClient = settings.string(forKey: IDCLIENT) {
             return idClient
         } else {
-            return ""
+            return nil
         }
     }
     
-    public static func readFirebaseToken() -> String{
+    public static func saveNotificationToken(notificationToken:String){
         let settings : UserDefaults = UserDefaults.standard
-        if let firebaseToken = settings.string(forKey: FB_TOKEN) {
-            return firebaseToken
+        settings.set(notificationToken, forKey: NOTIFICATION_TOKEN)
+    }
+    
+    public static func readNotificationToken() -> String? {
+        let settings : UserDefaults = UserDefaults.standard
+        if let notificationToken = settings.string(forKey: NOTIFICATION_TOKEN) {
+            return notificationToken
         } else {
-            return ""
+            return nil
         }
     }
     
@@ -72,12 +76,12 @@ public class AppData {
         settings.removeObject(forKey: MESSAGE)
     }
     
-    public static func getMessage() -> String {
+    public static func getMessage() -> String? {
         let settings : UserDefaults = UserDefaults.standard
         if let message = settings.string(forKey: MESSAGE) {
             return message
         } else {
-            return ""
+            return nil
         }
     }
     

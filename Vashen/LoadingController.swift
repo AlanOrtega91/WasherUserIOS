@@ -93,11 +93,11 @@ public class LoadingController: UIViewController {
     func tryLogin(){
         do {
             try ProfileReader.run(email: email, withPassword:password)
-            token = AppData.readToken()
-            //TODO: Implement APNS Token
-//            if let firebaseToken = FIRInstanceID.instanceID().token() {
-//                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
-//            }
+            if let notificationToken = AppData.readNotificationToken() {
+                if let newToken = AppData.readToken() {
+                    try User.saveFirebaseToken(token: newToken,pushNotificationToken: notificationToken)
+                }
+            }
             let storyBoard = UIStoryboard(name: "Map", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "reveal_controller")
             DispatchQueue.main.async {
@@ -136,10 +136,10 @@ public class LoadingController: UIViewController {
             }
             user = try User.sendNewUser(user: user, withPassword: self.password)
             AppData.saveData(user: user)
-            //TODO: Implement APNS Token
-//            if let fireBaseToken = FIRInstanceID.instanceID().token() {
-//                try User.saveFirebaseToken(token: user.token, pushNotificationToken: fireBaseToken)
-//            }
+            token = AppData.readToken()
+            if let notificationToken = AppData.readNotificationToken() {
+                try User.saveFirebaseToken(token: token,pushNotificationToken: notificationToken)
+            }
             
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "createPayment") as! CreateAccountPaymentController

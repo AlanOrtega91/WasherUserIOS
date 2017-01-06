@@ -10,6 +10,8 @@ import Foundation
 
 class HistoryController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
     
     var idClient:String!
     var services: [Service] = []
@@ -22,6 +24,12 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
         initValues()
         self.tableView.delegate = self
         self.tableView.dataSource = self
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func initValues() {
@@ -68,7 +76,7 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
     }
     
     func setMapImage(map: UIImageView, withService service:Service!, withPosition position:Int){
-        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=1000x400&key="
+        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=1000x400&key=AIzaSyCqA_ATaV7UWg-fiMStmBUStYr1FSgELmM"
         let url = URL(string: urlString)! as URL
         do {
         let data = try Data(contentsOf: url)

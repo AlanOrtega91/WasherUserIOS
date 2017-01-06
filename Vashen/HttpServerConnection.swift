@@ -10,7 +10,7 @@ import Foundation
 
 public class HttpServerConnection
 {
-    private static var prod = "imanio.zone"
+    private static var prod = "washer.mx"
     
     public static func buildURL(location: String) -> String {
         return ("http://" + prod + "/Vashen/API/" + location + "/")
@@ -20,7 +20,7 @@ public class HttpServerConnection
         do {
             let request = NSMutableURLRequest.init(url: NSURL.init(string: urlPath)! as URL)
             request.httpMethod = "POST"
-            request.timeoutInterval = 5
+            request.timeoutInterval = 30
             request.httpBody = params.data(using: String.Encoding.utf8, allowLossyConversion: true)
             
             let semaphore = DispatchSemaphore(value: 0)
@@ -32,9 +32,6 @@ public class HttpServerConnection
             
             _ = semaphore.wait(timeout: .distantFuture)
             if data != nil {
-                let stringResponseUTF8 = String(data: data, encoding: .utf8)
-                print(stringResponseUTF8 ?? "")
-                
                 let dataString = try JSONSerialization.jsonObject(with: data, options: [.allowFragments])
                 return dataString as! Dictionary<String, AnyObject>
             } else {

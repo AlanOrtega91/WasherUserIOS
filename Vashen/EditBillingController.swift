@@ -15,6 +15,9 @@ class EditBillingController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var billingName: UITextField!
     @IBOutlet weak var rfc: UITextField!
     @IBOutlet weak var billingAddress: UITextField!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,11 +35,19 @@ class EditBillingController: UIViewController, UITextFieldDelegate {
         self.billingAddress.delegate = self
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
-        
+        if user.billingName != "" {
             billingName.text = user.billingName
+        }
+        if user.rfc != "" {
             rfc.text = user.rfc
+        }
+        if user.billingAddress != "" {
             billingAddress.text = user.billingAddress
-        
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 10) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func dismissKeyboard() {

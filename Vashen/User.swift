@@ -32,9 +32,12 @@ public class User:NSManagedObject {
     public static func sendNewUser(user: User, withPassword password: String) throws -> User{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewUser")
         //TODO Send encoded string
-        var params = "name=" + user.name + "&lastName=" + user.lastName + "&email=" + user.email + "&password=" + password + "&phone=" + user.phone
+        var params = "name=" + user.name + "&lastName=" + user.lastName + "&email=" + user.email + "&password=" + password + "&phone=" + user.phone + "&device=ios"
         if user.encodedImage != "" {
-            params += "&encoded_string=" + user.encodedImage
+            let image = User.readImageDataFromFile(name: user.encodedImage)
+            let imageData = UIImageJPEGRepresentation(image!, 0.5)
+            let encodedB64 = (imageData?.base64EncodedString())!
+            params += "&encoded_string=" + encodedB64
         }
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params) as NSDictionary
@@ -71,10 +74,13 @@ public class User:NSManagedObject {
     
     public func sendChangeUserData(token: String) throws{
         let url = HttpServerConnection.buildURL(location: User.HTTP_LOCATION + "ChangeUserData")
-        //TODO: send encoded string
         var params = "newName=" + name + "&newLastName=" + lastName + "&newEmail=" + email + "&token=" + token + "&newPhone=" + phone + "&newBillingName=" + billingName + "&newRFC=" + rfc + "&newBillingAddress=" + billingAddress
         if encodedImage != "" {
-            params += "&encoded_string=" + encodedImage
+            let image = User.readImageDataFromFile(name: encodedImage)
+            let imageData = UIImageJPEGRepresentation(image!, 0.5)
+            let encodedB64 = (imageData?.base64EncodedString())!
+            //TODO: Fails to send encoded string
+            params += "&encoded_string=" + encodedB64
         }
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
@@ -106,19 +112,22 @@ public class User:NSManagedObject {
         }
     }
     
-    public static func getEncodedImageForUser(id:String) -> String {
-        let url = NSURL(string: "http://imanio.zone/Vashen/images/users/\(id)/profile_image.jpg")!
-        let imageData = NSData.init(contentsOf: url as URL)
-        return imageData!.base64EncodedString(options: .lineLength64Characters)
+    public static func getEncodedImageForUser(id:String) -> String? {
+        let url = NSURL(string: "http://washer.mx/Vashen/images/users/\(id)/profile_image.jpg")!
+        if let imageData = NSData.init(contentsOf: url as URL) {
+            return imageData.base64EncodedString(options: .lineLength64Characters)
+        } else {
+            return nil
+        }
     }
     
     public static func saveEncodedImageToFileAndGetPath(imageString:String) -> String? {
-        let imageName = "profile.png"
+        let imageName = "profile.jpg"
         if let dataImage = Data(base64Encoded: imageString, options: .ignoreUnknownCharacters) {
             if let image = UIImage(data: dataImage) {
                 let fileName = getDocumentsDirectory().appendingPathComponent(imageName)
                 do {
-                    if let imageToSave = UIImagePNGRepresentation(image) {
+                    if let imageToSave = UIImageJPEGRepresentation(image, 0.5) {
                         try imageToSave.write(to: fileName)
                         return imageName
                     }
@@ -131,10 +140,10 @@ public class User:NSManagedObject {
     }
     
     public static func saveImageToFileAndGetPath(image:UIImage) -> String? {
-        let imageName = "profile.png"
+        let imageName = "profile.jpg"
                 let fileName = getDocumentsDirectory().appendingPathComponent(imageName)
                 do {
-                    if let imageToSave = UIImagePNGRepresentation(image) {
+                    if let imageToSave = UIImageJPEGRepresentation(image, 0.5) {
                         try imageToSave.write(to: fileName)
                         return imageName
                     }

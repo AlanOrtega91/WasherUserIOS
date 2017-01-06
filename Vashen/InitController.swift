@@ -8,11 +8,11 @@
 
 import UIKit
 import AVFoundation
+import Firebase
 
 class InitController: UIViewController {
     
     var settings : UserDefaults = UserDefaults.standard
-    var token : String = AppData.readToken()
     var clickedAlertOK = false
     
     @IBOutlet var videoView: UIView!
@@ -20,6 +20,7 @@ class InitController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.animateView()
+        connectToFcm()
         DispatchQueue.global().async {
             self.decideNextView()
         }
@@ -36,20 +37,19 @@ class InitController: UIViewController {
     }
     
     func decideNextView(){
-        if token == "" {
-            changeView(storyBoardName: "Main", controllerName: "main")
+        if let token = AppData.readToken() {
+            tryReadUser(token: token)
         } else{
-            tryReadUser()
+            changeView(storyBoardName: "Main", controllerName: "main")
         }
     }
     
-    func tryReadUser() {
+    func tryReadUser(token:String) {
         do{
             try ProfileReader.run()
-            //TODO: imp;ement APNS Token
-//            if let firebaseToken = FIRInstanceID.instanceID().token() {
-//                try User.saveFirebaseToken(token: token,pushNotificationToken: firebaseToken)
-//            }
+            if let notificationToken = AppData.readNotificationToken() {
+                try User.saveFirebaseToken(token: token,pushNotificationToken: notificationToken)
+            }
             changeView(storyBoardName: "Map", controllerName: "reveal_controller")
         } catch User.UserError.errorSavingFireBaseToken{
             ProfileReader.delete()
@@ -65,6 +65,16 @@ class InitController: UIViewController {
                 
             }
             changeView(storyBoardName: "Main", controllerName: "main")
+        }
+    }
+    
+    func connectToFcm() {
+        FIRMessaging.messaging().connect { (error) in
+            if (error != nil) {
+                print("Unable to connect with FCM. \(error)")
+            } else {
+                print("Connected to FCM.")
+            }
         }
     }
     

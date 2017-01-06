@@ -16,6 +16,9 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
     @IBOutlet weak public var name: UITextField!
     @IBOutlet weak public var lastName: UITextField!
     @IBOutlet weak public var image: UIImageView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     var encodedString: String!
     var token: String!
@@ -29,6 +32,13 @@ public class CreateAccountPersonalController: UIViewController,UIImagePickerCont
         lastName.delegate = self
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     func dismissKeyboard() {
         view.endEditing(true)

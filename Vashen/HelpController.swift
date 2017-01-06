@@ -19,6 +19,8 @@ class HelpController: UIViewController {
     @IBOutlet weak var date: UILabel!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var map: UIImageView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
     
     override func viewWillAppear(_ animated: Bool) {
         initValues()
@@ -43,6 +45,12 @@ class HelpController: UIViewController {
         type.text = activeService.service
         setCleanerImage()
         setMapImage(map: map,withService: activeService)
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func setCleanerImage(){

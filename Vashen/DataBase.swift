@@ -121,7 +121,7 @@ public class DataBase {
         let context = appDelegate.managedObjectContext
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Service")
         fetchRequest.returnsObjectsAsFaults = false
-        let idPredicate = NSPredicate(format: "id = '%@'", id)
+        let idPredicate = NSPredicate(format: "id == %@", id)
         fetchRequest.predicate = idPredicate
         do {
             let results = try context.fetch(fetchRequest) as! [Service]
@@ -167,7 +167,7 @@ public class DataBase {
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Service")
         fetchRequest.returnsObjectsAsFaults = false
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "acceptedTime", ascending: false)]
-        let statusPredicate = NSPredicate(format: "status = '%@'", "Finished")
+        let statusPredicate = NSPredicate(format: "status == %@", "Finished")
         let ratingPredicate = NSPredicate(format: "rating != %i", -1)
         fetchRequest.predicate = NSCompoundPredicate(type: .and, subpredicates: [statusPredicate, ratingPredicate])
         do {

@@ -39,7 +39,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     @IBOutlet weak var vehiclesButton: UIButton!
     @IBOutlet weak var locationText: UITextField!
 
-    @IBOutlet weak var userLocationText: UITextField!
+    @IBOutlet weak var navigationBar: UINavigationBar!
     
     var geoLocationQueue = DispatchQueue(label: "com.alan.geoLocation", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     
@@ -80,6 +80,9 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     var inScope:Bool = false
     
     var clickedAlertOK = false
+    var menuOpen = false
+    var cleanerMarkerAnnotationAdded = false
+    var alert:UIAlertController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -233,12 +236,21 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         if activeService != nil {
             if activeService.status != "Looking" && cleaner != nil {
                 if cleaner.latitud != nil && cleaner.longitud != nil {
-                self.mapViewIOS.removeAnnotation(cleanerMarker)
-                cleanerMarker.coordinate = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
+                    if !cleanerMarkerAnnotationAdded {
+                        self.mapViewIOS.addAnnotation(cleanerMarker)
+                        cleanerMarkerAnnotationAdded = true
+                    }
+                    cleanerMarker.coordinate = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
                 }
+            } else {
+                self.mapViewIOS.removeAnnotations(markers)
+                markers.removeAll()
             }
         } else {
-            self.mapViewIOS.removeAnnotation(cleanerMarker)
+            if cleanerMarkerAnnotationAdded {
+                self.mapViewIOS.removeAnnotation(cleanerMarker)
+                cleanerMarkerAnnotationAdded = false
+            }
             requestLocation = CLLocation(latitude: centralMarker.coordinate.latitude, longitude: centralMarker.coordinate.longitude)
             if cleaners.count >= markers.count {
                 addMarkersAndUpdate()
@@ -249,33 +261,31 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func addMarkersAndUpdate(){
-        var aux: [CustomCleanerMarker] = []
         var i = 0
         while cleaners.count > i {
             if markers.count > i {
-                aux.append(markers[i])
-                self.mapViewIOS.addAnnotation(aux[i])
+                markers[i].coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
             } else {
                 let newMarker = CustomCleanerMarker()
                 newMarker.coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
-                aux.append(newMarker)
-                self.mapViewIOS.addAnnotation(aux[i])
+                markers.append(newMarker)
+                self.mapViewIOS.addAnnotation(newMarker)
             }
             i += 1
         }
-        markers = aux
     }
     
-    func removeMarkersAndUpdate(){
-        var aux: [CustomCleanerMarker] = []
+    func removeMarkersAndUpdate() {
         var i = 0
-        while cleaners.count > i {
-            aux.append(markers[i])
-            aux[i].coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+        while markers.count > i {
+            if cleaners.count > i {
+                markers[i].coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+            } else {
+                self.mapViewIOS.removeAnnotation(markers[i])
+                markers.remove(at: i)
+            }
             i += 1
         }
-        self.mapViewIOS.removeAnnotations(markers)
-        markers = aux
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -287,15 +297,22 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             if anView == nil {
                 anView = MKAnnotationView(annotation: annotation, reuseIdentifier: "washer")
             }
-            anView?.image = UIImage(named: "washer")
+            let image = UIImage(named: "washer_bike")
+            let si = CGSize(width: 32.0, height: 34.0)
+            UIGraphicsBeginImageContext(si)
+            image?.draw(in: CGRect(x: 0, y: 0, width: 32.0, height: 34.0))
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
             
+            anView?.image = newImage
             return anView
         } else if annotation is CustomCentralMarker {
             var anView = mapView.dequeueReusableAnnotationView(withIdentifier: "central")
             if anView == nil {
                 anView = MKAnnotationView(annotation: annotation, reuseIdentifier: "central")
             }
-            anView?.image = UIImage(named: "Location")
+            let image = UIImage(named: "Location")
+            anView?.image = image
             
             return anView
         }
@@ -320,6 +337,16 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                     DispatchQueue.main.async {
                         if pm.thoroughfare != nil && pm.subThoroughfare != nil && pm.subLocality != nil && pm.locality != nil && pm.administrativeArea != nil {
                             self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!), \(pm.locality!), \(pm.administrativeArea!)"
+                        } else if pm.thoroughfare != nil && pm.subThoroughfare != nil && pm.subLocality != nil && pm.locality != nil {
+                            self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!), \(pm.locality!)"
+                        } else if pm.thoroughfare != nil && pm.subThoroughfare != nil && pm.subLocality != nil {
+                            self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!)"
+                        } else if pm.thoroughfare != nil && pm.subThoroughfare != nil {
+                            self.locationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!)"
+                        } else if pm.thoroughfare != nil {
+                            self.locationText.text = "\(pm.thoroughfare!)"
+                        } else {
+                            self.locationText.text = "No se puede leer la ubicacion"
                         }
                     }
                 }
@@ -328,30 +355,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                 }
             })
         }
-    }
-    
-    func userLocationChanged(){
-            let location = CLLocation(latitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude)
-            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-                
-                if error != nil {
-                    print("Reverse geocoder failed with error" + error!.localizedDescription)
-                    self.userLocationText.text = ""
-                    return
-                }
-                
-                if placemarks!.count > 0 {
-                    let pm = placemarks![0]
-                    DispatchQueue.main.async {
-                        if pm.thoroughfare != nil && pm.subThoroughfare != nil && pm.subLocality != nil && pm.locality != nil && pm.administrativeArea != nil {
-                            self.userLocationText.text = "\(pm.thoroughfare!) \(pm.subThoroughfare!), \(pm.subLocality!), \(pm.locality!), \(pm.administrativeArea!)"
-                        }
-                    }
-                }
-                else {
-                    print("Problem with the data received from geocoder")
-                }
-            })
     }
     
     func configureState(){
@@ -386,7 +389,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         lowLayout.isHidden = true
         startLayout.isHidden = true
         locationText.isHidden = false
-        userLocationText.isHidden = false
     }
     
     func configureVehicleSelectedState(){
@@ -397,12 +399,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         upLayout.isHidden = false
         lowLayout.isHidden = false
         startLayout.isHidden = true
-        leftButton.setTitle("Ecologico $$", for: .normal)
-        leftButton.setImage(UIImage(named: "ecologico"), for: .normal)
-        leftDescription.setTitle("Lavado de auto en seco, con nuestro producto de máxima calidad, que brinda un acabado brillante, sin rayar el auto, protegiendo la pintura, al mismo tiempo que deja una capa de cera protectora.", for: .normal)
-        rightButton.setTitle("Tradicional $$", for: .normal)
-        rightButton.setImage(UIImage(named: "tradicional"), for: .normal)
-        rightDescription.setTitle("Lavado de auto con agua y shampoo, que deja una capa protectora de cera. Para este servicio, el usuario deberá proporcionar el agua al momento de la llegada de nuestros socios lavadores.", for: .normal)
     }
     
     func configureServiceSelectedState(){
@@ -412,17 +408,35 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         upLayout.isHidden = false
         lowLayout.isHidden = false
         startLayout.isHidden = true
-        if vehicleType == String(Service.BIKE) {
+        rightButton.isHidden = false
+        rightDescription.isHidden = false
+        var leftTitle = "Lavado Exterior"
+        var rightTitle = "Lavado Interior"
+        switch vehicleType {
+        case String(Service.BIKE):
+            leftTitle += " $1"
             rightButton.isHidden = true
             rightDescription.isHidden = true
-        } else {
-            rightButton.isHidden = false
-            rightDescription.isHidden = false
+            break
+        case String(Service.CAR):
+            leftTitle += " $2"
+            rightTitle += " $3"
+            break
+        case String(Service.SMALL_VAN):
+            leftTitle += " $4"
+            rightTitle += " $5"
+            break
+        case String(Service.BIG_VAN):
+            leftTitle += " $6"
+            rightTitle += " $7"
+            break
+        default:
+            break
         }
-        leftButton.setTitle("Lavado Exterior $$", for: .normal)
+        leftButton.setTitle(leftTitle, for: .normal)
         leftButton.setImage(UIImage(named: "exterior"), for: .normal)
         leftDescription.setTitle("Consiste en lavado de carrocería, cristales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).", for: .normal)
-        rightButton.setTitle("Lavado Interior $$", for: .normal)
+        rightButton.setTitle(rightTitle, for: .normal)
         rightButton.setImage(UIImage(named: "interior"), for: .normal)
         rightDescription.setTitle("Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo).", for: .normal)
     }
@@ -432,9 +446,16 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
              return
          }
          serviceRequestFlag = true
-        DispatchQueue.global(qos: .background).async {
-            self.sendRequestService()
-        }
+        let confirmAlert = UIAlertController(title: "", message: "Confirmar pedido del servicio", preferredStyle: UIAlertControllerStyle.alert)
+        confirmAlert.addAction(UIAlertAction(title: "Cancelar", style: UIAlertActionStyle.default, handler: {action in
+            self.serviceRequestFlag = false
+        }))
+        confirmAlert.addAction(UIAlertAction(title: "Confirmar", style: UIAlertActionStyle.default, handler: {action in
+            DispatchQueue.global(qos: .background).async {
+                self.sendRequestService()
+            }
+        }))
+        self.present(confirmAlert, animated: true, completion: nil)
     }
     
     func configureServiceStartState(){
@@ -445,18 +466,20 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         lowLayout.isHidden = true
         startLayout.isHidden = false
         cancelButton.isHidden = false
-        serviceInfo.text = "Buscando Lavador"
+        serviceInfo.text = "BUSCANDO LAVADOR"
         locationText.isHidden = true
-        userLocationText.isHidden = true
         configureActiveServiceView()
     }
     
     func sendRequestService(){
         do{
             let favCar = DataBase.getFavoriteCar()!
+            AppData.deleteMessage()
             let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude),withLongitud: String(requestLocation.coordinate.longitude),withId: service,withType: serviceType,withToken: token,withCar: vehicleType, withFavoriteCar: favCar.id)
             cancelCode = 0;
             activeService = serviceRequested
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.stateReceived = 0
             DispatchQueue.main.async {
                 self.upLayoutHeight.constant = 0
                 self.lowLayoutHeight.constant = 0
@@ -467,7 +490,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                 self.cancelButton.isHidden = false
                 self.cleanerInfo.isHidden = true
                 self.locationText.isHidden = true
-                self.userLocationText.isHidden = true
                 self.serviceInfo.text = "Buscando Lavador"
             }
             startActiveServiceCycle()
@@ -544,8 +566,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                 }
             })
             cancelAlarmClock.resume()
-            
-    
             break
         case "On The Way":
             if cancelAlarmClock != nil {
@@ -583,6 +603,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func configureServiceForDelete(){
         serviceRequestFlag = false
+        self.checkNotification()
         DispatchQueue.main.async {
             self.cleanerInfo.isHidden = true
             self.cleanerImageInfo.isHidden = true
@@ -594,12 +615,13 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func checkNotification(){
-        let message = AppData.getMessage()
-        if message != "" && message != "Finished"{
-            AppData.deleteMessage()
-            DispatchQueue.main.async {
-                self.createAlertInfo(message: message)
+        if let message = AppData.getMessage() {
+            if message != "Finished" {
+                DispatchQueue.main.async {
+                    self.createAlertInfo(message: message)
+                }
             }
+            AppData.deleteMessage()
         }
     }
     
@@ -620,25 +642,23 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func configureActiveServiceForFinished(){
+        //TODO: check for optimization
         if clock != nil {
             clock.cancel()
         }
         if activeService.rating == -1 {
             cancelTimers()
-            let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "summary") as! SummaryController
+            
             DispatchQueue.main.async {
+                if self.alert != nil {
+                    self.alert.dismiss(animated: true, completion: nil)
+                }
+                let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "summary") as! SummaryController
                 self.navigationController?.pushViewController(nextViewController, animated: true)
             }
         }
         serviceRequestFlag = false
-        DispatchQueue.main.async {
-            self.cleanerInfo.isHidden = true
-            self.cleanerImageInfo.isHidden = true
-            self.cleanerInfo.text = "-"
-            self.cleanerImageInfo.image = nil
-            self.serviceInfo.text = "Buscando lavador"
-        }
     }
     
     func modifyClock(){
@@ -670,11 +690,13 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func setImageDrawableForActiveService(){
-        let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
+        let url = URL(string: "http://washer.mx/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
         do {
-            let data = try Data(contentsOf: url as! URL)
-            self.cleanerImageInfo.image = UIImage(data: data as Data)
-        } catch {}
+            let data:Data = try Data(contentsOf: url!)
+            self.cleanerImageInfo.image = UIImage(data: data)
+        } catch {
+            self.cleanerImageInfo.image = UIImage(named: "default_image")
+        }
     }
     
     func alertForCancel(){
@@ -688,26 +710,26 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func buildAlertForCancel(){
         cancelAlarmClock.suspend()
-        var alert:UIAlertController!
+        var cancelAlert:UIAlertController!
         if cancelCode == 2 {
-            alert = UIAlertController(title: "Lavador esta tomando mucho tiempo", message: "Deseas cancelar?", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
+            cancelAlert = UIAlertController(title: "Lavador esta tomando mucho tiempo", message: "Deseas cancelar?", preferredStyle: UIAlertControllerStyle.alert)
+            cancelAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
                 self.sendCancel()
             }))
-            alert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.default, handler: { action in
+            cancelAlert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.default, handler: { action in
                 self.cancelAlarmClock.resume()
             }))
         } else {
-            alert = UIAlertController(title: "Cancelar", message: "Cancelar en este momento incluye un costo extra, estas seguro...?", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
+            cancelAlert = UIAlertController(title: "Cancelar", message: "Cancelar en este momento incluye un costo extra, estas seguro...?", preferredStyle: UIAlertControllerStyle.alert)
+            cancelAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: { action in
                 self.sendCancel()
                 if self.cancelAlarmClock != nil {
                     self.cancelAlarmClock.cancel()
                 }
             }))
-            alert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.default, handler: nil))
+            cancelAlert.addAction(UIAlertAction(title: "Esperar", style: UIAlertActionStyle.default, handler: nil))
         }
-        self.present(alert, animated: true, completion: nil)
+        self.present(cancelAlert, animated: true, completion: nil)
     }
     
     @IBAction func clickCancel(_ sender: AnyObject) {
@@ -723,10 +745,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         DispatchQueue.global().async {
             do {
                 try Service.cancelService(idService: self.activeService.id,withToken: self.token,withTimeOutCancel: self.cancelCode)
-                if self.activeService != nil {
-                    DataBase.deleteService(service: self.activeService)
-                    AppData.notifyNewData(newData: true)
-                }
                 if self.cancelAlarmClock != nil {
                     self.cancelAlarmClock.cancel()
                 }
@@ -804,9 +822,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         userLocation = manager.location
-        DispatchQueue.global().async {
-            self.userLocationChanged()
-        }
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -825,7 +840,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func initView(){
         menuOpenButton.target = self.revealViewController()
-        menuOpenButton.action = #selector(SWRevealViewController.revealToggle(_:))       
+        menuOpenButton.action = #selector(SWRevealViewController.revealToggle(_:))
         self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         let slide: UISwipeGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.stateBack))
         slide.direction = UISwipeGestureRecognizerDirection.down
@@ -872,10 +887,10 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         self.view.endEditing(true)
         let position = mapViewIOS.region.center
         if activeService == nil {
+            self.locationText.text = "BUSCANDO..."
             centralMarker.coordinate = CLLocationCoordinate2D(latitude: position.latitude, longitude: position.longitude)
-            self.mapViewIOS.addAnnotation(centralMarker)
             if let tempLocation = self.requestLocation {
-                geoLocationQueue.asyncAfter(deadline: .now() + 5, execute: {
+                geoLocationQueue.asyncAfter(deadline: .now() + 3, execute: {
                     self.reloadAddress(location: tempLocation)
                 })
             }
@@ -894,6 +909,12 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func tapMap(){
         self.view.endEditing(true)
+        if menuOpen {
+            self.revealViewController().revealToggle(animated: true)
+        }
+        if activeService == nil {
+            self.stateBack()
+        }
     }
     
     @IBAction func myLocationClicked(_ sender: AnyObject) {
@@ -907,11 +928,16 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func createAlertInfo(message:String){
-        let alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
-        alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
+        print(message)
+        //TODO: dismiss alert?
+        if self.alert != nil {
+            self.alert.dismiss(animated: true, completion: nil)
+        }
+        self.alert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        self.alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
             self.clickedAlertOK = true
         }))
-        self.present(alert, animated: true, completion: nil)
+        self.present(self.alert, animated: true, completion: nil)
     }
     
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -942,9 +968,9 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
         if(position == .left) {
-            self.mapViewIOS.isUserInteractionEnabled = true;
+            menuOpen = false
         } else {
-            self.mapViewIOS.isUserInteractionEnabled = false;
+            menuOpen = true
         }
     }
     
@@ -952,6 +978,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         let image = UIImage(named: "default_marker")
     }
     class CustomCleanerMarker: MKPointAnnotation {
-        let image = UIImage(named: "washer")
+        let image = UIImage(named: "washer_bike")
     }
 }

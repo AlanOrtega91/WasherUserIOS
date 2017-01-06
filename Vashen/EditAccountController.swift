@@ -17,6 +17,9 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var phone: UITextField!
     @IBOutlet weak var userImage: UIImageView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    @IBOutlet weak var navigationBarRightButton: UIBarButtonItem!
     
     var imagePath: String!
     
@@ -29,6 +32,13 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
         phone.delegate = self
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+        if let barFont = UIFont(name: "PingFang TC", size: 17) {
+            self.navigationBar.titleTextAttributes = [ NSFontAttributeName: barFont]
+        }
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+            self.navigationBarRightButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
     
     func dismissKeyboard() {
@@ -67,7 +77,9 @@ class EditAccountController: UIViewController, UIImagePickerControllerDelegate,U
         user?.lastName = lastName.text!
         user?.email = email.text!
         user?.phone = phone.text!
-        user?.encodedImage = imagePath
+        if imagePath != nil {
+            user?.encodedImage = imagePath
+        }
         do{
         try reviewCredentials()
         

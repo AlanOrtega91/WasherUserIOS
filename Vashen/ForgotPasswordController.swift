@@ -10,8 +10,14 @@ import UIKit
 
 class ForgotPasswordController: UIViewController {
 
+    @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        if let buttonFont = UIFont(name: "PingFang TC", size: 14) {
+            self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
+        }
     }
 
     override func didReceiveMemoryWarning() {
