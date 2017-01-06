@@ -119,7 +119,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 if stateReceived != 6 {
                     stateReceived = 6
                     AppData.deleteMessage()
-                    sendPopUp(message: "Cancelado")
+                    sendPopUp(message: "Tu servicio fue cancelado")
                     if let serviceJson = userInfo["serviceInfo"] as? String{
                         let data = serviceJson.data(using: String.Encoding.utf8)
                         do {
@@ -182,7 +182,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: .prod)
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: .sandbox)
         if let tokenF = FIRInstanceID.instanceID().token() {
             AppData.saveNotificationToken(notificationToken: tokenF)
             connectToFcm()

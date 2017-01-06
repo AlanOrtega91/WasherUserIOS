@@ -203,13 +203,11 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             do{
                 self.cleaners = try Cleaner.getNearbyCleaners(latitud: location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
             } catch Cleaner.CleanerError.noSessionFound{
-                createAlertInfo(message: "Error con la sesion")
-                while !self.clickedAlertOK {
-                    
-                }
+                ProfileReader.delete()
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
-                self.present(nextViewController, animated: true, completion: nil)
+                self.navigationController?.setViewControllers([nextViewController], animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
             } catch {
                 print("Error leyendo lavadores")
             }
@@ -223,13 +221,11 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                 }
             }
         } catch Cleaner.CleanerError.noSessionFound{
-            createAlertInfo(message: "Error con la sesion")
-            while !self.clickedAlertOK {
-                
-            }
+            ProfileReader.delete()
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
-            self.present(nextViewController, animated: true, completion: nil)
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            _ = self.navigationController?.popToRootViewController(animated: true)
         } catch {
             print("Error leyendo ubicacion del lavador")
         }
@@ -495,14 +491,12 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             startActiveServiceCycle()
             cancelSent = false
         } catch Service.ServiceError.noSessionFound{
-            createAlertInfo(message: "Error con la sesion")
-            while !clickedAlertOK {
-                
-            }
+            ProfileReader.delete()
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
             DispatchQueue.main.async {
-                self.present(nextViewController, animated: true, completion: nil)
+                self.navigationController?.setViewControllers([nextViewController], animated: true)
+                _ = self.navigationController?.popToRootViewController(animated: true)
             }
         } catch Service.ServiceError.userBlock{
             createAlertInfo(message: "Usuario bloqueado por error de tarjeta")
@@ -558,18 +552,18 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             configureActiveService(display: "Llegando en: 15 min")
             
             let cancelAlarmClockQueue = DispatchQueue(label: "com.alan.clockCancel", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-            cancelAlarmClock = DispatchSource.makeTimerSource(flags: .strict, queue: cancelAlarmClockQueue)
-            cancelAlarmClock.scheduleRepeating(deadline: .now() + .seconds(60*15), interval: .seconds(60*15), leeway: .seconds(60))
-            cancelAlarmClock.setEventHandler(handler: {
+            self.cancelAlarmClock = DispatchSource.makeTimerSource(flags: .strict, queue: cancelAlarmClockQueue)
+            self.cancelAlarmClock.scheduleRepeating(deadline: .now() + .seconds(60*15), interval: .seconds(60*15), leeway: .seconds(60))
+            self.cancelAlarmClock.setEventHandler(handler: {
                 DispatchQueue.main.async {
                     self.alertForCancel()
                 }
             })
-            cancelAlarmClock.resume()
+            self.cancelAlarmClock.resume()
             break
         case "On The Way":
-            if cancelAlarmClock != nil {
-                cancelAlarmClock.cancel()
+            if self.cancelAlarmClock != nil {
+                self.cancelAlarmClock.cancel()
             }
             configureActiveService(display: "De camino")
             break
@@ -577,8 +571,8 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             DispatchQueue.main.async {
                 self.cancelButton.isHidden = true
             }
-            if cancelAlarmClock != nil {
-                cancelAlarmClock.cancel()
+            if self.cancelAlarmClock != nil {
+                self.cancelAlarmClock.cancel()
             }
             
             let clockQueue = DispatchQueue(label: "com.alan.clock", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
@@ -709,7 +703,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func buildAlertForCancel(){
-        cancelAlarmClock.suspend()
+        self.cancelAlarmClock.suspend()
         var cancelAlert:UIAlertController!
         if cancelCode == 2 {
             cancelAlert = UIAlertController(title: "Lavador esta tomando mucho tiempo", message: "Deseas cancelar?", preferredStyle: UIAlertControllerStyle.alert)
@@ -744,17 +738,20 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         cancelSent = true
         DispatchQueue.global().async {
             do {
+                if self.activeService == nil {
+                    return
+                }
                 try Service.cancelService(idService: self.activeService.id,withToken: self.token,withTimeOutCancel: self.cancelCode)
                 if self.cancelAlarmClock != nil {
                     self.cancelAlarmClock.cancel()
                 }
             } catch Service.ServiceError.noSessionFound{
-                self.cancelSent = false
-                self.createAlertInfo(message: "Error de sesion")
+                ProfileReader.delete()
                 let storyBoard = UIStoryboard(name: "Main", bundle: nil)
                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
                 DispatchQueue.main.async {
                     self.present(nextViewController, animated: true, completion: nil)
+                    _ = self.navigationController?.popToRootViewController(animated: true)
                 }
             } catch {
                 self.createAlertInfo(message: "Error al cancelar")
@@ -922,7 +919,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         if self.userLocation != nil {
             location = CLLocationCoordinate2D(latitude: self.userLocation.coordinate.latitude, longitude: self.userLocation.coordinate.longitude)
         }
-        let span = MKCoordinateSpanMake(0.02, 0.02)
+        let span = MKCoordinateSpanMake(0.01, 0.01)
         let region = MKCoordinateRegionMake(location, span)
         self.mapViewIOS.setRegion(region, animated: true)
     }

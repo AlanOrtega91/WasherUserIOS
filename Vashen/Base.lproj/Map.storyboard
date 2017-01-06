@@ -314,15 +314,6 @@
                                             <action selector="leftClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="zDg-4l-fWm"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-ak-Mh2">
-                                        <rect key="frame" x="15" y="50" width="166.5" height="95"/>
-                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="9"/>
-                                        <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
-                                        <state key="normal" backgroundImage="options_down">
-                                            <string key="title">Consiste en lavado de carrocería, cristales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).</string>
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8kX-9m-598">
                                         <rect key="frame" x="201.5" y="10" width="166.5" height="40"/>
                                         <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
@@ -339,6 +330,15 @@
                                         <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
                                         <state key="normal" backgroundImage="options_down">
                                             <string key="title">Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo).</string>
+                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-ak-Mh2">
+                                        <rect key="frame" x="15" y="50" width="166.5" height="95"/>
+                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="9"/>
+                                        <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
+                                        <state key="normal" backgroundImage="options_down">
+                                            <string key="title">Consiste en lavado de carrocería, cristales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).</string>
                                             <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
