@@ -115,7 +115,6 @@ public class ProfileReader {
             car.color = carJSON["Color"]! as! String
             car.plates = carJSON["Placas"]! as! String
             car.brand = carJSON["Marca"]! as! String
-            car.multiplier = Double(carJSON["Multiplicador"] as! String)!
             print(String(describing: carJSON["Favorito"]))
             switch carJSON["Favorito"] as! String {
             case "1":

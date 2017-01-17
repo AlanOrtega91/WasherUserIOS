@@ -54,11 +54,13 @@ class HelpController: UIViewController {
     }
     
     func setCleanerImage(){
-        let url = URL(string: "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")! as URL
+        let url = URL(string: "http://washer.mx/Washer/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")! as URL
         do {
             let data = try Data(contentsOf: url)
             self.cleanerImage.image = UIImage(data: data)
-        } catch {}
+        } catch {
+            self.cleanerImage.image = UIImage(named: "default_image")
+        }
     }
     
     func setMapImage(map:UIImageView, withService service:Service){

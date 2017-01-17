@@ -87,13 +87,17 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
     }
     
     func setCleanerImage(image:UIImageView, withId id: String, withPosition position:Int){
-        let url = URL(string: "http://imanio.zone/Vashen/images/cleaners/" + id + "/profile_image.jpg")! as URL
+        let url = URL(string: "http://washer.mx/Washer/images/cleaners/" + id + "/profile_image.jpg")! as URL
         do {
             let data = try Data(contentsOf: url)
             image.image = UIImage(data: data)
             imagesCleaner[position] = image.image!
             imageCleanerSet[position] = 1
-        } catch {}
+        } catch {
+            image.image = UIImage(named: "default_image")
+            imagesCleaner[position] = image.image!
+            imageCleanerSet[position] = 1
+        }
 
     }
     

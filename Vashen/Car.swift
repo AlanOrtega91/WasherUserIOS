@@ -20,7 +20,6 @@ public class Car:NSManagedObject {
     @NSManaged var color:String
     @NSManaged var favorite:Bool
     @NSManaged var brand: String
-    @NSManaged var multiplier: Double
     
     public static func newCar()->Car{
         return DataBase.newCar()

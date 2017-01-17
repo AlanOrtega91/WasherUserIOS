@@ -20,7 +20,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     let upLayoutSize = CGFloat(70)
     @IBOutlet weak var lowLayout: UIView!
     @IBOutlet weak var lowLayoutHeight: NSLayoutConstraint!
-    let lowLayoutSize = CGFloat(150)
+    let lowLayoutSize = CGFloat(160)
     @IBOutlet weak var startLayout: UIView!
     @IBOutlet weak var startLayoutHeight: NSLayoutConstraint!
     let startLayoutSize = CGFloat(90)
@@ -32,8 +32,8 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     @IBOutlet weak var cleanerImageInfo: UIImageView!
     
     @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var rightDescription: UIButton!
-    @IBOutlet weak var leftDescription: UIButton!
+    @IBOutlet weak var leftDescriptionLeft: UILabel!
+    @IBOutlet weak var rightDescriptionView: UIView!
 
 
     @IBOutlet weak var vehiclesButton: UIButton!
@@ -54,12 +54,10 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     var viewState = Int()
     final var STANDBY = 0
     final var VEHICLE_SELECTED = 1
-    final var ECO_OR_TRADITIONAL_SELECTED = 2
-    final var OUTSIDE_OR_INSIDE_SELECTED = 3
-    final var SERVICE_START = 4
+    final var OUTSIDE_OR_INSIDE_SELECTED = 2
+    final var SERVICE_START = 3
     var serviceRequestFlag: Bool = false
     var requestLocation: CLLocation!
-    var serviceType:String!
     var vehicleType:String!
     var service:String!
     var cancelCode:Int = 0
@@ -83,6 +81,9 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     var menuOpen = false
     var cleanerMarkerAnnotationAdded = false
     var alert:UIAlertController!
+    
+    let normalLeftText = " -Carrocería\n -Rines"
+    let bikeLeftText = " -Carrocería\n -Rines\n -Asiento"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,7 +179,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     func initTimers(){
         let nearbyCleanersQueue = DispatchQueue(label: "com.alan.nearbyCleaners", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         nearbyCleanersTimer = DispatchSource.makeTimerSource(flags: .strict, queue: nearbyCleanersQueue)
-        nearbyCleanersTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
+        nearbyCleanersTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(5))
         nearbyCleanersTimer.setEventHandler(handler: {
             if self.activeService == nil {
                 if let tempLocation:CLLocation = self.requestLocation {
@@ -190,7 +191,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         
         let reloadMapQueue = DispatchQueue(label: "com.alan.reloadMap", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         reloadMapTimer = DispatchSource.makeTimerSource(flags: .strict, queue: reloadMapQueue)
-        reloadMapTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(2))
+        reloadMapTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(5))
         reloadMapTimer.setEventHandler(handler: {
             DispatchQueue.main.async {
                 self.reloadMap()
@@ -361,9 +362,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         case VEHICLE_SELECTED:
             configureVehicleSelectedState()
             break
-        case ECO_OR_TRADITIONAL_SELECTED:
-            configureServiceSelectedState()
-            break
         case OUTSIDE_OR_INSIDE_SELECTED:
             configureServiceTypeState()
             viewState = SERVICE_START
@@ -388,16 +386,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func configureVehicleSelectedState(){
-        
-        upLayoutHeight.constant = upLayoutSize
-        lowLayoutHeight.constant = lowLayoutSize
-        startLayoutHeight.constant = 0
-        upLayout.isHidden = false
-        lowLayout.isHidden = false
-        startLayout.isHidden = true
-    }
-    
-    func configureServiceSelectedState(){
         upLayoutHeight.constant = upLayoutSize
         lowLayoutHeight.constant = lowLayoutSize
         startLayoutHeight.constant = 0
@@ -405,36 +393,34 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         lowLayout.isHidden = false
         startLayout.isHidden = true
         rightButton.isHidden = false
-        rightDescription.isHidden = false
+        rightDescriptionView.isHidden = false
         var leftTitle = "Lavado Exterior"
         var rightTitle = "Lavado Interior"
+        leftDescriptionLeft.text = self.normalLeftText
         switch vehicleType {
         case String(Service.BIKE):
-            leftTitle += " $1"
+            leftTitle += " $35"
             rightButton.isHidden = true
-            rightDescription.isHidden = true
+            rightDescriptionView.isHidden = true
+            leftDescriptionLeft.text = self.bikeLeftText
             break
         case String(Service.CAR):
-            leftTitle += " $2"
-            rightTitle += " $3"
+            leftTitle += " $55"
+            rightTitle += " $65"
             break
         case String(Service.SMALL_VAN):
-            leftTitle += " $4"
-            rightTitle += " $5"
+            leftTitle += " $65"
+            rightTitle += " $75"
             break
         case String(Service.BIG_VAN):
-            leftTitle += " $6"
-            rightTitle += " $7"
+            leftTitle += " $80"
+            rightTitle += " $90"
             break
         default:
             break
         }
         leftButton.setTitle(leftTitle, for: .normal)
-        leftButton.setImage(UIImage(named: "exterior"), for: .normal)
-        leftDescription.setTitle("Consiste en lavado de carrocería, cristales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).", for: .normal)
         rightButton.setTitle(rightTitle, for: .normal)
-        rightButton.setImage(UIImage(named: "interior"), for: .normal)
-        rightDescription.setTitle("Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo).", for: .normal)
     }
     
     func configureServiceTypeState(){
@@ -471,7 +457,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         do{
             let favCar = DataBase.getFavoriteCar()!
             AppData.deleteMessage()
-            let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude),withLongitud: String(requestLocation.coordinate.longitude),withId: service,withType: serviceType,withToken: token,withCar: vehicleType, withFavoriteCar: favCar.id)
+            let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude), withLongitud: String(requestLocation.coordinate.longitude), withId: service, withToken: token, withCar: vehicleType, withFavoriteCar: favCar.id)
             cancelCode = 0;
             activeService = serviceRequested
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -684,7 +670,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func setImageDrawableForActiveService(){
-        let url = URL(string: "http://washer.mx/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
+        let url = URL(string: "http://washer.mx/Washer/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
         do {
             let data:Data = try Data(contentsOf: url!)
             self.cleanerImageInfo.image = UIImage(data: data)
@@ -765,24 +751,14 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     
     @IBAction func leftClick(_ sender: AnyObject) {
-        if viewState == VEHICLE_SELECTED {
-            serviceType = String(Service.ECO)
-            viewState = ECO_OR_TRADITIONAL_SELECTED
-        } else {
             service = String(Service.OUTSIDE)
             viewState = OUTSIDE_OR_INSIDE_SELECTED
-        }
         configureState()
     }
     
     @IBAction func rightClick(_ sender: AnyObject) {
-        if viewState == VEHICLE_SELECTED {
-            serviceType = String(Service.TRADITIONAL)
-            viewState = ECO_OR_TRADITIONAL_SELECTED
-        } else {
-            service = String(Service.OUTSIDE)
+            service = String(Service.OUTSIDE_INSIDE)
             viewState = OUTSIDE_OR_INSIDE_SELECTED
-        }
         configureState()
     }
     
@@ -798,10 +774,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             createAlertInfo(message: "No hay lavadores cercanos")
             return
         }
-        //Always eco
-        //viewState = VEHICLE_SELECTED
-        serviceType = String(Service.ECO)
-        viewState = ECO_OR_TRADITIONAL_SELECTED
+        viewState = VEHICLE_SELECTED
         vehicleType = DataBase.getFavoriteCar()?.type
         configureState()
     }

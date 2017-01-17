@@ -504,7 +504,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="background_main" translatesAutoresizingMaskIntoConstraints="NO" id="wJn-na-m7O">
-                                <rect key="frame" x="-4" y="28" width="383" height="631"/>
+                                <rect key="frame" x="-4" y="20" width="383" height="647"/>
                             </imageView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OKp-ch-Rfi">
                                 <rect key="frame" x="-4" y="20" width="383" height="50"/>
@@ -624,7 +624,7 @@
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="IK6-OE-qDU" secondAttribute="trailing" constant="-20" id="5t7-2T-qwu"/>
-                            <constraint firstItem="kbL-xy-b4H" firstAttribute="top" secondItem="wJn-na-m7O" secondAttribute="bottom" constant="8" symbolic="YES" id="FH0-Fb-M1K"/>
+                            <constraint firstItem="kbL-xy-b4H" firstAttribute="top" secondItem="wJn-na-m7O" secondAttribute="bottom" id="FH0-Fb-M1K"/>
                             <constraint firstItem="IK6-OE-qDU" firstAttribute="top" secondItem="OKp-ch-Rfi" secondAttribute="bottom" id="H8l-hV-o2a"/>
                             <constraint firstAttribute="trailingMargin" secondItem="OKp-ch-Rfi" secondAttribute="trailing" constant="-20" id="Ubw-zS-J1q"/>
                             <constraint firstItem="IK6-OE-qDU" firstAttribute="leading" secondItem="mR6-vi-cAI" secondAttribute="leadingMargin" constant="-20" id="VFN-X2-GeE"/>
@@ -639,7 +639,7 @@
                             <constraint firstItem="OKp-ch-Rfi" firstAttribute="leading" secondItem="mR6-vi-cAI" secondAttribute="leadingMargin" constant="-20" id="lVf-Rl-Mlq"/>
                             <constraint firstAttribute="bottomMargin" secondItem="ngn-NN-lmq" secondAttribute="bottom" constant="-7" id="vNG-58-jYr"/>
                             <constraint firstItem="ngn-NN-lmq" firstAttribute="leading" secondItem="mR6-vi-cAI" secondAttribute="leadingMargin" constant="-20" id="xhl-dp-p5b"/>
-                            <constraint firstItem="wJn-na-m7O" firstAttribute="top" secondItem="W2v-FL-kNO" secondAttribute="bottom" constant="8" symbolic="YES" id="yW9-IT-mMG"/>
+                            <constraint firstItem="wJn-na-m7O" firstAttribute="top" secondItem="W2v-FL-kNO" secondAttribute="bottom" id="yW9-IT-mMG"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">

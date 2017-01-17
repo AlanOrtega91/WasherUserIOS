@@ -267,7 +267,7 @@
                                 <rect key="frame" x="-4" y="70" width="383" height="597"/>
                             </mapView>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="bottom" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Ubicación Servicio" textAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="7" translatesAutoresizingMaskIntoConstraints="NO" id="8Vi-Fs-PFt">
-                                <rect key="frame" x="77.5" y="100" width="250" height="35"/>
+                                <rect key="frame" x="78" y="100" width="250" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="adG-cy-qCp"/>
                                     <constraint firstAttribute="width" constant="250" id="ipT-b2-aHq"/>
@@ -277,10 +277,10 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </textField>
                             <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3b2-ft-cMX">
-                                <rect key="frame" x="-4" y="357" width="383" height="70"/>
+                                <rect key="frame" x="-4" y="347" width="383" height="70"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGX-fH-oCz">
-                                        <rect key="frame" x="40" y="9" width="303" height="52.5"/>
+                                        <rect key="frame" x="40" y="9" width="303" height="52"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="VGX-fH-oCz" secondAttribute="height" multiplier="290:50" id="yvB-yD-8Lh"/>
                                         </constraints>
@@ -299,7 +299,7 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dU3-R6-rJ9">
-                                <rect key="frame" x="-4" y="427" width="383" height="150"/>
+                                <rect key="frame" x="-4" y="417" width="383" height="160"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oxf-J4-Yzz">
                                         <rect key="frame" x="15" y="10" width="166.5" height="40"/>
@@ -307,7 +307,7 @@
                                             <constraint firstAttribute="height" priority="750" constant="40" id="yoj-Lc-MxE"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
-                                        <state key="normal" title="Lavado Exterior $$" image="interior" backgroundImage="options_up">
+                                        <state key="normal" title="Lavado Exterior $$" image="exterior" backgroundImage="options_up">
                                             <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -317,50 +317,136 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8kX-9m-598">
                                         <rect key="frame" x="201.5" y="10" width="166.5" height="40"/>
                                         <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
-                                        <state key="normal" title="Lavado Interior $$" image="exterior" backgroundImage="options_up">
+                                        <state key="normal" title="Lavado Interior $$" image="interior" backgroundImage="options_up">
                                             <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="rightClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="f3m-66-eIf"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="xkP-XN-jf2">
-                                        <rect key="frame" x="201.5" y="50" width="166.5" height="95"/>
-                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="6"/>
-                                        <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
-                                        <state key="normal" backgroundImage="options_down">
-                                            <string key="title">Consiste en Lavado de carrocería, cristales, rines, llantas, molduras, aspirado y limpieza de habitáculo (se requiere estar presente al momento de iniciar y al terminar el servicio para permitir que el socio lavador pueda acceder al interior del vehículo).</string>
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleAspectFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="WAc-ak-Mh2">
-                                        <rect key="frame" x="15" y="50" width="166.5" height="95"/>
-                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="9"/>
-                                        <inset key="contentEdgeInsets" minX="10" minY="5" maxX="10" maxY="5"/>
-                                        <state key="normal" backgroundImage="options_down">
-                                            <string key="title">Consiste en lavado de carrocería, cristales, rines, llantas y molduras (no se requiere estar en el lugar de servicio del vehículo).</string>
-                                            <color key="titleColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
+                                    <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O9Y-gF-XGF" userLabel="leftDescriptionView">
+                                        <rect key="frame" x="15" y="50" width="166.5" height="105"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YJj-px-2ON">
+                                                <rect key="frame" x="0.0" y="0.0" width="166.5" height="105"/>
+                                                <state key="normal" title="Button" backgroundImage="options_down"/>
+                                                <connections>
+                                                    <action selector="leftClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="XWJ-H4-OBc"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Dn-iQ-65E">
+                                                <rect key="frame" x="0.0" y="0.0" width="81" height="28"/>
+                                                <string key="text">-Carrocería
+-Rines</string>
+                                                <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="10"/>
+                                                <color key="textColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXi-iV-2Hf">
+                                                <rect key="frame" x="86" y="0.0" width="80.5" height="28"/>
+                                                <string key="text">-Llantas
+-Cristales</string>
+                                                <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="10"/>
+                                                <color key="textColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No se requiere estar presente durante el servicio." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DdP-VQ-uQV">
+                                                <rect key="frame" x="0.0" y="28" width="166.5" height="31"/>
+                                                <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="11"/>
+                                                <color key="textColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="YJj-px-2ON" secondAttribute="bottom" id="0hk-jh-NqF"/>
+                                            <constraint firstItem="2Dn-iQ-65E" firstAttribute="leading" secondItem="O9Y-gF-XGF" secondAttribute="leading" id="1YG-eZ-mPW"/>
+                                            <constraint firstItem="DdP-VQ-uQV" firstAttribute="leading" secondItem="O9Y-gF-XGF" secondAttribute="leading" id="6iW-Mt-e3h"/>
+                                            <constraint firstItem="YJj-px-2ON" firstAttribute="leading" secondItem="O9Y-gF-XGF" secondAttribute="leading" id="8C9-EH-TMx"/>
+                                            <constraint firstItem="MXi-iV-2Hf" firstAttribute="top" secondItem="O9Y-gF-XGF" secondAttribute="top" id="AQ5-W6-VRI"/>
+                                            <constraint firstItem="YJj-px-2ON" firstAttribute="top" secondItem="O9Y-gF-XGF" secondAttribute="top" id="Bih-9I-sxg"/>
+                                            <constraint firstAttribute="trailing" secondItem="YJj-px-2ON" secondAttribute="trailing" id="DAt-i5-LR4"/>
+                                            <constraint firstAttribute="trailing" secondItem="DdP-VQ-uQV" secondAttribute="trailing" id="IYX-GL-Izt"/>
+                                            <constraint firstAttribute="trailing" secondItem="MXi-iV-2Hf" secondAttribute="trailing" id="O1K-bk-eD8"/>
+                                            <constraint firstItem="DdP-VQ-uQV" firstAttribute="top" secondItem="2Dn-iQ-65E" secondAttribute="bottom" id="R6N-OF-YmI"/>
+                                            <constraint firstItem="2Dn-iQ-65E" firstAttribute="top" secondItem="O9Y-gF-XGF" secondAttribute="top" id="cRx-gh-yee"/>
+                                            <constraint firstItem="MXi-iV-2Hf" firstAttribute="leading" secondItem="2Dn-iQ-65E" secondAttribute="trailing" constant="5" id="kWD-lD-1y3"/>
+                                            <constraint firstItem="2Dn-iQ-65E" firstAttribute="width" secondItem="MXi-iV-2Hf" secondAttribute="width" id="mbF-Zl-W6a"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sRC-IK-R0i">
+                                        <rect key="frame" x="201.5" y="50" width="166.5" height="105"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q7G-Ee-mo7">
+                                                <rect key="frame" x="0.0" y="0.0" width="166.5" height="105"/>
+                                                <state key="normal" title="Button" backgroundImage="options_down"/>
+                                                <connections>
+                                                    <action selector="rightClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="6lL-Xg-aII"/>
+                                                </connections>
+                                            </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cim-kS-cmW">
+                                                <rect key="frame" x="0.0" y="0.0" width="81" height="42"/>
+                                                <string key="text">-Carrocería
+-Rines
+-Cristales</string>
+                                                <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="10"/>
+                                                <color key="textColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fsw-de-Yj7">
+                                                <rect key="frame" x="86" y="0.0" width="80.5" height="56"/>
+                                                <string key="text">-Llantas
+-Aspirado
+-Limpieza de habitáculo</string>
+                                                <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="10"/>
+                                                <color key="textColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Se requiere abrir el vehículo al inicio y cerrar al término del servicio." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lLD-fh-x1Q">
+                                                <rect key="frame" x="0.0" y="56.5" width="166.5" height="42"/>
+                                                <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="10"/>
+                                                <color key="textColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="Fsw-de-Yj7" firstAttribute="top" secondItem="sRC-IK-R0i" secondAttribute="top" id="K74-Mt-iIX"/>
+                                            <constraint firstItem="cim-kS-cmW" firstAttribute="leading" secondItem="sRC-IK-R0i" secondAttribute="leading" id="RXq-xb-hCz"/>
+                                            <constraint firstItem="lLD-fh-x1Q" firstAttribute="leading" secondItem="sRC-IK-R0i" secondAttribute="leading" id="Zd1-Qu-6mr"/>
+                                            <constraint firstItem="Q7G-Ee-mo7" firstAttribute="top" secondItem="sRC-IK-R0i" secondAttribute="top" id="b00-ER-Ajb"/>
+                                            <constraint firstItem="cim-kS-cmW" firstAttribute="top" secondItem="sRC-IK-R0i" secondAttribute="top" id="bjj-cT-Q9s"/>
+                                            <constraint firstItem="lLD-fh-x1Q" firstAttribute="top" secondItem="Fsw-de-Yj7" secondAttribute="bottom" id="elU-si-yMH"/>
+                                            <constraint firstItem="Q7G-Ee-mo7" firstAttribute="leading" secondItem="sRC-IK-R0i" secondAttribute="leading" id="gU4-5R-QfP"/>
+                                            <constraint firstItem="Fsw-de-Yj7" firstAttribute="leading" secondItem="cim-kS-cmW" secondAttribute="trailing" constant="5" id="ggN-2n-q9W"/>
+                                            <constraint firstAttribute="trailing" secondItem="lLD-fh-x1Q" secondAttribute="trailing" id="hWd-kV-8Aw"/>
+                                            <constraint firstAttribute="bottom" secondItem="Q7G-Ee-mo7" secondAttribute="bottom" id="n8d-5X-FLG"/>
+                                            <constraint firstAttribute="trailing" secondItem="Q7G-Ee-mo7" secondAttribute="trailing" id="ovQ-7L-Z59"/>
+                                            <constraint firstAttribute="trailing" secondItem="Fsw-de-Yj7" secondAttribute="trailing" id="v4t-FX-prb"/>
+                                            <constraint firstItem="cim-kS-cmW" firstAttribute="width" secondItem="Fsw-de-Yj7" secondAttribute="width" id="xoV-Cq-dWZ"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
+                                    <constraint firstItem="O9Y-gF-XGF" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="bottom" id="3Cj-Yb-5Vc"/>
                                     <constraint firstItem="oxf-J4-Yzz" firstAttribute="leading" secondItem="dU3-R6-rJ9" secondAttribute="leading" constant="15" id="3lc-7O-0qW"/>
-                                    <constraint firstItem="xkP-XN-jf2" firstAttribute="top" secondItem="8kX-9m-598" secondAttribute="bottom" id="70P-G7-vsi"/>
-                                    <constraint firstItem="xkP-XN-jf2" firstAttribute="centerX" secondItem="8kX-9m-598" secondAttribute="centerX" id="9YS-Ra-gqW"/>
-                                    <constraint firstAttribute="height" constant="150" id="OxG-Tw-cWM"/>
+                                    <constraint firstItem="O9Y-gF-XGF" firstAttribute="centerX" secondItem="oxf-J4-Yzz" secondAttribute="centerX" id="5vm-LX-V6Q"/>
+                                    <constraint firstItem="sRC-IK-R0i" firstAttribute="centerX" secondItem="8kX-9m-598" secondAttribute="centerX" id="Bmj-Ue-vqo"/>
+                                    <constraint firstAttribute="height" constant="160" id="OxG-Tw-cWM"/>
                                     <constraint firstAttribute="trailing" secondItem="8kX-9m-598" secondAttribute="trailing" constant="15" id="Qaf-er-ikX"/>
                                     <constraint firstItem="8kX-9m-598" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="top" id="V5M-MM-8m9"/>
                                     <constraint firstItem="oxf-J4-Yzz" firstAttribute="top" secondItem="dU3-R6-rJ9" secondAttribute="top" constant="10" id="VVF-S2-gv1"/>
-                                    <constraint firstItem="WAc-ak-Mh2" firstAttribute="width" secondItem="oxf-J4-Yzz" secondAttribute="width" id="ZRj-Rg-ZpR"/>
-                                    <constraint firstItem="WAc-ak-Mh2" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="bottom" id="ags-56-EwD"/>
-                                    <constraint firstAttribute="bottom" secondItem="xkP-XN-jf2" secondAttribute="bottom" constant="5" id="jOw-8a-GzL"/>
-                                    <constraint firstItem="WAc-ak-Mh2" firstAttribute="centerX" secondItem="oxf-J4-Yzz" secondAttribute="centerX" id="jVt-qX-AQs"/>
+                                    <constraint firstAttribute="bottom" secondItem="O9Y-gF-XGF" secondAttribute="bottom" constant="5" id="aZU-em-dNv"/>
+                                    <constraint firstItem="sRC-IK-R0i" firstAttribute="top" secondItem="8kX-9m-598" secondAttribute="bottom" id="glG-ut-8D5"/>
+                                    <constraint firstItem="O9Y-gF-XGF" firstAttribute="width" secondItem="oxf-J4-Yzz" secondAttribute="width" id="hD6-ur-fTI"/>
                                     <constraint firstAttribute="height" constant="100" id="m1e-SQ-unT"/>
-                                    <constraint firstItem="xkP-XN-jf2" firstAttribute="width" secondItem="8kX-9m-598" secondAttribute="width" id="r5e-d1-sG9"/>
-                                    <constraint firstAttribute="bottom" secondItem="WAc-ak-Mh2" secondAttribute="bottom" constant="5" id="rXl-Fg-CsZ"/>
+                                    <constraint firstItem="sRC-IK-R0i" firstAttribute="width" secondItem="8kX-9m-598" secondAttribute="width" id="r4h-2a-dcC"/>
                                     <constraint firstItem="8kX-9m-598" firstAttribute="leading" secondItem="oxf-J4-Yzz" secondAttribute="trailing" constant="20" id="tTQ-JU-Mhd"/>
                                     <constraint firstItem="oxf-J4-Yzz" firstAttribute="width" secondItem="8kX-9m-598" secondAttribute="width" id="wTJ-wi-4Yi"/>
+                                    <constraint firstAttribute="bottom" secondItem="sRC-IK-R0i" secondAttribute="bottom" constant="5" id="wvs-SE-XqX"/>
                                     <constraint firstItem="8kX-9m-598" firstAttribute="height" secondItem="oxf-J4-Yzz" secondAttribute="height" id="zfP-DU-GeA"/>
                                 </constraints>
                                 <variation key="default">
@@ -373,14 +459,14 @@
                                 <rect key="frame" x="-4" y="577" width="383" height="90"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8W8-g1-RN5">
-                                        <rect key="frame" x="20" y="7.5" width="78" height="75"/>
+                                        <rect key="frame" x="20" y="8" width="78" height="75"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="78" id="kr5-x2-G1u"/>
                                             <constraint firstAttribute="width" secondItem="8W8-g1-RN5" secondAttribute="height" multiplier="26:25" id="lyy-tD-6I4"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1cf-Nz-pM3">
-                                        <rect key="frame" x="100" y="65.5" width="183" height="17"/>
+                                        <rect key="frame" x="100" y="66" width="183" height="17"/>
                                         <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="12"/>
                                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -396,7 +482,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ALAINUIN ORTEGIN" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pjc-fI-fGQ">
-                                        <rect key="frame" x="141.5" y="7.5" width="100" height="21"/>
+                                        <rect key="frame" x="142" y="8" width="100" height="21"/>
                                         <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
                                         <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
@@ -440,7 +526,7 @@
                                 </variation>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYe-vj-6AR">
-                                <rect key="frame" x="42.5" y="100" width="35" height="35"/>
+                                <rect key="frame" x="43" y="100" width="35" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="35" id="02b-HS-G8X"/>
                                 </constraints>
@@ -489,7 +575,7 @@
                         <outlet property="cleanerImageInfo" destination="8W8-g1-RN5" id="JVf-aS-sxe"/>
                         <outlet property="cleanerInfo" destination="pjc-fI-fGQ" id="4vF-Uv-61m"/>
                         <outlet property="leftButton" destination="oxf-J4-Yzz" id="Whg-DC-BUv"/>
-                        <outlet property="leftDescription" destination="WAc-ak-Mh2" id="j5g-2W-oW8"/>
+                        <outlet property="leftDescriptionLeft" destination="2Dn-iQ-65E" id="b7X-6B-aKe"/>
                         <outlet property="locationText" destination="8Vi-Fs-PFt" id="ssf-YY-j5U"/>
                         <outlet property="lowLayout" destination="dU3-R6-rJ9" id="laV-Aq-hDf"/>
                         <outlet property="lowLayoutHeight" destination="OxG-Tw-cWM" id="wbQ-xH-xoW"/>
@@ -497,7 +583,7 @@
                         <outlet property="menuOpenButton" destination="y9e-DX-gaG" id="u6K-xS-yZS"/>
                         <outlet property="navigationBar" destination="eE2-De-VnG" id="Yi6-R0-KdD"/>
                         <outlet property="rightButton" destination="8kX-9m-598" id="4XS-UZ-xIg"/>
-                        <outlet property="rightDescription" destination="xkP-XN-jf2" id="AYP-dS-2cG"/>
+                        <outlet property="rightDescriptionView" destination="sRC-IK-R0i" id="gQ3-Px-T0n"/>
                         <outlet property="serviceInfo" destination="1cf-Nz-pM3" id="8hg-Bo-3b7"/>
                         <outlet property="startLayout" destination="uzo-AC-pb4" id="Cs3-c1-AlY"/>
                         <outlet property="startLayoutHeight" destination="QPQ-7a-eXQ" id="ETx-Dq-Apc"/>

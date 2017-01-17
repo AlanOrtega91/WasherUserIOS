@@ -64,7 +64,7 @@ class SummaryController: UIViewController {
     
     func setCleanerImage(){
         if let activeService = DataBase.getActiveService() {
-            let urlString = "http://imanio.zone/Vashen/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg"
+            let urlString = "http://washer.mx/Washer/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg"
             if let url = URL(string: urlString) {
                 do {
                     let data = try Data(contentsOf: url)

@@ -113,7 +113,7 @@ public class User:NSManagedObject {
     }
     
     public static func getEncodedImageForUser(id:String) -> String? {
-        let url = NSURL(string: "http://washer.mx/Vashen/images/users/\(id)/profile_image.jpg")!
+        let url = NSURL(string: "http://washer.mx/Washer/images/users/\(id)/profile_image.jpg")!
         if let imageData = NSData.init(contentsOf: url as URL) {
             return imageData.base64EncodedString(options: .lineLength64Characters)
         } else {

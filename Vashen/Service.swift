@@ -31,8 +31,6 @@ public class Service:NSManagedObject {
     @NSManaged var encodedCleanerImage:String
     @NSManaged var id:String
     
-    public static let ECO = 2
-    public static let TRADITIONAL = 1
     public static let OUTSIDE = 1
     public static let OUTSIDE_INSIDE = 2
     
@@ -46,9 +44,9 @@ public class Service:NSManagedObject {
         return DataBase.newService()
     }
     
-    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withType idServiceType:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
+    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "RequestService")
-        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&idTipoServicio=\(idServiceType)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)"
+        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["Status"] as! String == "SESSION ERROR" {

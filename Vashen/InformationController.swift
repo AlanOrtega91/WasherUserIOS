@@ -62,7 +62,7 @@ class InformationController: UIViewController {
     }
     
     func setImageDrawableForActiveService(){
-        let url = NSURL(string: "http://imanio.zone/Vashen/images/cleaners/" + service.cleanerId + "/profile_image.jpg")
+        let url = NSURL(string: "http://washer.mx/Washer/images/cleaners/" + service.cleanerId + "/profile_image.jpg")
         do {
             let data:Data = try Data(contentsOf: url! as URL)
             self.cleanerImage.image = UIImage(data: data)

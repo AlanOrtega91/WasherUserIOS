@@ -10,10 +10,9 @@ import Foundation
 
 public class HttpServerConnection
 {
-    private static var prod = "washer.mx"
-    
+
     public static func buildURL(location: String) -> String {
-        return ("http://" + prod + "/Vashen/API/" + location + "/")
+        return ("http://washer.mx/Washer/API/" + location + "/")
     }
     
     public static func sendHttpRequestPost(urlPath: String, withParams params: String) throws -> Dictionary<String,AnyObject>{
