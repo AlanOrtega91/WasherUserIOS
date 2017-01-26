@@ -182,7 +182,7 @@ public class LoadingController: UIViewController {
         tokenConekta?.create(success: { (data) -> Void in
             if data?["object"] as! String == "error" {
                 //ERRORES
-                self.createAlertInfo(message: "Usuario creado. Error en el sistema de notificaciones se presentaran problemas en el servicio")
+                self.createAlertInfo(message: "Error registrando la tarjeta de credito")
                 while !self.clickedAlertOK {
                     
                 }

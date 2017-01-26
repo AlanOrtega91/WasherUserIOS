@@ -27,7 +27,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func registrerForRemoteNotifications(application: UIApplication){
-        //let notificationTypes: UIUserNotificationType = [UIUserNotificationType.alert, UIUserNotificationType.badge, UIUserNotificationType.sound]
         let pushNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories: nil)
         application.registerUserNotificationSettings(pushNotificationSettings)
         application.registerForRemoteNotifications()
@@ -37,7 +36,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if let refreshedToken = FIRInstanceID.instanceID().token() {
         print("FCM InstanceID token: \(refreshedToken)")
         AppData.saveNotificationToken(notificationToken: refreshedToken)
-        // Connect to FCM since connection may have failed when attempted before having a token.
         connectToFcm()
         } else {
             print("FCM error reading token")
@@ -65,6 +63,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         } catch {
             
         }
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: .prod)
+        if let tokenF = FIRInstanceID.instanceID().token() {
+            AppData.saveNotificationToken(notificationToken: tokenF)
+            connectToFcm()
+            print("FCM Token:\(tokenF)")
+        } else {
+            print("FCM Couldnt save token")
+        }
+    }
+    
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print(error)
+        AppData.saveNotificationToken(notificationToken: "")
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
@@ -180,23 +194,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppData.saveMessage(message: message)
     }
     
-    
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        FIRInstanceID.instanceID().setAPNSToken(deviceToken, type: .prod)
-        if let tokenF = FIRInstanceID.instanceID().token() {
-            AppData.saveNotificationToken(notificationToken: tokenF)
-            connectToFcm()
-            print("FCM Token:\(tokenF)")
-        } else {
-            print("FCM Couldnt save token")
-        }
-    }
-    
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print(error)
-        AppData.saveNotificationToken(notificationToken: "")
-    }
-    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -241,7 +238,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory.appendingPathComponent("SingleViewCoreDataV1.sqlite")
+        let url = self.applicationDocumentsDirectory.appendingPathComponent("WasherV1.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
             try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)

@@ -7,7 +7,7 @@ target 'Vashen' do
 
   # Pods for Vashen
   pod ‘Firebase’
-  pod ‘Firebase/Core’
   pod ‘Firebase/Messaging’
+pod ‘Firebase/Core’
 
 end

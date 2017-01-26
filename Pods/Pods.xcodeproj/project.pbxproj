@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		84F41ECF8E482F1D08CA966C6378C901 /* Pods-Vashen-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F8AEDFDF0D9201DB0AADECD3DE6749A /* Pods-Vashen-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B6F4DF8A7E7C1BF8FFC106F7226E0F00 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		C83EE26A1A42633FCC8B8BF07F9AF19D /* Pods-Vashen-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 23A50B7502D66EEDDEF3C34AD688A5D6 /* Pods-Vashen-dummy.m */; };
 /* End PBXBuildFile section */
 
@@ -29,7 +28,6 @@
 		AFA5AA84CC4353568A830AB266789B20 /* FirebaseInstanceID.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseInstanceID.framework; path = Frameworks/frameworks/FirebaseInstanceID.framework; sourceTree = "<group>"; };
 		BAC2A328322C454F1499A9C87CA299CD /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
 		C00440DD8BE0E675A1BC2A73C025F628 /* FirebaseAnalytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseAnalytics.framework; path = Frameworks/frameworks/FirebaseAnalytics.framework; sourceTree = "<group>"; };
-		CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		D139EB5D313320EA582F26D5C9EB46F7 /* Pods-Vashen-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Vashen-acknowledgements.plist"; sourceTree = "<group>"; };
 		D6FE30177E791E66AFC4B1F5AF0A8163 /* Pods-Vashen-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Vashen-acknowledgements.markdown"; sourceTree = "<group>"; };
 		E9D13747CB38FF555B779B39ABB1B67F /* FirebaseMessaging.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseMessaging.framework; path = Frameworks/frameworks/FirebaseMessaging.framework; sourceTree = "<group>"; };
@@ -43,7 +41,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B6F4DF8A7E7C1BF8FFC106F7226E0F00 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,7 +74,6 @@
 		3DCAB2B7CDE207B3958B6CB957FCC758 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */,
 			);
 			name = iOS;
 			sourceTree = "<group>";

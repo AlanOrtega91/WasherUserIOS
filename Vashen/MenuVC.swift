@@ -27,15 +27,14 @@ class MenuVC: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let cell = tableView.dequeueReusableCell(withIdentifier: "headerCell") as! HeaderCell
         if let user = DataBase.readUser() {
-        
-        if user.encodedImage != "" {
-            if let userImage = User.readImageDataFromFile(name: user.encodedImage) {
-                cell.userImage.image = userImage
+            if user.encodedImage != "" {
+                if let userImage = User.readImageDataFromFile(name: user.encodedImage) {
+                    cell.userImage.image = userImage
+                }
+            } else {
+                cell.userImage.image = UIImage(named: "default_image")
             }
-        } else {
-            cell.userImage.image = UIImage(named: "default_image")
-        }
-        cell.userName.text = user.name + " " + user.lastName
+            cell.userName.text = user.name + " " + user.lastName
         }
         return cell
     }

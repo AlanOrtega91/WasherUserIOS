@@ -17,6 +17,7 @@ public class AppData {
         static var NOTIFICATION_TOKEN  = "notificationToken"
         static var MESSAGE  = "notificationMessage"
         static var SERVICE_CHANGED  = "serviceChanged"
+    static var SUMMARY_OPEN  = "summaryOpen"
     
     public static func saveData(user: User){
         let settings : UserDefaults = UserDefaults.standard
@@ -82,6 +83,20 @@ public class AppData {
             return message
         } else {
             return nil
+        }
+    }
+    
+    public static func changeSummaryOpen(opened: Bool){
+        let settings : UserDefaults = UserDefaults.standard
+        settings.set(opened, forKey: SUMMARY_OPEN)
+    }
+    
+    public static func isSummaryOpened() -> Bool {
+        let settings : UserDefaults = UserDefaults.standard
+        if settings.bool(forKey: SUMMARY_OPEN) {
+            return true
+        } else {
+            return false
         }
     }
     

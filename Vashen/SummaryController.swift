@@ -29,6 +29,7 @@ class SummaryController: UIViewController {
     
     override func viewDidLoad() {
         initView()
+        AppData.changeSummaryOpen(opened: true)
     }
     
     func initView(){
@@ -92,6 +93,7 @@ class SummaryController: UIViewController {
                 }
             }
             DispatchQueue.main.async {
+                AppData.changeSummaryOpen(opened: false)
                 _ = self.navigationController?.popViewController(animated: true)
             }
             AppData.deleteMessage()

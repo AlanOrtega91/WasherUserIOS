@@ -24,7 +24,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     @IBOutlet weak var startLayout: UIView!
     @IBOutlet weak var startLayoutHeight: NSLayoutConstraint!
     let startLayoutSize = CGFloat(90)
-
+    
     @IBOutlet weak var serviceInfo: UILabel!
     @IBOutlet weak var cleanerInfo: UILabel!
     @IBOutlet weak var leftButton: UIButton!
@@ -34,11 +34,11 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     @IBOutlet weak var cancelButton: UIButton!
     @IBOutlet weak var leftDescriptionLeft: UILabel!
     @IBOutlet weak var rightDescriptionView: UIView!
-
-
+    
+    
     @IBOutlet weak var vehiclesButton: UIButton!
     @IBOutlet weak var locationText: UITextField!
-
+    
     @IBOutlet weak var navigationBar: UINavigationBar!
     
     var geoLocationQueue = DispatchQueue(label: "com.alan.geoLocation", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
@@ -130,15 +130,13 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         user = DataBase.readUser()
         creditCard = DataBase.readCard()
         activeService = DataBase.getActiveService()
+        viewState = SERVICE_START
         if activeService == nil {
             viewState = STANDBY
             configureState()
         } else if activeService.status == "Finished" {
-            viewState = SERVICE_START
-            configureState()
-            
+            configureActiveServiceView()
         } else {
-            viewState = SERVICE_START
             configureState()
             startActiveServiceCycle()
         }
@@ -201,17 +199,17 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func nearbyCleaners(location:CLLocation){
-            do{
-                self.cleaners = try Cleaner.getNearbyCleaners(latitud: location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
-            } catch Cleaner.CleanerError.noSessionFound{
-                ProfileReader.delete()
-                let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
-                self.navigationController?.setViewControllers([nextViewController], animated: true)
-                _ = self.navigationController?.popToRootViewController(animated: true)
-            } catch {
-                print("Error leyendo lavadores")
-            }
+        do{
+            self.cleaners = try Cleaner.getNearbyCleaners(latitud: location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
+        } catch Cleaner.CleanerError.noSessionFound{
+            ProfileReader.delete()
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            _ = self.navigationController?.popToRootViewController(animated: true)
+        } catch {
+            print("Error leyendo lavadores")
+        }
     }
     
     func reloadMap(){
@@ -425,9 +423,9 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func configureServiceTypeState(){
         if serviceRequestFlag {
-             return
-         }
-         serviceRequestFlag = true
+            return
+        }
+        serviceRequestFlag = true
         let confirmAlert = UIAlertController(title: "", message: "Confirmar pedido del servicio", preferredStyle: UIAlertControllerStyle.alert)
         confirmAlert.addAction(UIAlertAction(title: "Cancelar", style: UIAlertActionStyle.default, handler: {action in
             self.serviceRequestFlag = false
@@ -522,7 +520,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             configureActiveServiceForLooking()
             break
         case "Accepted":
-            var diffInMillis = activeService.acceptedTime.addingTimeInterval(60 * 2).timeIntervalSinceNow
+            var diffInMillis = activeService.acceptedTime.addingTimeInterval(60 * 5).timeIntervalSinceNow
             if diffInMillis < 0 {
                 diffInMillis = 0
             } else {
@@ -534,7 +532,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             let t = DispatchTime.now() + diffInMillis
             DispatchQueue.main.asyncAfter(deadline: t, execute: {
                 self.cancelButton.isHidden = true
-                });
+            });
             configureActiveService(display: "Llegando en: 15 min")
             
             let cancelAlarmClockQueue = DispatchQueue(label: "com.alan.clockCancel", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
@@ -628,14 +626,15 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         }
         if activeService.rating == -1 {
             cancelTimers()
-            
-            DispatchQueue.main.async {
-                if self.alert != nil {
-                    self.alert.dismiss(animated: true, completion: nil)
+            if !AppData.isSummaryOpened() {
+                DispatchQueue.main.async {
+                    if self.alert != nil {
+                        self.alert.dismiss(animated: true, completion: nil)
+                    }
+                    let storyBoard = UIStoryboard(name: "Map", bundle: nil)
+                    let nextViewController = storyBoard.instantiateViewController(withIdentifier: "summary") as! SummaryController
+                    self.navigationController?.pushViewController(nextViewController, animated: true)
                 }
-                let storyBoard = UIStoryboard(name: "Map", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "summary") as! SummaryController
-                self.navigationController?.pushViewController(nextViewController, animated: true)
             }
         }
         serviceRequestFlag = false
@@ -680,12 +679,12 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func alertForCancel(){
-            if self.activeService == nil || self.cancelSent{
-                return
-            }
-            self.cancelCode = 2
-            self.buildAlertForCancel()
-            //Send notification
+        if self.activeService == nil || self.cancelSent{
+            return
+        }
+        self.cancelCode = 2
+        self.buildAlertForCancel()
+        //Send notification
     }
     
     func buildAlertForCancel(){
@@ -751,14 +750,14 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     
     @IBAction func leftClick(_ sender: AnyObject) {
-            service = String(Service.OUTSIDE)
-            viewState = OUTSIDE_OR_INSIDE_SELECTED
+        service = String(Service.OUTSIDE)
+        viewState = OUTSIDE_OR_INSIDE_SELECTED
         configureState()
     }
     
     @IBAction func rightClick(_ sender: AnyObject) {
-            service = String(Service.OUTSIDE_INSIDE)
-            viewState = OUTSIDE_OR_INSIDE_SELECTED
+        service = String(Service.OUTSIDE_INSIDE)
+        viewState = OUTSIDE_OR_INSIDE_SELECTED
         configureState()
     }
     
@@ -929,7 +928,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
                 self.mapViewIOS.setRegion(region, animated: true)
             }
         })
-
+        
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
