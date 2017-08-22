@@ -13,6 +13,9 @@ class LegalInformationController: UIViewController {
     @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var navigationBarLeftButton: UIBarButtonItem!
     
+    @IBOutlet weak var informacion: UITextView!
+    var texto: String = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let barFont = UIFont(name: "PingFang TC", size: 17) {
@@ -22,6 +25,7 @@ class LegalInformationController: UIViewController {
             self.navigationBarLeftButton.setTitleTextAttributes([ NSFontAttributeName: buttonFont], for: .normal)
         }
         // Do any additional setup after loading the view.
+        informacion.text = texto
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,15 +36,5 @@ class LegalInformationController: UIViewController {
     @IBAction func cancelClick(_ sender: AnyObject) {
         _ = self.navigationController?.popViewController(animated: true)
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

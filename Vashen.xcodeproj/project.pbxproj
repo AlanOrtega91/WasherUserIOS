@@ -17,7 +17,6 @@
 		E71410221D6FA60C00C97798 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71410211D6FA60C00C97798 /* HeaderCell.swift */; };
 		E714A5FE1D677415008DE774 /* EditPaymentController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E714A5FD1D677414008DE774 /* EditPaymentController.swift */; };
 		E7153DF81D92D06000F169B9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7153DF71D92D06000F169B9 /* Assets.xcassets */; };
-		E7153DFA1D92D71600F169B9 /* LegalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7153DF91D92D71600F169B9 /* LegalController.swift */; };
 		E7153DFC1D92D77700F169B9 /* LegalInformationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7153DFB1D92D77700F169B9 /* LegalInformationController.swift */; };
 		E72C5E711DA45BD60069AE94 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E72C5E701DA45BD60069AE94 /* MapKit.framework */; };
 		E72E6EC51E05B22D005A8F77 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E72E6EC41E05B22D005A8F77 /* GoogleService-Info.plist */; };
@@ -27,6 +26,7 @@
 		E7550BB11D5BAB3200FBD719 /* HistoryRowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */; };
 		E7550BB31D6360B400FBD719 /* CarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7550BB21D6360B400FBD719 /* CarCell.swift */; };
 		E7615F221D64C823001607D3 /* Cleaner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7615F211D64C823001607D3 /* Cleaner.swift */; };
+		E78993881EEF03E800779412 /* Reportes.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78993871EEF03E800779412 /* Reportes.swift */; };
 		E7D7D4F21DB8593100103925 /* Splash.mov in Resources */ = {isa = PBXBuildFile; fileRef = E7D7D4F11DB8593100103925 /* Splash.mov */; };
 		E7F528101D99FF6400BA2B16 /* Card.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F528091D99FF6400BA2B16 /* Card.m */; };
 		E7F528111D99FF6400BA2B16 /* Conekta.m in Sources */ = {isa = PBXBuildFile; fileRef = E7F5280B1D99FF6400BA2B16 /* Conekta.m */; };
@@ -77,7 +77,6 @@
 		E714A5FD1D677414008DE774 /* EditPaymentController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditPaymentController.swift; sourceTree = "<group>"; };
 		E7153DF61D920AA600F169B9 /* Vashen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Vashen.entitlements; sourceTree = "<group>"; };
 		E7153DF71D92D06000F169B9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		E7153DF91D92D71600F169B9 /* LegalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalController.swift; sourceTree = "<group>"; };
 		E7153DFB1D92D77700F169B9 /* LegalInformationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegalInformationController.swift; sourceTree = "<group>"; };
 		E72C5E701DA45BD60069AE94 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		E72E6EC41E05B22D005A8F77 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -87,6 +86,7 @@
 		E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryRowTableViewCell.swift; sourceTree = "<group>"; };
 		E7550BB21D6360B400FBD719 /* CarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CarCell.swift; sourceTree = "<group>"; };
 		E7615F211D64C823001607D3 /* Cleaner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cleaner.swift; sourceTree = "<group>"; };
+		E78993871EEF03E800779412 /* Reportes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reportes.swift; sourceTree = "<group>"; };
 		E7D7D4F11DB8593100103925 /* Splash.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Splash.mov; sourceTree = "<group>"; };
 		E7F528081D99FF6400BA2B16 /* Card.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Card.h; sourceTree = "<group>"; };
 		E7F528091D99FF6400BA2B16 /* Card.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Card.m; sourceTree = "<group>"; };
@@ -175,6 +175,7 @@
 				E7550BA41D5262D600FBD719 /* HttpServerConnection.swift */,
 				E7550BA81D5A4AE700FBD719 /* DataBase.swift */,
 				E7615F211D64C823001607D3 /* Cleaner.swift */,
+				E78993871EEF03E800779412 /* Reportes.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -264,7 +265,6 @@
 				E7550BB01D5BAB3200FBD719 /* HistoryRowTableViewCell.swift */,
 				E7FD0EF91D754786001C2A06 /* InformationController.swift */,
 				E7FE8A231D4F01A90071CDFA /* InitController.swift */,
-				E7153DF91D92D71600F169B9 /* LegalController.swift */,
 				E7153DFB1D92D77700F169B9 /* LegalInformationController.swift */,
 				E7550BA61D526FB500FBD719 /* LoadingController.swift */,
 				E7FE8A291D4F067E0071CDFA /* LoginController.swift */,
@@ -415,6 +415,7 @@
 				E71410221D6FA60C00C97798 /* HeaderCell.swift in Sources */,
 				E71089031D4FA853006DB612 /* User.swift in Sources */,
 				E7FE8A1A1D4EC1C90071CDFA /* ConfigurationController.swift in Sources */,
+				E78993881EEF03E800779412 /* Reportes.swift in Sources */,
 				E7F528131D99FF6400BA2B16 /* Token.m in Sources */,
 				E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */,
 				E7F528101D99FF6400BA2B16 /* Card.m in Sources */,
@@ -455,7 +456,6 @@
 				E7550BA91D5A4AE700FBD719 /* DataBase.swift in Sources */,
 				E7FE8A261D4F04DD0071CDFA /* MapController.swift in Sources */,
 				E71089111D4FECA6006DB612 /* Car.swift in Sources */,
-				E7153DFA1D92D71600F169B9 /* LegalController.swift in Sources */,
 				E71089151D4FECBC006DB612 /* UserCard.swift in Sources */,
 				E7FE8A1C1D4EC1D30071CDFA /* AboutController.swift in Sources */,
 			);

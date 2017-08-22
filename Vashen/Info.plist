@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.3</string>
+	<string>1.3.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>2</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
 	<key>ITSAppUsesNonExemptEncryption</key>
@@ -35,12 +35,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Permitenos acceso a tu camara</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Es necesario utilizar la ubicación en Washer</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string> </string>
+	<string>Es necesario utilizar la ubicación en Washer para conocer donde pedir el servicio</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Permitenos acceso a tu biblioteca</string>
+	<string>Permitenos acceso a tu biblioteca para poner de foto de perfil</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

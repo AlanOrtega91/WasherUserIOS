@@ -25,13 +25,17 @@ public class Cleaner{
         var cleaners = [Cleaner]()
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CleanerError.noSessionFound
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CleanerError.noSessionFound
+                } else {
+                    throw CleanerError.errorGettingCleaners
+                }
             }
-            if response["Status"] as! String != "OK" {
-                throw CleanerError.errorGettingCleaners
-            }
-            let parameters = response["cleaners"] as! [NSDictionary]
+            
+            let parameters = response["lavadores"] as! [NSDictionary]
             for json:NSDictionary in parameters {
                 let cleaner = Cleaner()
                 cleaner.id = json["idLavador"] as! String
@@ -52,13 +56,16 @@ public class Cleaner{
         let params = "cleanerId=\(cleanerId)&token=\(token)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CleanerError.noSessionFound
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CleanerError.noSessionFound
+                } else {
+                    throw CleanerError.errorGettingCleaners
+                }
             }
-            if response["Status"] as! String != "OK" {
-                throw CleanerError.errorGettingCleaners
-            }
-            let parameters = response["cleaner"] as! NSDictionary
+            let parameters = response["lavador"] as! NSDictionary
             let cleaner = Cleaner()
             cleaner.id = parameters["idLavador"] as! String
             if let latitud = parameters["Latitud"] as? String {
@@ -73,18 +80,22 @@ public class Cleaner{
         }
     }
     
-    public static func readCleanerRating(cleanerId:String, withToken token:String)throws -> Double{
+    public static func readCleanerRating(cleanerId:String, withToken token:String) throws -> Double{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "ReadCleanerRating")
         let params = "idLavador=\(cleanerId)&token=\(token)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CleanerError.noSessionFound
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CleanerError.noSessionFound
+                } else {
+                    throw CleanerError.errorLeyendoCalificacion
+                }
             }
-            if response["Status"] as! String != "OK" {
-                throw CleanerError.errorGettingCleaners
-            }
-            if let ratingString = response["Calificacion"] as? String{
+ 
+            if let ratingString = response["calificacion"] as? String{
                 let rating = Double(ratingString)
                 return rating!
             } else {
@@ -98,5 +109,6 @@ public class Cleaner{
     enum CleanerError:Error {
         case noSessionFound
         case errorGettingCleaners
+        case errorLeyendoCalificacion
     }
 }

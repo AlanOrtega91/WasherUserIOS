@@ -29,7 +29,7 @@ public class UserCard:NSManagedObject {
         let params = "token=\(token)&cardToken=\(cardToken)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String != "OK" {
+            if response["estado"] as! String != "ok" {
                 throw UserCardError.errorSavingCard
             }
             

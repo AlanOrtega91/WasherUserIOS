@@ -30,6 +30,7 @@ public class Service:NSManagedObject {
     @NSManaged var rating:Int16
     @NSManaged var encodedCleanerImage:String
     @NSManaged var id:String
+    @NSManaged var metodoDePago:String
     
     public static let OUTSIDE = 1
     public static let OUTSIDE_INSIDE = 2
@@ -44,21 +45,25 @@ public class Service:NSManagedObject {
         return DataBase.newService()
     }
     
-    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String) throws -> Service{
+    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String, conMetodoDePago metodoDePago:String) throws -> Service{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "RequestService")
-        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)"
+        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)&metodoDePago=\(metodoDePago)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw ServiceError.noSessionFound
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw ServiceError.noSessionFound
+                } else if response["Status"] as! String == "bloqueo"
+                {
+                    throw ServiceError.userBlock
+                } else {
+                    throw ServiceError.errorRequestingService
+                }
             }
-            if response["Status"] as! String == "USER BLOCK" {
-                throw ServiceError.userBlock
-            }
-            if response["Status"] as! String != "OK" {
-                throw ServiceError.errorRequestingService
-            }
-            let parameters = response["info"] as! NSDictionary
+ 
+            let parameters = response["servicio"] as! NSDictionary
             let service = Service.newService()
             service.id = parameters["id"] as! String
             service.car = parameters["coche"] as! String
@@ -86,11 +91,14 @@ public class Service:NSManagedObject {
         let params = "serviceId=\(idService)&statusId=6&token=\(token)&cancelCode=\(timeOutCancel)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw ServiceError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw ServiceError.errorCancelingRequest
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw ServiceError.noSessionFound
+                } else {
+                    throw ServiceError.errorCancelingRequest
+                }
             }
 
         } catch HttpServerConnection.HttpError.connectionException {
@@ -103,15 +111,18 @@ public class Service:NSManagedObject {
         let params = "serviceId=\(idService)&rating=\(rating)&token=\(token)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw ServiceError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw ServiceError.errorCancelingRequest
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw ServiceError.noSessionFound
+                } else {
+                    throw ServiceError.errorMandandoCalificacion
+                }
             }
             
         } catch HttpServerConnection.HttpError.connectionException {
-            throw ServiceError.errorCancelingRequest
+            throw ServiceError.errorMandandoCalificacion
         }
     }
     
@@ -120,6 +131,7 @@ public class Service:NSManagedObject {
         case userBlock
         case errorRequestingService
         case errorCancelingRequest
+        case errorMandandoCalificacion
     }
     
 }

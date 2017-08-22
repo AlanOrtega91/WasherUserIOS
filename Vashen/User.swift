@@ -33,42 +33,28 @@ public class User:NSManagedObject {
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "NewUser")
         //TODO Send encoded string
         var params = "name=" + user.name + "&lastName=" + user.lastName + "&email=" + user.email + "&password=" + password + "&phone=" + user.phone + "&device=ios"
-        if user.encodedImage != "" {
+        if user.encodedImage != ""
+        {
             let image = User.readImageDataFromFile(name: user.encodedImage)
             let imageData = UIImageJPEGRepresentation(image!, 0.5)
             let encodedB64 = (imageData?.base64EncodedString())!
             params += "&encoded_string=" + encodedB64
         }
         do{
-            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params) as NSDictionary
-            if response["Status"] as! String != "OK" {
-                if response["Status"] as! String != "CREATE PAYMENT ACCOUNT ERROR" {
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
+            if response["estado"] as! String != "ok"
+            {
+                if response["clave"] as! String != "pago"
+                {
                     throw UserError.errorWithNewUser
                 }
             }
-            let parameters = response["User Info"] as! NSDictionary
+            let parameters = response["usuario"] as! NSDictionary
             user.id = parameters["idCliente"]! as! String
             user.token = parameters["Token"]! as! String
             return user
         } catch HttpServerConnection.HttpError.connectionException{
             throw UserError.errorWithNewUser
-        }
-    }
-    
-    public static func saveFirebaseToken(token:String, pushNotificationToken:String) throws {
-        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "SavePushNotificationToken")
-        let params = "token=" + token + "&pushNotificationToken=" + pushNotificationToken
-        do{
-            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw UserError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw UserError.errorSavingFireBaseToken
-            }
-            
-        } catch HttpServerConnection.HttpError.connectionException{
-            throw UserError.errorSavingFireBaseToken
         }
     }
     
@@ -84,26 +70,30 @@ public class User:NSManagedObject {
         }
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw UserError.noSessionFound
+                } else
+                {
+                    throw UserError.errorChangeData
+                }
+            }
             
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw UserError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw UserError.errorChangeData
-            }
-
         } catch HttpServerConnection.HttpError.connectionException{
             throw UserError.errorChangeData
         }
     }
+    
+    
     
     public func sendLogout() throws {
         let url = HttpServerConnection.buildURL(location: User.HTTP_LOCATION + "LogOut")
         let params = "email=\(email)"
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            
-            if response["Status"] as! String != "OK" {
+            if response["estado"] as! String != "ok" {
                 throw UserError.errorWithLogOut
             }
             
@@ -112,11 +102,35 @@ public class User:NSManagedObject {
         }
     }
     
+    public static func saveFirebaseToken(token:String, pushNotificationToken:String) throws {
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "SavePushNotificationToken")
+        let params = "token=" + token + "&pushNotificationToken=" + pushNotificationToken
+        do{
+            let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)            
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw UserError.noSessionFound
+                } else
+                {
+                    throw UserError.errorSavingFireBaseToken
+                }
+            }
+            
+            
+        } catch HttpServerConnection.HttpError.connectionException{
+            throw UserError.errorSavingFireBaseToken
+        }
+    }
+    
     public static func getEncodedImageForUser(id:String) -> String? {
-        let url = NSURL(string: "http://washer.mx/Washer/images/users/\(id)/profile_image.jpg")!
-        if let imageData = NSData.init(contentsOf: url as URL) {
+        //TODO: Cambiar a direccion que no dependa de la version
+        let url = URL(string: "http://54.218.50.2/api/1.0.0/images/users/\(id)/profile_image.jpg")!
+        do {
+            let imageData = try Data.init(contentsOf: url)
             return imageData.base64EncodedString(options: .lineLength64Characters)
-        } else {
+        } catch {
             return nil
         }
     }

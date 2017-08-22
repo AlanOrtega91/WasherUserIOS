@@ -59,7 +59,7 @@ class MenuVC: UITableViewController {
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "help") as! HelpController
             break
         case TableArray[5]:
-            if let url = URL(string: "http://www.washer.mx") {
+            if let url = URL(string: "http://www.washer.mx/team") {
                 UIApplication.shared.openURL(url)
             }
             break

@@ -277,7 +277,7 @@
                                 <textInputTraits key="textInputTraits" returnKeyType="search"/>
                             </textField>
                             <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3b2-ft-cMX">
-                                <rect key="frame" x="-4" y="347" width="383" height="70"/>
+                                <rect key="frame" x="-4" y="327" width="383" height="70"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VGX-fH-oCz">
                                         <rect key="frame" x="40" y="9" width="303" height="52"/>
@@ -299,23 +299,23 @@
                                 </constraints>
                             </view>
                             <view hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dU3-R6-rJ9">
-                                <rect key="frame" x="-4" y="417" width="383" height="160"/>
+                                <rect key="frame" x="-4" y="397" width="383" height="180"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oxf-J4-Yzz">
-                                        <rect key="frame" x="15" y="10" width="166.5" height="40"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aaC-zp-GJe">
+                                        <rect key="frame" x="5" y="0.0" width="373" height="15"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" priority="750" constant="40" id="yoj-Lc-MxE"/>
+                                            <constraint firstAttribute="height" constant="15" id="OmZ-7L-1I9"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
-                                        <state key="normal" title="Lavado Exterior $$" image="exterior" backgroundImage="options_up">
-                                            <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="12"/>
+                                        <state key="normal" title="Tarjeta">
+                                            <color key="titleColor" red="0.51372549020000002" green="0.53725490200000003" blue="0.5568627451" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="leftClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="zDg-4l-fWm"/>
+                                            <action selector="mostrarCambioMetodoDePago:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="699-Jb-uew"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="8kX-9m-598">
-                                        <rect key="frame" x="201.5" y="10" width="166.5" height="40"/>
+                                        <rect key="frame" x="201.5" y="25" width="166.5" height="40"/>
                                         <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
                                         <state key="normal" title="Lavado Interior $$" image="interior" backgroundImage="options_up">
                                             <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -325,10 +325,10 @@
                                         </connections>
                                     </button>
                                     <view opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O9Y-gF-XGF" userLabel="leftDescriptionView">
-                                        <rect key="frame" x="15" y="50" width="166.5" height="105"/>
+                                        <rect key="frame" x="15" y="65" width="167" height="110"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YJj-px-2ON">
-                                                <rect key="frame" x="0.0" y="0.0" width="166.5" height="105"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="166.5" height="110"/>
                                                 <state key="normal" title="Button" backgroundImage="options_down"/>
                                                 <connections>
                                                     <action selector="leftClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="XWJ-H4-OBc"/>
@@ -376,10 +376,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sRC-IK-R0i">
-                                        <rect key="frame" x="201.5" y="50" width="166.5" height="105"/>
+                                        <rect key="frame" x="201.5" y="65" width="166.5" height="110"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Q7G-Ee-mo7">
-                                                <rect key="frame" x="0.0" y="0.0" width="166.5" height="105"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="166.5" height="110"/>
                                                 <state key="normal" title="Button" backgroundImage="options_down"/>
                                                 <connections>
                                                     <action selector="rightClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="6lL-Xg-aII"/>
@@ -428,20 +428,36 @@
                                             <constraint firstItem="cim-kS-cmW" firstAttribute="width" secondItem="Fsw-de-Yj7" secondAttribute="width" id="xoV-Cq-dWZ"/>
                                         </constraints>
                                     </view>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="oxf-J4-Yzz">
+                                        <rect key="frame" x="15" y="25" width="166.5" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" priority="750" constant="40" id="yoj-Lc-MxE"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="PingFangTC-Medium" family="PingFang TC" pointSize="15"/>
+                                        <state key="normal" title="Lavado Exterior $$" image="exterior" backgroundImage="options_up">
+                                            <color key="titleColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="leftClick:" destination="GBQ-w9-cbx" eventType="touchUpInside" id="zDg-4l-fWm"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="O9Y-gF-XGF" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="bottom" id="3Cj-Yb-5Vc"/>
                                     <constraint firstItem="oxf-J4-Yzz" firstAttribute="leading" secondItem="dU3-R6-rJ9" secondAttribute="leading" constant="15" id="3lc-7O-0qW"/>
                                     <constraint firstItem="O9Y-gF-XGF" firstAttribute="centerX" secondItem="oxf-J4-Yzz" secondAttribute="centerX" id="5vm-LX-V6Q"/>
+                                    <constraint firstAttribute="trailing" secondItem="aaC-zp-GJe" secondAttribute="trailing" constant="5" id="5yX-T5-csC"/>
                                     <constraint firstItem="sRC-IK-R0i" firstAttribute="centerX" secondItem="8kX-9m-598" secondAttribute="centerX" id="Bmj-Ue-vqo"/>
-                                    <constraint firstAttribute="height" constant="160" id="OxG-Tw-cWM"/>
+                                    <constraint firstAttribute="height" constant="180" id="OxG-Tw-cWM"/>
                                     <constraint firstAttribute="trailing" secondItem="8kX-9m-598" secondAttribute="trailing" constant="15" id="Qaf-er-ikX"/>
                                     <constraint firstItem="8kX-9m-598" firstAttribute="top" secondItem="oxf-J4-Yzz" secondAttribute="top" id="V5M-MM-8m9"/>
-                                    <constraint firstItem="oxf-J4-Yzz" firstAttribute="top" secondItem="dU3-R6-rJ9" secondAttribute="top" constant="10" id="VVF-S2-gv1"/>
                                     <constraint firstAttribute="bottom" secondItem="O9Y-gF-XGF" secondAttribute="bottom" constant="5" id="aZU-em-dNv"/>
+                                    <constraint firstItem="aaC-zp-GJe" firstAttribute="leading" secondItem="dU3-R6-rJ9" secondAttribute="leading" constant="5" id="eOt-Sl-oWF"/>
                                     <constraint firstItem="sRC-IK-R0i" firstAttribute="top" secondItem="8kX-9m-598" secondAttribute="bottom" id="glG-ut-8D5"/>
                                     <constraint firstItem="O9Y-gF-XGF" firstAttribute="width" secondItem="oxf-J4-Yzz" secondAttribute="width" id="hD6-ur-fTI"/>
+                                    <constraint firstItem="aaC-zp-GJe" firstAttribute="top" secondItem="dU3-R6-rJ9" secondAttribute="top" id="hD7-Pl-8vT"/>
+                                    <constraint firstItem="oxf-J4-Yzz" firstAttribute="top" secondItem="aaC-zp-GJe" secondAttribute="bottom" constant="10" id="i1s-gM-3k5"/>
                                     <constraint firstAttribute="height" constant="100" id="m1e-SQ-unT"/>
                                     <constraint firstItem="sRC-IK-R0i" firstAttribute="width" secondItem="8kX-9m-598" secondAttribute="width" id="r4h-2a-dcC"/>
                                     <constraint firstItem="8kX-9m-598" firstAttribute="leading" secondItem="oxf-J4-Yzz" secondAttribute="trailing" constant="20" id="tTQ-JU-Mhd"/>
@@ -581,6 +597,7 @@
                         <outlet property="lowLayoutHeight" destination="OxG-Tw-cWM" id="wbQ-xH-xoW"/>
                         <outlet property="mapViewIOS" destination="EcP-a2-Xsi" id="ifp-zY-Zuo"/>
                         <outlet property="menuOpenButton" destination="y9e-DX-gaG" id="u6K-xS-yZS"/>
+                        <outlet property="metodoDePagoTexto" destination="aaC-zp-GJe" id="66B-CS-fbb"/>
                         <outlet property="navigationBar" destination="eE2-De-VnG" id="Yi6-R0-KdD"/>
                         <outlet property="rightButton" destination="8kX-9m-598" id="4XS-UZ-xIg"/>
                         <outlet property="rightDescriptionView" destination="sRC-IK-R0i" id="gQ3-Px-T0n"/>

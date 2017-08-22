@@ -31,15 +31,18 @@ public class Car:NSManagedObject {
         let params = "vehiculoId=" + car.type + "&token=" + token + "&color=" + car.color + "&placas=" + car.plates + "&marca=" + car.brand
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params) as NSDictionary
-            
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CarError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw CarError.errorAddingCar
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CarError.noSessionFound
+                } else {
+                    throw CarError.errorAddingCar
+                }
             }
 
-            return  String(describing: response["carId"]!)
+
+            return  String(describing: response["id"]!)
         } catch HttpServerConnection.HttpError.connectionException{
             throw CarError.errorAddingCar
         }
@@ -50,12 +53,14 @@ public class Car:NSManagedObject {
         let params = "vehiculoFavoritoId=\(carId)&token=\(token)"
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CarError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw CarError.errorAddingFavoriteCar
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CarError.noSessionFound
+                } else {
+                    throw CarError.errorAddingFavoriteCar
+                }
             }
             
         } catch HttpServerConnection.HttpError.connectionException{
@@ -69,11 +74,14 @@ public class Car:NSManagedObject {
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CarError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw CarError.errorEditingCar
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CarError.noSessionFound
+                } else {
+                    throw CarError.errorEditingCar
+                }
             }
             
         } catch HttpServerConnection.HttpError.connectionException{
@@ -86,12 +94,14 @@ public class Car:NSManagedObject {
         let params = "favoriteCarId=" + id + "&token=\(token)"
         do{
             let response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            
-            if response["Status"] as! String == "SESSION ERROR" {
-                throw CarError.noSessionFound
-            }
-            if response["Status"] as! String != "OK" {
-                throw CarError.errorDeletingCar
+            if response["estado"] as! String == "error"
+            {
+                if response["clave"] as! String == "sesion"
+                {
+                    throw CarError.noSessionFound
+                } else {
+                    throw CarError.errorDeletingCar
+                }
             }
             
         } catch HttpServerConnection.HttpError.connectionException{

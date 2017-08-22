@@ -39,14 +39,13 @@ public class ProfileReader {
         let params = "token=\(token)&device=ios"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            print(response)
-            if response["Status"] as! String != "OK" {
+            if response["estado"] as! String != "ok" {
                 throw ProfileReaderError.errorReadingData
             }
-            readUser(parameters: response["User Info"] as! NSDictionary)
-            readCars(parameters: response["carsList"] as! [NSDictionary])
-            readHistory(parameters: response["History"] as! [NSDictionary])
-            if let cards = response["cards"] as? NSDictionary {
+            readUser(parameters: response["usuario"] as! NSDictionary)
+            readCars(parameters: response["coches"] as! [NSDictionary])
+            readHistory(parameters: response["historial"] as! [NSDictionary])
+            if let cards = response["tarjeta"] as? NSDictionary {
                 readCard(parameters: cards)
             }
         } catch {
@@ -70,13 +69,13 @@ public class ProfileReader {
         let params = "email=\(email)&password=\(password)&device=ios"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
-            if response["Status"] as! String != "OK" {
+            if response["estado"] as! String != "ok" {
                 throw ProfileReaderError.errorReadingData
             }
-            readUser(parameters: response["User Info"] as! NSDictionary)
-            readCars(parameters: response["carsList"] as! [NSDictionary])
-            readHistory(parameters: response["History"] as! [NSDictionary])
-            if let cards = response["cards"] as? NSDictionary {
+            readUser(parameters: response["usuario"] as! NSDictionary)
+            readCars(parameters: response["coches"] as! [NSDictionary])
+            readHistory(parameters: response["historial"] as! [NSDictionary])
+            if let cards = response["tarjeta"] as? NSDictionary {
                 readCard(parameters: cards)
             }
         } catch {
@@ -160,6 +159,9 @@ public class ProfileReader {
                 service.rating = Int16(rating)!
             } else {
                 service.rating = -1
+            }
+            if let metodoDePago = serviceJSON["metodoDePago"] as? String {
+                service.metodoDePago = metodoDePago
             }
             services.append(service)
         }

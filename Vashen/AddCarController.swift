@@ -104,8 +104,8 @@ class AddCarController: UIViewController,UIPickerViewDataSource,UIPickerViewDele
     var types: [String] = [
         "Moto",
         "Auto",
-        "Camioneta Chica",
-        "Camioneta Grande"]
+        "SUV",
+        "Camioneta"]
     var colors: [String] = [
         "Azul",
         "Rojo",

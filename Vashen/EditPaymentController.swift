@@ -26,7 +26,7 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
     
     var selected:Int = 0
     var months: [String] = ["01","02","03","04","05","06","07","08","09","10","11","12"]
-    var years: [String] = ["16","17","18","19","20","21","22","23"]
+    var years: [String] = []
     
     override func viewDidLoad() {
         initValues()
@@ -37,6 +37,24 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         if sentNewCard {
             createAlertInfo()
         }
+        
+        configuraAño()
+    }
+    
+    func configuraAño()
+    {
+        let date = Date()
+        let calendar = Calendar.current
+        
+        let year = calendar.component(.year, from: date)
+        var c = year
+        var añosAEscribir = ""
+        while c < year+10 {
+            añosAEscribir = String(c)
+            years.append(añosAEscribir.substring(from: añosAEscribir.index(añosAEscribir.startIndex, offsetBy: 2)))
+            c = c + 1
+        }
+        
     }
     
     func initValues(){
@@ -133,7 +151,7 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         let user = DataBase.readUser()
         let conekta = Conekta()
         conekta.delegate = self
-        conekta.publicKey = "key_LqvrHkEMcS3rda65s4W4wRg"
+        conekta.publicKey = "key_SwHV7ybQx64daTopMTQhZrw"
         conekta.collectDevice()
 
         let cardConekta = conekta.card()

@@ -54,7 +54,7 @@ class HelpController: UIViewController {
     }
     
     func setCleanerImage(){
-        let url = URL(string: "http://washer.mx/Washer/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")! as URL
+        let url = URL(string: "http://54.218.50.2/api/1.0.0/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")! as URL
         do {
             let data = try Data(contentsOf: url)
             self.cleanerImage.image = UIImage(data: data)
@@ -64,7 +64,7 @@ class HelpController: UIViewController {
     }
     
     func setMapImage(map:UIImageView, withService service:Service){
-        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=1000x400&key="
+        let urlString = "https://maps.googleapis.com/maps/api/staticmap?center=\(service.latitud),\(service.longitud)&markers=color:red%7Clabel:S%7C\(service.latitud),\(service.longitud)&zoom=15&size=640x260&key="
         let url = URL(string: urlString)! as URL
         do {
             let data = try Data(contentsOf: url)

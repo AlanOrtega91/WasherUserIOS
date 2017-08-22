@@ -40,6 +40,9 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     @IBOutlet weak var locationText: UITextField!
     
     @IBOutlet weak var navigationBar: UINavigationBar!
+    @IBOutlet weak var metodoDePagoTexto: UIButton!
+    
+   
     
     var geoLocationQueue = DispatchQueue(label: "com.alan.geoLocation", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
     
@@ -77,6 +80,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     var userLocation: CLLocation!
     var inScope:Bool = false
     
+    
     var clickedAlertOK = false
     var menuOpen = false
     var cleanerMarkerAnnotationAdded = false
@@ -84,6 +88,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     let normalLeftText = " -Carrocería\n -Rines"
     let bikeLeftText = " -Carrocería\n -Rines\n -Asiento"
+    var metodoDePago:String = "t"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -411,8 +416,8 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             rightTitle += " $75"
             break
         case String(Service.BIG_VAN):
-            leftTitle += " $80"
-            rightTitle += " $90"
+            leftTitle += " $90"
+            rightTitle += " $100"
             break
         default:
             break
@@ -455,7 +460,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         do{
             let favCar = DataBase.getFavoriteCar()!
             AppData.deleteMessage()
-            let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude), withLongitud: String(requestLocation.coordinate.longitude), withId: service, withToken: token, withCar: vehicleType, withFavoriteCar: favCar.id)
+            let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude), withLongitud: String(requestLocation.coordinate.longitude), withId: service, withToken: token, withCar: vehicleType, withFavoriteCar: favCar.id, conMetodoDePago: metodoDePago)
             cancelCode = 0;
             activeService = serviceRequested
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -669,7 +674,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     func setImageDrawableForActiveService(){
-        let url = URL(string: "http://washer.mx/Washer/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
+        let url = URL(string: "http://54.218.50.2/api/1.0.0/images/cleaners/" + activeService.cleanerId + "/profile_image.jpg")
         do {
             let data:Data = try Data(contentsOf: url!)
             self.cleanerImageInfo.image = UIImage(data: data)
@@ -765,12 +770,11 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         if viewState != STANDBY {
             return
         }
-        if creditCard == nil {
-            createAlertInfo(message: "Agrega una tarjeta de credito")
-            return
-        }
         if cleaners.count < 1 {
             createAlertInfo(message: "No hay lavadores cercanos")
+            DispatchQueue.global(qos: .background).async {
+                Reportes.sendReport(descripcion: "Demanda", latitud: self.requestLocation.coordinate.latitude, longitud: self.requestLocation.coordinate.longitude)
+            }
             return
         }
         viewState = VEHICLE_SELECTED
@@ -780,7 +784,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     
     func initLocation(){
-        self.locManager.requestAlwaysAuthorization()
         self.locManager.requestWhenInUseAuthorization()
         if CLLocationManager.locationServicesEnabled() {
             locManager.delegate = self
@@ -817,6 +820,13 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         self.upLayout.addGestureRecognizer(slide)
         self.locationText.delegate = self
         self.revealViewController().delegate = self
+        if creditCard == nil {
+            metodoDePago = "e"
+            metodoDePagoTexto.setTitle("Efectivo", for: .normal)
+        } else {
+            metodoDePago = "t"
+            metodoDePagoTexto.setTitle("Tarjeta", for: .normal)
+        }
     }
     
     func stateBack(){
@@ -933,6 +943,20 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
+    }
+    @IBAction func mostrarCambioMetodoDePago(_ sender: Any) {
+        if creditCard != nil {
+            let alerta = UIAlertController(title: "?Que metodo de pago deseas utilizar?", message: "Si seleccionas efectivo deberas estar presente cuando llegue el lavador para pagar antes de iniciar el servicio", preferredStyle: UIAlertControllerStyle.actionSheet)
+            alerta.addAction(UIAlertAction(title: "Efectivo", style: UIAlertActionStyle.default, handler: { action in
+                self.metodoDePago = "e"
+                self.metodoDePagoTexto.setTitle("Efectivo", for: .normal)
+            }))
+            alerta.addAction(UIAlertAction(title: "Tarjeta", style: UIAlertActionStyle.default, handler: { action in
+                self.metodoDePago = "t"
+                self.metodoDePagoTexto.setTitle("Tarjeta", for: .normal)
+            }))
+            self.present(alerta, animated: true, completion: nil)
+        }
     }
     
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
