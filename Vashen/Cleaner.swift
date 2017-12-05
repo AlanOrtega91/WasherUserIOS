@@ -17,6 +17,7 @@ public class Cleaner{
     public var lastName:String!
     public var latitud:Double!
     public var longitud:Double!
+    public var ocupado:Bool!
     
     
     public static func getNearbyCleaners(latitud:Double, longitud:Double, withToken token:String)throws -> [Cleaner]{
@@ -43,6 +44,11 @@ public class Cleaner{
                 cleaner.lastName = json["PrimerApellido"] as? String
                 cleaner.latitud = Double(json["Latitud"] as! String)
                 cleaner.longitud = Double(json["Longitud"] as! String)
+                if json["ocupado"] as? String == "0"{
+                    cleaner.ocupado = false
+                } else {
+                    cleaner.ocupado = true
+                }
                 cleaners.append(cleaner)
             }
             return cleaners

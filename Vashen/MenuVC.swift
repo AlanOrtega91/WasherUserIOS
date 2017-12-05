@@ -10,8 +10,8 @@ import Foundation
 
 class MenuVC: UITableViewController {
     
-    var TableArray = ["PAGO","FACTURACION","HISTORIAL","VEHICULOS","AYUDA","SE PARTE DEL EQUIPO","CONFIGURACION","Acerca de"]
-    var ImageMenuArray = [UIImage(named: "pay_icon")!,UIImage(named: "billing_icon")!,UIImage(named: "history_icon")!,UIImage(named: "vehicle_icon")!,UIImage(named: "help_icon")!,UIImage(named: "work_icon")!,UIImage(named: "config_icon")!]
+    var TableArray = ["PAGO","FACTURACION","HISTORIAL","VEHICULOS","PROMOCIONES","AYUDA","SE PARTE DEL EQUIPO","CONFIGURACION","Acerca de"]
+    var ImageMenuArray = [UIImage(named: "pay_icon")!,UIImage(named: "billing_icon")!,UIImage(named: "history_icon")!,UIImage(named: "vehicle_icon")!,UIImage(named: "promo_icon")!,UIImage(named: "help_icon")!,UIImage(named: "work_icon")!,UIImage(named: "config_icon")!]
     
     override func viewDidLoad() {
         let imageView = UIImageView(frame: self.tableView.frame)
@@ -56,17 +56,20 @@ class MenuVC: UITableViewController {
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "cars") as! CarsController
             break
         case TableArray[4]:
-            nextViewController = storyBoard.instantiateViewController(withIdentifier: "help") as! HelpController
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "promociones") as! PromocionesController
             break
         case TableArray[5]:
+            nextViewController = storyBoard.instantiateViewController(withIdentifier: "help") as! HelpController
+            break
+        case TableArray[6]:
             if let url = URL(string: "http://www.washer.mx/team") {
                 UIApplication.shared.openURL(url)
             }
             break
-        case TableArray[6]:
+        case TableArray[7]:
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "configuration") as! ConfigurationController
             break
-        case TableArray[7]:
+        case TableArray[8]:
             nextViewController = storyBoard.instantiateViewController(withIdentifier: "about") as! AboutController
             break
         default:

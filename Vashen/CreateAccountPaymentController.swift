@@ -143,6 +143,7 @@ class CreateAccountPaymentController: UIViewController,UIPickerViewDataSource,UI
     @IBAction func saveNewCard(_ sender: AnyObject) {
         let conekta = Conekta()
         conekta.delegate = self
+        //TODO: Cambiar a produccion
         conekta.publicKey = "key_SwHV7ybQx64daTopMTQhZrw"
         conekta.collectDevice()
         let user = DataBase.readUser()

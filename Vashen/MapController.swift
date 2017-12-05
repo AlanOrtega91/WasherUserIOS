@@ -80,7 +80,6 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     var userLocation: CLLocation!
     var inScope:Bool = false
     
-    
     var clickedAlertOK = false
     var menuOpen = false
     var cleanerMarkerAnnotationAdded = false
@@ -89,6 +88,9 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     let normalLeftText = " -Carrocería\n -Rines"
     let bikeLeftText = " -Carrocería\n -Rines\n -Asiento"
     var metodoDePago:String = "t"
+    
+    var precios = [Precio]()
+    var idRegion = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -182,30 +184,46 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     func initTimers(){
         let nearbyCleanersQueue = DispatchQueue(label: "com.alan.nearbyCleaners", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
         nearbyCleanersTimer = DispatchSource.makeTimerSource(flags: .strict, queue: nearbyCleanersQueue)
-        nearbyCleanersTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(5))
+        nearbyCleanersTimer.scheduleRepeating(deadline: .now(), interval: .milliseconds(50), leeway: .seconds(1))
         nearbyCleanersTimer.setEventHandler(handler: {
-            if self.activeService == nil {
-                if let tempLocation:CLLocation = self.requestLocation {
-                    self.nearbyCleaners(location: tempLocation)
-                }
-            }
+
+            self.leeYDibujaLavadores()
         })
         nearbyCleanersTimer.resume()
-        
-        let reloadMapQueue = DispatchQueue(label: "com.alan.reloadMap", qos: .background, attributes: .concurrent, autoreleaseFrequency: .inherit, target: nil)
-        reloadMapTimer = DispatchSource.makeTimerSource(flags: .strict, queue: reloadMapQueue)
-        reloadMapTimer.scheduleRepeating(deadline: .now(), interval: .seconds(1), leeway: .seconds(5))
-        reloadMapTimer.setEventHandler(handler: {
-            DispatchQueue.main.async {
-                self.reloadMap()
-            }
-        })
-        reloadMapTimer.resume()
     }
     
-    func nearbyCleaners(location:CLLocation){
+    func leeYDibujaLavadores()
+    {
+        if self.activeService != nil &&  self.activeService.status != "Looking" {
+            readCleanerLocation()
+            actualizaMarcadorDeLavador()
+        } else if requestLocation != nil {
+            getNearbyCleaners()
+            actualizaMarcadorDeLavadores()
+        }
+    }
+    
+    func readCleanerLocation()
+    {
         do{
-            self.cleaners = try Cleaner.getNearbyCleaners(latitud: location.coordinate.latitude, longitud: location.coordinate.longitude, withToken: self.token)
+            self.cleaner = try Cleaner.getCleanerLocation(cleanerId: self.activeService.cleanerId,withToken: self.token)
+        } catch Cleaner.CleanerError.errorGettingCleaners {
+            print("Error leyendo ubicacion del lavador")
+        } catch Cleaner.CleanerError.noSessionFound {
+            ProfileReader.delete()
+            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
+            self.navigationController?.setViewControllers([nextViewController], animated: true)
+            _ = self.navigationController?.popToRootViewController(animated: true)
+        } catch {
+            print("Error leyendo lavador")
+        }
+    }
+    
+    func getNearbyCleaners()
+    {
+        do{
+            self.cleaners = try Cleaner.getNearbyCleaners(latitud: self.requestLocation.coordinate.latitude, longitud: self.requestLocation.coordinate.longitude, withToken: self.token)
         } catch Cleaner.CleanerError.noSessionFound{
             ProfileReader.delete()
             let storyBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -217,62 +235,88 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         }
     }
     
-    func reloadMap(){
-        do{
-            if self.activeService != nil {
-                if self.activeService.cleanerId != "" {
-                    self.cleaner = try Cleaner.getCleanerLocation(cleanerId: self.activeService.cleanerId,withToken: self.token)
+    func actualizaMarcadorDeLavador()
+    {
+        DispatchQueue.main.async {
+        if self.activeService.status != "Looking" && self.cleaner != nil {
+            if self.cleaner.latitud != nil && self.cleaner.longitud != nil {
+                if !self.cleanerMarkerAnnotationAdded {
+                    self.mapViewIOS.addAnnotation(self.cleanerMarker)
+                    self.cleanerMarkerAnnotationAdded = true
                 }
-            }
-        } catch Cleaner.CleanerError.noSessionFound{
-            ProfileReader.delete()
-            let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "main")
-            self.navigationController?.setViewControllers([nextViewController], animated: true)
-            _ = self.navigationController?.popToRootViewController(animated: true)
-        } catch {
-            print("Error leyendo ubicacion del lavador")
-        }
-        if activeService != nil {
-            if activeService.status != "Looking" && cleaner != nil {
-                if cleaner.latitud != nil && cleaner.longitud != nil {
-                    if !cleanerMarkerAnnotationAdded {
-                        self.mapViewIOS.addAnnotation(cleanerMarker)
-                        cleanerMarkerAnnotationAdded = true
-                    }
-                    cleanerMarker.coordinate = CLLocationCoordinate2D(latitude: cleaner.latitud, longitude: cleaner.longitud)
+                let ubicacionLavador = CLLocationCoordinate2D(latitude: self.cleaner.latitud, longitude: self.cleaner.longitud)
+                if self.cleanerMarker.coordinate.latitude != ubicacionLavador.latitude ||  self.cleanerMarker.coordinate.longitude != ubicacionLavador.longitude{
+                    self.cleanerMarker.coordinate = ubicacionLavador
                 }
-            } else {
-                self.mapViewIOS.removeAnnotations(markers)
-                markers.removeAll()
             }
         } else {
-            if cleanerMarkerAnnotationAdded {
-                self.mapViewIOS.removeAnnotation(cleanerMarker)
-                cleanerMarkerAnnotationAdded = false
+            self.mapViewIOS.removeAnnotations(self.markers)
+            self.markers.removeAll()
+        }
+        }
+    }
+    
+    func actualizaMarcadorDeLavadores()
+    {
+        DispatchQueue.main.async {
+            if self.cleanerMarkerAnnotationAdded {
+                self.mapViewIOS.removeAnnotation(self.cleanerMarker)
+                self.cleanerMarkerAnnotationAdded = false
             }
-            requestLocation = CLLocation(latitude: centralMarker.coordinate.latitude, longitude: centralMarker.coordinate.longitude)
-            if cleaners.count >= markers.count {
-                addMarkersAndUpdate()
+            if self.cleaners.count >= self.markers.count {
+                self.addMarkersAndUpdate()
             } else {
-                removeMarkersAndUpdate()
+                self.removeMarkersAndUpdate()
             }
         }
     }
     
+    
     func addMarkersAndUpdate(){
+        var agregarACambio = false
+        var marcadoresACambiar: [CustomCleanerMarker] = []
+        
         var i = 0
         while cleaners.count > i {
+            agregarACambio = false
             if markers.count > i {
-                markers[i].coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+                
+                let ubicacionLavador = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+                if markers[i].coordinate.latitude != ubicacionLavador.latitude ||  markers[i].coordinate.longitude != ubicacionLavador.longitude{
+                    markers[i].coordinate = ubicacionLavador
+                    //agregarACambio = true
+                }
+                
+                
+                if self.cleaners[i].ocupado {
+                    if !markers[i].ocupado {
+                        markers[i].ocupado = true
+                        agregarACambio = true
+                    }
+                } else {
+                    if markers[i].ocupado {
+                        markers[i].ocupado = false
+                        agregarACambio = true
+                    }
+                }
+                if agregarACambio {
+                    marcadoresACambiar.append(markers[i])
+                }
             } else {
                 let newMarker = CustomCleanerMarker()
                 newMarker.coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+                if self.cleaners[i].ocupado {
+                    newMarker.ocupado = true
+                } else {
+                    newMarker.ocupado = false
+                }
                 markers.append(newMarker)
-                self.mapViewIOS.addAnnotation(newMarker)
+                mapViewIOS.addAnnotation(newMarker)
             }
             i += 1
         }
+        mapViewIOS.removeAnnotations(marcadoresACambiar)
+        mapViewIOS.addAnnotations(marcadoresACambiar)
     }
     
     func removeMarkersAndUpdate() {
@@ -280,12 +324,19 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         while markers.count > i {
             if cleaners.count > i {
                 markers[i].coordinate = CLLocationCoordinate2D(latitude: self.cleaners[i].latitud, longitude: self.cleaners[i].longitud)
+                if self.cleaners[i].ocupado {
+                    markers[i].ocupado = true
+                } else {
+                    markers[i].ocupado = false
+                }
             } else {
                 self.mapViewIOS.removeAnnotation(markers[i])
                 markers.remove(at: i)
             }
             i += 1
         }
+        mapViewIOS.removeAnnotations(markers)
+        mapViewIOS.addAnnotations(markers)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -293,14 +344,22 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
             return nil
         }
         if annotation is CustomCleanerMarker {
+            let annot:CustomCleanerMarker = annotation as! MapController.CustomCleanerMarker
+            var image:UIImage
+            
+            if  annot.ocupado{
+                image = UIImage(named: "washer_bike_ocupado")!
+            } else {
+                image = UIImage(named: "washer_bike")!
+            }
             var anView = mapView.dequeueReusableAnnotationView(withIdentifier: "washer")
             if anView == nil {
                 anView = MKAnnotationView(annotation: annotation, reuseIdentifier: "washer")
             }
-            let image = UIImage(named: "washer_bike")
+            
             let si = CGSize(width: 32.0, height: 34.0)
             UIGraphicsBeginImageContext(si)
-            image?.draw(in: CGRect(x: 0, y: 0, width: 32.0, height: 34.0))
+            image.draw(in: CGRect(x: 0, y: 0, width: 32.0, height: 34.0))
             let newImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             
@@ -400,31 +459,56 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         var leftTitle = "Lavado Exterior"
         var rightTitle = "Lavado Interior"
         leftDescriptionLeft.text = self.normalLeftText
+        do {
+            var precio = ""
         switch vehicleType {
         case String(Service.BIKE):
-            leftTitle += " $35"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 1, idVehiculo: Service.BIKE)
+            leftTitle += " $\(precio)"
             rightButton.isHidden = true
             rightDescriptionView.isHidden = true
             leftDescriptionLeft.text = self.bikeLeftText
             break
         case String(Service.CAR):
-            leftTitle += " $55"
-            rightTitle += " $65"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 1, idVehiculo: Service.CAR)
+            leftTitle += " $\(precio)"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 2, idVehiculo: Service.CAR)
+            rightTitle += " $\(precio)"
             break
         case String(Service.SMALL_VAN):
-            leftTitle += " $65"
-            rightTitle += " $75"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 1, idVehiculo: Service.SMALL_VAN)
+            leftTitle += " $\(precio)"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 2, idVehiculo: Service.SMALL_VAN)
+            rightTitle += " $\(precio)"
             break
         case String(Service.BIG_VAN):
-            leftTitle += " $90"
-            rightTitle += " $100"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 1, idVehiculo: Service.BIG_VAN)
+            leftTitle += " $\(precio)"
+            precio = try buscarPrecioPorIdServicioYIdVehiculo(idServicio: 2, idVehiculo: Service.BIG_VAN)
+            rightTitle += " $\(precio)"
             break
         default:
             break
         }
         leftButton.setTitle(leftTitle, for: .normal)
         rightButton.setTitle(rightTitle, for: .normal)
+        } catch {
+            createAlertInfo(message: "No se encontro precio para este vehiculo")
+            viewState = STANDBY
+            configureState()
+        }
     }
+    
+    func buscarPrecioPorIdServicioYIdVehiculo(idServicio:Int, idVehiculo:Int) throws -> String
+    {
+        for precio in precios {
+            if precio.idServicio == idServicio && precio.idVehiculo == idVehiculo {
+                return String(precio.precio)
+            }
+        }
+        throw MapaError.errorBuscandoPrecio
+    }
+    
     
     func configureServiceTypeState(){
         if serviceRequestFlag {
@@ -460,7 +544,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         do{
             let favCar = DataBase.getFavoriteCar()!
             AppData.deleteMessage()
-            let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude), withLongitud: String(requestLocation.coordinate.longitude), withId: service, withToken: token, withCar: vehicleType, withFavoriteCar: favCar.id, conMetodoDePago: metodoDePago)
+            let serviceRequested = try Service.requestService(direccion: self.locationText.text!, withLatitud: String(requestLocation.coordinate.latitude), withLongitud: String(requestLocation.coordinate.longitude), withId: service, withToken: token, withCar: vehicleType, withFavoriteCar: favCar.id, conMetodoDePago: metodoDePago, conIdDeRegion: idRegion)
             cancelCode = 0;
             activeService = serviceRequested
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -767,19 +851,12 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
     }
     
     @IBAction func vehicleClicked(_ sender: UIButton) {
-        if viewState != STANDBY {
-            return
+        let latitud = requestLocation.coordinate.latitude
+        let longitud = requestLocation.coordinate.longitude
+        //TODO: preexecute
+        DispatchQueue.global(qos: .background).async {
+            self.buscarPreciosAsync(latitud: latitud, longitud: longitud)
         }
-        if cleaners.count < 1 {
-            createAlertInfo(message: "No hay lavadores cercanos")
-            DispatchQueue.global(qos: .background).async {
-                Reportes.sendReport(descripcion: "Demanda", latitud: self.requestLocation.coordinate.latitude, longitud: self.requestLocation.coordinate.longitude)
-            }
-            return
-        }
-        viewState = VEHICLE_SELECTED
-        vehicleType = DataBase.getFavoriteCar()?.type
-        configureState()
     }
     
     
@@ -868,6 +945,7 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         if activeService == nil {
             self.locationText.text = "BUSCANDO..."
             centralMarker.coordinate = CLLocationCoordinate2D(latitude: position.latitude, longitude: position.longitude)
+            requestLocation = CLLocation(latitude: position.latitude, longitude: position.longitude)
             if let tempLocation = self.requestLocation {
                 geoLocationQueue.asyncAfter(deadline: .now() + 3, execute: {
                     self.reloadAddress(location: tempLocation)
@@ -971,6 +1049,45 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         let image = UIImage(named: "default_marker")
     }
     class CustomCleanerMarker: MKPointAnnotation {
-        let image = UIImage(named: "washer_bike")
+        var ocupado = false
+    }
+    
+    func buscarPreciosAsync(latitud:Double, longitud:Double)
+    {
+        do {
+            precios = try Service.leerPrecios(latitud: latitud, longitud: longitud)
+            if precios.count > 0 {
+                idRegion = precios[0].region
+                DispatchQueue.main.async {
+                    self.buscarPreciosPostExec()
+                }
+            } else {
+                createAlertInfo(message: "Error al leer los precios")
+            }
+            
+        } catch {
+            createAlertInfo(message: "Error al leer los precios")
+        }
+    }
+    
+    func buscarPreciosPostExec()
+    {
+        if viewState != STANDBY {
+            return
+        }
+        if cleaners.count < 1 {
+            createAlertInfo(message: "No hay lavadores cercanos")
+            DispatchQueue.global(qos: .background).async {
+                Reportes.sendReport(descripcion: "Demanda", latitud: self.requestLocation.coordinate.latitude, longitud: self.requestLocation.coordinate.longitude)
+            }
+            return
+        }
+        viewState = VEHICLE_SELECTED
+        vehicleType = DataBase.getFavoriteCar()?.type
+        configureState()
+    }
+    
+    public enum MapaError:Error {
+        case errorBuscandoPrecio
     }
 }

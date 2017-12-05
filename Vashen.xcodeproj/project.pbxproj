@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C70A69E31F9016D5005CDB96 /* KeyboardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70A69E21F9016D5005CDB96 /* KeyboardManager.swift */; };
+		C70A69E51F902139005CDB96 /* PromocionesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70A69E41F902139005CDB96 /* PromocionesController.swift */; };
+		C70A69E71F902939005CDB96 /* Promocion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70A69E61F902939005CDB96 /* Promocion.swift */; };
+		C70A69E91F902A3E005CDB96 /* PromocionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70A69E81F902A3E005CDB96 /* PromocionCell.swift */; };
+		C70A69EB1F903801005CDB96 /* AgregarPromocion.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70A69EA1F903801005CDB96 /* AgregarPromocion.swift */; };
+		C70BEC4C1FA29FA4000DC63F /* Versiones.swift in Sources */ = {isa = PBXBuildFile; fileRef = C70BEC4B1FA29FA4000DC63F /* Versiones.swift */; };
+		C7B463031FD60A26007FCB03 /* Precio.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B463021FD60A26007FCB03 /* Precio.swift */; };
 		E71089011D4FA4FB006DB612 /* AppData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089001D4FA4FB006DB612 /* AppData.swift */; };
 		E71089031D4FA853006DB612 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089021D4FA853006DB612 /* User.swift */; };
 		E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71089041D4FD10B006DB612 /* ProfileReader.swift */; };
@@ -66,6 +73,13 @@
 /* Begin PBXFileReference section */
 		49CDA3A5E02924588B609A00 /* Pods_Vashen.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Vashen.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F0C283001CC9CD711B32C25 /* Pods-Vashen.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vashen.release.xcconfig"; path = "Pods/Target Support Files/Pods-Vashen/Pods-Vashen.release.xcconfig"; sourceTree = "<group>"; };
+		C70A69E21F9016D5005CDB96 /* KeyboardManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardManager.swift; sourceTree = "<group>"; };
+		C70A69E41F902139005CDB96 /* PromocionesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromocionesController.swift; sourceTree = "<group>"; };
+		C70A69E61F902939005CDB96 /* Promocion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promocion.swift; sourceTree = "<group>"; };
+		C70A69E81F902A3E005CDB96 /* PromocionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromocionCell.swift; sourceTree = "<group>"; };
+		C70A69EA1F903801005CDB96 /* AgregarPromocion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AgregarPromocion.swift; sourceTree = "<group>"; };
+		C70BEC4B1FA29FA4000DC63F /* Versiones.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Versiones.swift; sourceTree = "<group>"; };
+		C7B463021FD60A26007FCB03 /* Precio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Precio.swift; sourceTree = "<group>"; };
 		E71089001D4FA4FB006DB612 /* AppData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppData.swift; sourceTree = "<group>"; };
 		E71089021D4FA853006DB612 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E71089041D4FD10B006DB612 /* ProfileReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileReader.swift; sourceTree = "<group>"; };
@@ -176,6 +190,9 @@
 				E7550BA81D5A4AE700FBD719 /* DataBase.swift */,
 				E7615F211D64C823001607D3 /* Cleaner.swift */,
 				E78993871EEF03E800779412 /* Reportes.swift */,
+				C70A69E61F902939005CDB96 /* Promocion.swift */,
+				C70BEC4B1FA29FA4000DC63F /* Versiones.swift */,
+				C7B463021FD60A26007FCB03 /* Precio.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -183,6 +200,7 @@
 		E710890F1D4FE7EA006DB612 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
+				C70A69E21F9016D5005CDB96 /* KeyboardManager.swift */,
 				E7153DF71D92D06000F169B9 /* Assets.xcassets */,
 				E72E6EC41E05B22D005A8F77 /* GoogleService-Info.plist */,
 				E7FE8A011D4E6AAA0071CDFA /* Vashen-Bridging-Header.h */,
@@ -274,6 +292,9 @@
 				E7FE8A051D4E6D650071CDFA /* MenuVC.swift */,
 				E7FE8A0F1D4EC1380071CDFA /* PaymentController.swift */,
 				E7F951041D66650400BA9DE2 /* SummaryController.swift */,
+				C70A69E41F902139005CDB96 /* PromocionesController.swift */,
+				C70A69E81F902A3E005CDB96 /* PromocionCell.swift */,
+				C70A69EA1F903801005CDB96 /* AgregarPromocion.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -416,6 +437,7 @@
 				E71089031D4FA853006DB612 /* User.swift in Sources */,
 				E7FE8A1A1D4EC1C90071CDFA /* ConfigurationController.swift in Sources */,
 				E78993881EEF03E800779412 /* Reportes.swift in Sources */,
+				C70BEC4C1FA29FA4000DC63F /* Versiones.swift in Sources */,
 				E7F528131D99FF6400BA2B16 /* Token.m in Sources */,
 				E71089051D4FD10B006DB612 /* ProfileReader.swift in Sources */,
 				E7F528101D99FF6400BA2B16 /* Card.m in Sources */,
@@ -424,12 +446,14 @@
 				E7F951051D66650400BA9DE2 /* SummaryController.swift in Sources */,
 				E7550BB11D5BAB3200FBD719 /* HistoryRowTableViewCell.swift in Sources */,
 				E7FE8A0E1D4EBB3D0071CDFA /* MenuCell.swift in Sources */,
+				C70A69EB1F903801005CDB96 /* AgregarPromocion.swift in Sources */,
 				E71089081D4FD1F2006DB612 /* Vashen.xcdatamodeld in Sources */,
 				E7F528121D99FF6400BA2B16 /* Connection.m in Sources */,
 				E7FE8A381D4F24C70071CDFA /* EditAccountController.swift in Sources */,
 				E7FD0EFA1D754786001C2A06 /* InformationController.swift in Sources */,
 				E7FE8A301D4F084C0071CDFA /* CreateAccountPersonalController.swift in Sources */,
 				E7FE8A101D4EC1380071CDFA /* PaymentController.swift in Sources */,
+				C7B463031FD60A26007FCB03 /* Precio.swift in Sources */,
 				E7FE8A361D4F248E0071CDFA /* AddCarController.swift in Sources */,
 				E71089131D4FECB1006DB612 /* Service.swift in Sources */,
 				E7FE8A341D4F230E0071CDFA /* EditBillingController.swift in Sources */,
@@ -439,9 +463,11 @@
 				E7FE89ED1D4E69DC0071CDFA /* AppDelegate.swift in Sources */,
 				E7FE8A281D4F060B0071CDFA /* MainController.swift in Sources */,
 				E7FE8A041D4E6AAB0071CDFA /* SWRevealViewController.m in Sources */,
+				C70A69E71F902939005CDB96 /* Promocion.swift in Sources */,
 				E7FE8A061D4E6D650071CDFA /* MenuVC.swift in Sources */,
 				E7FE8A2A1D4F067E0071CDFA /* LoginController.swift in Sources */,
 				E7550BA71D526FB500FBD719 /* LoadingController.swift in Sources */,
+				C70A69E31F9016D5005CDB96 /* KeyboardManager.swift in Sources */,
 				E7FE8A181D4EC1B40071CDFA /* HelpController.swift in Sources */,
 				E7153DFC1D92D77700F169B9 /* LegalInformationController.swift in Sources */,
 				E7FE8A2C1D4F07310071CDFA /* ForgotPasswordController.swift in Sources */,
@@ -451,12 +477,14 @@
 				E714A5FE1D677415008DE774 /* EditPaymentController.swift in Sources */,
 				E7FE8A321D4F08590071CDFA /* CreateAccountPaymentController.swift in Sources */,
 				E7FE8A2E1D4F08400071CDFA /* CreateAccountController.swift in Sources */,
+				C70A69E51F902139005CDB96 /* PromocionesController.swift in Sources */,
 				E7FC6CBB1D647CD800A54B2B /* EditCarController.swift in Sources */,
 				E7550BB31D6360B400FBD719 /* CarCell.swift in Sources */,
 				E7550BA91D5A4AE700FBD719 /* DataBase.swift in Sources */,
 				E7FE8A261D4F04DD0071CDFA /* MapController.swift in Sources */,
 				E71089111D4FECA6006DB612 /* Car.swift in Sources */,
 				E71089151D4FECBC006DB612 /* UserCard.swift in Sources */,
+				C70A69E91F902A3E005CDB96 /* PromocionCell.swift in Sources */,
 				E7FE8A1C1D4EC1D30071CDFA /* AboutController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

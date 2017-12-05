@@ -22,7 +22,7 @@ class InitController: UIViewController {
         self.animateView()
         connectToFcm()
         DispatchQueue.global().async {
-            self.decideNextView()
+            self.iniciar()
         }
     }
     
@@ -36,42 +36,11 @@ class InitController: UIViewController {
         player.play()
     }
     
-    func decideNextView(){
-        if let token = AppData.readToken() {
-            tryReadUser(token: token)
-        } else{
-            changeView(storyBoardName: "Main", controllerName: "main")
-        }
-    }
-    
-    func tryReadUser(token:String) {
-        do{
-            try ProfileReader.run()
-            if let notificationToken = AppData.readNotificationToken() {
-                try User.saveFirebaseToken(token: token,pushNotificationToken: notificationToken)
-            }
-            changeView(storyBoardName: "Map", controllerName: "reveal_controller")
-        } catch User.UserError.errorSavingFireBaseToken{
-            ProfileReader.delete()
-            createAlertInfo(message: "Error con el sistema de notificaciones")
-            while !clickedAlertOK {
-                
-            }
-            changeView(storyBoardName: "Main", controllerName: "main")
-        } catch {
-            ProfileReader.delete()
-            createAlertInfo(message: "Error con el inicio de sesion")
-            while !clickedAlertOK {
-                
-            }
-            changeView(storyBoardName: "Main", controllerName: "main")
-        }
-    }
     
     func connectToFcm() {
         FIRMessaging.messaging().connect { (error) in
             if (error != nil) {
-                print("Unable to connect with FCM. \(error)")
+                print("Unable to connect with FCM. \(String(describing: error))")
             } else {
                 print("Connected to FCM.")
             }
@@ -88,13 +57,39 @@ class InitController: UIViewController {
         }
     }
     
-    func createAlertInfo(message:String){
-            let alert = UIAlertController(title: "Error", message: message, preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.default, handler: {action in
-                self.clickedAlertOK = true
+    func mostrarNuevaActualizacion(){
+            let alert = UIAlertController(title: "Existe una nueva actualizacion",
+                                          message: "Descarga la nueva version", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Descargar", style: UIAlertActionStyle.default, handler: {action in
+                if let url = URL(string: "itms-apps://itunes.apple.com/app/id1187936862?mt=8") {
+                    UIApplication.shared.openURL(url)
+                }
             }))
         DispatchQueue.main.async {
             self.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    func iniciar() {
+        if let token = AppData.readToken() {
+            do {
+                try Versiones.leerVersion()
+                try tryReadUser(token: token)
+            } catch Versiones.VersionesError.actualizacionRequerida {
+                self.mostrarNuevaActualizacion()
+            }catch {
+                changeView(storyBoardName: "Main", controllerName: "main")
+            }
+        } else{
+            changeView(storyBoardName: "Main", controllerName: "main")
+        }
+    }
+    
+    func tryReadUser(token:String) throws {
+        try ProfileReader.run()
+        if let notificationToken = AppData.readNotificationToken() {
+            try User.saveFirebaseToken(token: token,pushNotificationToken: notificationToken)
+        }
+        changeView(storyBoardName: "Map", controllerName: "reveal_controller")
     }
 }

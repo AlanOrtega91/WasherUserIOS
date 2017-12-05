@@ -151,6 +151,7 @@ class EditPaymentController: UIViewController,UIPickerViewDataSource,UIPickerVie
         let user = DataBase.readUser()
         let conekta = Conekta()
         conekta.delegate = self
+        //TODO: Cambiar a produccion
         conekta.publicKey = "key_SwHV7ybQx64daTopMTQhZrw"
         conekta.collectDevice()
 

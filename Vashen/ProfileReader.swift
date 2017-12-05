@@ -90,6 +90,7 @@ public class ProfileReader {
         user.id = parameters["idCliente"]! as! String
         user.token = parameters["Token"]! as! String
         user.phone = parameters["Telefono"]! as! String
+        user.codigo = parameters["codigo"]! as! String
         if let billingName = parameters["NombreFactura"] as? String{
             user.billingName = billingName
         }

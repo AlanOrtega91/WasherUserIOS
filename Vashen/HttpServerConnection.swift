@@ -12,7 +12,7 @@ public class HttpServerConnection
 {
 
     public static func buildURL(location: String) -> String {
-        return ("http://54.218.50.2/api/1.1.0/interfaz/" + location + "/")
+        return ("http://54.218.50.2/api/1.3.1/interfaz/" + location + "/")
     }
     
     public static func sendHttpRequestPost(urlPath: String, withParams params: String) throws -> Dictionary<String,AnyObject>{

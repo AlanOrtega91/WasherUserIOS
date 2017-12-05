@@ -44,6 +44,7 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         do{
         try reviewCredentials()
         try reviewPassword()
+        try revisaDatos()
         let nextViewController = self.storyboard!.instantiateViewController(withIdentifier: "createPersonal") as! CreateAccountPersonalController
             
         nextViewController.email = email.text
@@ -57,7 +58,10 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
             createAlertInfo(message: "Error con la contraseña: Debe contener al menos 6 caracteres")
         } catch CreateAccountError.passwordDontMatch{
             createAlertInfo(message: "Contraseñas diferentes")
-        } catch {
+        } catch CreateAccountError.telefonoInvalido {
+            createAlertInfo(message: "El telefono debe de ser de al menos 10 digitos")
+        }
+        catch {
             createAlertInfo(message: "Error desconocido")
         }
     }
@@ -74,6 +78,12 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
     func reviewPassword() throws {
         if password.text != password2.text {
             throw CreateAccountError.passwordDontMatch
+        }
+    }
+    
+    func revisaDatos() throws {
+        if phone.text?.characters.count != 10 {
+            throw CreateAccountError.telefonoInvalido
         }
     }
     
@@ -116,5 +126,6 @@ public class CreateAccountController: UIViewController,UITextFieldDelegate {
         case invalidCredentialsEmail
         case invalidCredentialsPassword
         case passwordDontMatch
+        case telefonoInvalido
     }
 }

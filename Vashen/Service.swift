@@ -45,9 +45,10 @@ public class Service:NSManagedObject {
         return DataBase.newService()
     }
     
-    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String, conMetodoDePago metodoDePago:String) throws -> Service{
+    public static func requestService(direccion:String, withLatitud latitud:String, withLongitud longitud:String, withId idService:String, withToken token:String, withCar idCar:String, withFavoriteCar idFavCar:String, conMetodoDePago metodoDePago:String,
+                                      conIdDeRegion idRegion:Int) throws -> Service{
         let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "RequestService")
-        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)&metodoDePago=\(metodoDePago)"
+        let params = "direccion=&latitud=\(latitud)&longitud=\(longitud)&idServicio=\(idService)&token=\(token)&idCoche=\(idCar)&idCocheFavorito=\(idFavCar)&metodoDePago=\(metodoDePago)&idRegion=\(idRegion)"
         do{
             var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
             if response["estado"] as! String == "error"
@@ -125,6 +126,32 @@ public class Service:NSManagedObject {
             throw ServiceError.errorMandandoCalificacion
         }
     }
+    public static func leerPrecios(latitud:Double, longitud:Double) throws -> [Precio]{
+        let url = HttpServerConnection.buildURL(location: HTTP_LOCATION + "leerPrecios")
+        let params = "latitud=\(latitud)&longitud=\(longitud)"
+        do{
+            var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)
+            if response["estado"] as! String != "ok"
+            {
+                throw ServiceError.errorLeyendoPrecios
+            }
+            let preciosJson = response["precios"] as! [NSDictionary]
+            var precios = [Precio]()
+            for precioJson in preciosJson {
+                let precio = Precio()
+                precio.idVehiculo = Int(precioJson["idVehiculo"] as! String)!
+                precio.nombre = precioJson["Nombre"] as! String
+                precio.idServicio = Int(precioJson["idServicio"] as! String)!
+                precio.servicio = precioJson["Servicio"] as! String
+                precio.precio = Double(precioJson["Precio"] as! String)!
+                precio.region = Int(precioJson["id"] as! String)!
+                precios.append(precio)
+            }
+            return precios
+        } catch HttpServerConnection.HttpError.connectionException {
+            throw ServiceError.errorLeyendoPrecios
+        }
+    }
     
     enum ServiceError: Error {
         case noSessionFound
@@ -132,6 +159,7 @@ public class Service:NSManagedObject {
         case errorRequestingService
         case errorCancelingRequest
         case errorMandandoCalificacion
+        case errorLeyendoPrecios
     }
     
 }

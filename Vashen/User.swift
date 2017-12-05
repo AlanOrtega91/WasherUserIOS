@@ -22,6 +22,7 @@ public class User:NSManagedObject {
     @NSManaged var billingName: String
     @NSManaged var rfc: String
     @NSManaged var billingAddress:String
+    @NSManaged var codigo:String
     
     public static let HTTP_LOCATION = "User/"
     
@@ -52,6 +53,7 @@ public class User:NSManagedObject {
             let parameters = response["usuario"] as! NSDictionary
             user.id = parameters["idCliente"]! as! String
             user.token = parameters["Token"]! as! String
+            user.codigo = parameters["codigo"]! as! String
             return user
         } catch HttpServerConnection.HttpError.connectionException{
             throw UserError.errorWithNewUser
@@ -65,7 +67,6 @@ public class User:NSManagedObject {
             let image = User.readImageDataFromFile(name: encodedImage)
             let imageData = UIImageJPEGRepresentation(image!, 0.5)
             let encodedB64 = (imageData?.base64EncodedString())!
-            //TODO: Fails to send encoded string
             params += "&encoded_string=" + encodedB64
         }
         do{
@@ -125,8 +126,7 @@ public class User:NSManagedObject {
     }
     
     public static func getEncodedImageForUser(id:String) -> String? {
-        //TODO: Cambiar a direccion que no dependa de la version
-        let url = URL(string: "http://54.218.50.2/api/1.0.0/images/users/\(id)/profile_image.jpg")!
+        let url = URL(string: "http://54.218.50.2/api/imagenes/usuarios/\(id)/profile_image.jpg")!
         do {
             let imageData = try Data.init(contentsOf: url)
             return imageData.base64EncodedString(options: .lineLength64Characters)

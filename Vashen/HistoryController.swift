@@ -87,7 +87,7 @@ class HistoryController: UIViewController,UITableViewDataSource,UITableViewDeleg
     }
     
     func setCleanerImage(image:UIImageView, withId id: String, withPosition position:Int){
-        let url = URL(string: "http://54.218.50.2/api/1.0.0/images/cleaners/" + id + "/profile_image.jpg")!
+        let url = URL(string: "http://54.218.50.2/api/imagenes/lavadores/" + id + "/profile_image.jpg")!
         do {
             let data = try Data(contentsOf: url)
             image.image = UIImage(data: data)
