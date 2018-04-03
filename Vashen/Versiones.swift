@@ -12,7 +12,7 @@ class Versiones {
     
     
     static func leerVersion() throws {
-        let VERSION = "1.3.0"
+        let VERSION = "1.3.1"
         let url = "http://54.218.50.2/api/version/"
         let params = ""
         var response = try HttpServerConnection.sendHttpRequestPost(urlPath: url, withParams: params)

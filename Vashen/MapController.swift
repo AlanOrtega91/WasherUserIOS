@@ -898,11 +898,11 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         self.locationText.delegate = self
         self.revealViewController().delegate = self
         if creditCard == nil {
-            metodoDePago = "e"
-            metodoDePagoTexto.setTitle("Efectivo", for: .normal)
+            //metodoDePago = "e"
+            //metodoDePagoTexto.setTitle("Efectivo", for: .normal)
         } else {
             metodoDePago = "t"
-            metodoDePagoTexto.setTitle("Tarjeta", for: .normal)
+            //metodoDePagoTexto.setTitle("Tarjeta", for: .normal)
         }
     }
     
@@ -1023,18 +1023,18 @@ class MapController: UIViewController,MKMapViewDelegate,CLLocationManagerDelegat
         return true
     }
     @IBAction func mostrarCambioMetodoDePago(_ sender: Any) {
-        if creditCard != nil {
-            let alerta = UIAlertController(title: "?Que metodo de pago deseas utilizar?", message: "Si seleccionas efectivo deberas estar presente cuando llegue el lavador para pagar antes de iniciar el servicio", preferredStyle: UIAlertControllerStyle.actionSheet)
-            alerta.addAction(UIAlertAction(title: "Efectivo", style: UIAlertActionStyle.default, handler: { action in
-                self.metodoDePago = "e"
-                self.metodoDePagoTexto.setTitle("Efectivo", for: .normal)
-            }))
-            alerta.addAction(UIAlertAction(title: "Tarjeta", style: UIAlertActionStyle.default, handler: { action in
-                self.metodoDePago = "t"
-                self.metodoDePagoTexto.setTitle("Tarjeta", for: .normal)
-            }))
-            self.present(alerta, animated: true, completion: nil)
-        }
+//        if creditCard != nil {
+//            let alerta = UIAlertController(title: "?Que metodo de pago deseas utilizar?", message: "Si seleccionas efectivo deberas estar presente cuando llegue el lavador para pagar antes de iniciar el servicio", preferredStyle: UIAlertControllerStyle.actionSheet)
+//            alerta.addAction(UIAlertAction(title: "Efectivo", style: UIAlertActionStyle.default, handler: { action in
+//                self.metodoDePago = "e"
+//                self.metodoDePagoTexto.setTitle("Efectivo", for: .normal)
+//            }))
+//            alerta.addAction(UIAlertAction(title: "Tarjeta", style: UIAlertActionStyle.default, handler: { action in
+//                self.metodoDePago = "t"
+//                self.metodoDePagoTexto.setTitle("Tarjeta", for: .normal)
+//            }))
+//            self.present(alerta, animated: true, completion: nil)
+//        }
     }
     
     func revealController(_ revealController: SWRevealViewController!, didMoveTo position: FrontViewPosition) {
